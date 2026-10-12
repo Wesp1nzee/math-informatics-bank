@@ -147,11 +147,16 @@
 
   /* ---- scroll reveal --------------------------------------------------- */
   /*
-   * The hidden state is only applied when <html> has the `js` class, which a
-   * tiny inline script adds before first paint. Without JavaScript the content
-   * stays visible, so the reveal is a pure enhancement.
+   * The entrance animation is a pure enhancement: the hidden state is applied
+   * by default and a single `ScrollReveal` client island adds
+   * `data-reveal-in` when an element reaches the viewport.
+   *
+   * Whether scripting is available is detected with the CSS `scripting` media
+   * feature, **not** with a class set by an inline script. Mutating
+   * `<html class>` from a script desynchronises the attribute React renders
+   * during hydration and produces a hydration mismatch.
    */
-  .js .reveal {
+  .reveal {
     opacity: 0;
     transform: translateY(20px);
     transition:
@@ -160,35 +165,24 @@
     transition-delay: calc(var(--i, 0) * 70ms);
   }
 
-  .js .reveal[data-reveal-in] {
+  .reveal[data-reveal-in] {
     opacity: 1;
     transform: none;
   }
 
   /*
    * ---- JavaScript availability switch -----------------------------------
-   * The `js` class is added to <html> before first paint (see the root
-   * layout). Components can then ship two presentations: a scripted one
-   * (`.js-only`) and a static fallback (`.no-js-only`).
-   *
-   * `!important` is required because Tailwind utilities live in a later
-   * cascade layer, so a plain component rule would lose to e.g. `grid`.
+   * Components can ship two presentations: the interactive one (`.js-only`)
+   * and a static fallback (`.no-js-only`). The fallback wrappers carry no
+   * display utility of their own, so no `!important` is needed to show them.
    */
   .no-js-only {
-    display: block;
-  }
-
-  html.js .no-js-only {
-    display: none !important;
-  }
-
-  html:not(.js) .js-only {
-    display: none !important;
+    display: none;
   }
 
   /*
    * Collapsible task solution: collapsed by default, opened by React once the
-   * answer is correct (or on request). Without JavaScript it is simply open.
+   * answer is correct (or on request). Without scripting it is simply open.
    */
   .solution-panel {
     display: none;
@@ -198,8 +192,29 @@
     display: block;
   }
 
-  html:not(.js) .solution-panel {
-    display: block !important;
+  /*
+   * Without scripting the static fallback takes over. `!important` is required
+   * for `.js-only` because those elements carry Tailwind display utilities
+   * (`grid`, `inline-flex`) that live in a later cascade layer.
+   */
+  @media (scripting: none) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .js-only {
+      display: none !important;
+    }
+
+    .no-js-only {
+      display: block;
+    }
+
+    .solution-panel {
+      display: block;
+    }
   }
 
   /*
@@ -650,7 +665,7 @@
     transition-duration: 200ms !important;
   }
 
-  .js .reveal {
+  .reveal {
     opacity: 1;
     transform: none;
   }

@@ -203,7 +203,10 @@ export function CodeDemo() {
           <pre className="code" aria-hidden="true">
             {TASK5_CODE.map((line, index) => (
               <span
-                key={line || `blank-${index}`}
+                // The listing is a fixed, ordered sequence: the line index is
+                // the stable identity. (Lines are not unique as strings — the
+                // program repeats `s += str(s.count('1') % 2)` twice.)
+                key={index}
                 className="ln"
                 data-active={activeLine === index ? "" : undefined}
                 dangerouslySetInnerHTML={{
@@ -287,28 +290,32 @@ export function CodeDemo() {
 
       {/*
         Static presentation for browsers without JavaScript: the full listing
-        and the result, so the demo's content is never lost.
+        and the result, so the demo's content is never lost. The wrapper is
+        deliberately free of display utilities — the grid lives on an inner
+        element — so the `display` switch in globals.css stays in control.
       */}
-      <div className="no-js-only grid w-full gap-3">
-        <div className="editor">
-          <div className="editor-bar">
-            <span>task5.py</span>
-            <Badge tone="neutral">Python</Badge>
+      <div className="no-js-only">
+        <div className="grid w-full gap-3">
+          <div className="editor">
+            <div className="editor-bar">
+              <span>task5.py</span>
+              <Badge tone="neutral">Python</Badge>
+            </div>
+            <pre className="code" data-static-code="">
+              {TASK5_CODE.map((line, index) => (
+                <span
+                  key={`static-${index}`}
+                  className="ln"
+                  dangerouslySetInnerHTML={{ __html: highlightPython(line) }}
+                />
+              ))}
+            </pre>
           </div>
-          <pre className="code" data-static-code="">
-            {TASK5_CODE.map((line, index) => (
-              <span
-                key={`static-${index}`}
-                className="ln"
-                dangerouslySetInnerHTML={{ __html: highlightPython(line) }}
-              />
-            ))}
-          </pre>
+          <p className="text-ink-soft text-sm">
+            Программа выводит <b className="text-ink">86</b>: первое значение R, большее
+            83, достигается при N = 21. Анимация выполнения требует JavaScript.
+          </p>
         </div>
-        <p className="text-ink-soft text-sm">
-          Программа выводит <b className="text-ink">86</b>: первое значение R, большее
-          83, достигается при N = 21. Анимация выполнения требует JavaScript.
-        </p>
       </div>
     </div>
   );

@@ -29,18 +29,28 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ru" className={`${geist.variable} ${instrumentSerif.variable}`}>
-      <body className="flex min-h-dvh flex-col">
-        {/*
-          Runs before the rest of the document is painted: it enables the
-          `.reveal` hidden state in CSS. Without JavaScript the class is never
-          added, so all content stays visible (progressive enhancement).
-        */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js');",
-          }}
-        />
+    /*
+     * `suppressHydrationWarning` covers attributes that browser extensions
+     * (e.g. LanguageTool adds `data-lt-installed`) inject into <html> before
+     * React hydrates. It only silences mismatches on this element's own
+     * attributes — not on its subtree.
+     *
+     * `data-scroll-behavior="smooth"` tells the Next.js router that smooth
+     * scrolling is enabled in CSS, so it can suppress it during route
+     * transitions (see the Next 16 upgrade guide).
+     */
+    <html
+      lang="ru"
+      className={`${geist.variable} ${instrumentSerif.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
+      {/*
+       * `suppressHydrationWarning` also covers extensions that annotate
+       * <body> (Grammarly adds `data-gr-ext-installed` and similar). The
+       * element only carries a static className, so nothing real is masked.
+       */}
+      <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
         {children}
       </body>
     </html>
