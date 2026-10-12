@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Математика и информатика — задачи, разборы и занятия</title>
+<meta name="description" content="Персональный сайт репетитора: бесплатный банк задач, разборы по математике и информатике, индивидуальные занятия для ОГЭ и ЕГЭ.">
+<meta property="og:title" content="Математика и информатика — задачи, разборы и занятия">
+<meta property="og:description" content="Задачи, разборы и индивидуальные занятия по математике и информатике.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+:root{
+  --bg:#F7F7F5;--surface:#FFFFFF;--surface-subtle:#F0F0ED;
+  --text:#111111;--text-secondary:#686865;--text-muted:#989895;
+  --border:#DEDED9;--border-strong:#C9C9C3;
+  --accent:#3157D5;--accent-hover:#2547B8;--accent-subtle:#E9EDFF;
+  --success:#208A5A;--error:#C83B3B;--warning:#B7791F;
+  --font:"Geist","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --r-sm:6px;--r-md:10px;--r-lg:12px;--r-xl:16px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --t-micro:150ms;--t-ui:300ms;--t-hero:900ms;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.6 var(--font);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-sm)}
+.container{max-width:1440px;margin:0 auto;padding:0 48px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+.section{padding:140px 0;border-top:1px solid var(--border)}
+.eyebrow{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);display:block;margin-bottom:24px}
+.h2{font-size:clamp(36px,5vw,64px);line-height:1.04;letter-spacing:-.035em;font-weight:500}
+.h3{font-size:clamp(24px,2.6vw,34px);line-height:1.15;letter-spacing:-.02em;font-weight:500}
+.body-large{font-size:20px;line-height:1.55;color:var(--text-secondary);max-width:34em}
+.serif{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+.muted{color:var(--text-secondary)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.section-head{margin-bottom:72px}
+.section-head .body-large{margin-top:24px}
+
+.button{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:var(--r-md);font-weight:500;font-size:16px;border:1px solid transparent;transition:background var(--t-micro) ease,border-color var(--t-micro) ease,transform var(--t-micro) ease}
+.button svg{width:16px;height:16px;transition:transform var(--t-micro) ease}
+.button:hover svg{transform:translateX(3px)}
+.button:active{transform:translateY(1px)}
+.button-primary{background:var(--accent);color:#fff}
+.button-primary:hover{background:var(--accent-hover)}
+.button-secondary{background:transparent;border-color:var(--border-strong)}
+.button-secondary:hover{background:var(--surface);border-color:var(--text)}
+.button-sm{min-height:40px;padding:0 16px;font-size:15px}
+.link{color:var(--accent);font-weight:500;display:inline-flex;gap:8px;align-items:center}
+.link:hover{color:var(--accent-hover)}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 700ms var(--ease),transform 700ms var(--ease);transition-delay:calc(var(--i,0)*70ms)}
+.reveal.in{opacity:1;transform:none}
+
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;background:rgba(247,247,245,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:background var(--t-ui) ease,border-color var(--t-ui) ease}
+.nav.scrolled{background:rgba(247,247,245,.88);border-bottom-color:var(--border)}
+.nav-inner{height:64px;display:flex;align-items:center;gap:48px}
+.brand{font-weight:600;letter-spacing:-.01em;font-size:18px}
+.brand span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none;margin:0;padding:0;font-size:15px;color:var(--text-secondary)}
+.nav-links a{padding:8px 0;transition:color var(--t-micro) ease}
+.nav-links a:hover{color:var(--text)}
+.nav .button{margin-left:auto}
+.burger{display:none;margin-left:auto;width:44px;height:44px;border:1px solid var(--border);background:var(--surface);border-radius:var(--r-md);align-items:center;justify-content:center}
+.burger svg{width:20px;height:20px}
+.mobile-menu{display:none}
+
+.hero{padding:150px 0 110px}
+.hero-grid{align-items:center}
+.hero-copy{grid-column:1 / span 6}
+.hero-viz{grid-column:7 / span 6}
+.display-title{font-size:clamp(46px,7.2vw,108px);line-height:.94;letter-spacing:-.05em;font-weight:500;text-transform:uppercase}
+.display-title .serif{text-transform:none;letter-spacing:-.03em;font-size:1.05em;color:var(--accent)}
+.hero .body-large{margin:36px 0 40px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+
+.viz{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px 28px 20px;will-change:transform;transform-origin:50% 60%}
+.viz-top{display:flex;justify-content:space-between;font-size:13px;color:var(--text-secondary);margin-bottom:22px}
+.viz-top b{font-weight:500;color:var(--text)}
+.formulas{display:grid;gap:6px;font-size:22px;min-height:84px}
+.formulas .f{opacity:0;transform:translateY(8px);transition:opacity 600ms var(--ease),transform 600ms var(--ease)}
+.formulas .f span.part{display:inline-block;opacity:0;transform:translateY(6px);transition:opacity 500ms var(--ease),transform 500ms var(--ease)}
+.formulas .on,.formulas .on span.part{opacity:1;transform:none}
+.formulas .d{color:var(--accent)}
+.graph-wrap{margin-top:8px}
+.graph{width:100%;height:auto;display:block;overflow:visible}
+.g-grid line{stroke:var(--border);stroke-width:1}
+.g-axis{stroke:var(--border-strong);stroke-width:1.25}
+.g-text{fill:var(--text-muted);font:12px var(--font)}
+.g-curve{fill:none;stroke:var(--text);stroke-width:2.5;stroke-linecap:round}
+.g-tan{stroke:var(--accent);stroke-width:2;stroke-linecap:round}
+.g-pt{fill:var(--accent);stroke:var(--surface);stroke-width:3}
+.g-label{fill:var(--accent);font:500 13px var(--font)}
+.g-drop{stroke:var(--accent);stroke-width:1;stroke-dasharray:3 4;opacity:.6}
+.fade-el{opacity:0;transition:opacity 600ms var(--ease)}
+.fade-el.on{opacity:1}
+.viz-note{font-size:13px;color:var(--text-muted);margin-top:8px}
+
+.try-grid{align-items:start}
+.try-intro{grid-column:1 / span 5}
+.try-card{grid-column:7 / span 6;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:40px}
+.tag{display:inline-block;font-size:12.5px;font-weight:500;padding:4px 12px;border-radius:9999px;background:var(--accent-subtle);color:var(--accent)}
+.try-card h3{margin:20px 0 6px}
+.try-q{font-size:22px;line-height:1.4;margin:24px 0 8px}
+.try-f{font-size:26px;padding:18px 0}
+.options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.option{min-height:60px;border:1px solid var(--border-strong);background:var(--bg);border-radius:var(--r-md);font-size:22px;font-weight:500;transition:border-color var(--t-micro) ease,background var(--t-micro) ease,transform var(--t-ui) var(--ease)}
+.option:hover:not(:disabled){border-color:var(--text);background:var(--surface)}
+.option:disabled{cursor:default}
+.option.wrong{border-color:var(--error);background:#FBEDED;color:var(--error);animation:nudge 300ms var(--ease)}
+.option.right{border-color:var(--success);background:#E8F5EE;color:var(--success)}
+@keyframes nudge{30%{transform:translateX(-4px)}60%{transform:translateX(3px)}}
+.feedback{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--t-ui) var(--ease)}
+.feedback.open{grid-template-rows:1fr}
+.feedback>div{overflow:hidden}
+.explain{margin-top:24px;padding-top:24px;border-top:1px solid var(--border);font-size:16px}
+.explain .status{font-weight:600;margin-bottom:10px;display:block}
+.explain .status.ok{color:var(--success)}.explain .status.no{color:var(--error)}
+.steps{margin:12px 0 20px;display:grid;gap:4px;font-size:18px}
+.retry{background:none;border:0;padding:0;color:var(--text-secondary);text-decoration:underline;text-underline-offset:3px;margin-left:20px;min-height:44px}
+
+.articles-grid{align-items:stretch}
+.article-lead{grid-column:1 / span 7;display:flex;flex-direction:column;justify-content:space-between;min-height:480px;padding:40px;border:1px solid var(--border);border-radius:var(--r-xl);background:var(--surface);transition:border-color var(--t-ui) ease}
+.article-lead:hover{border-color:var(--text)}
+.article-num{font-family:var(--serif);font-size:96px;line-height:1;color:var(--accent);font-style:italic}
+.article-lead h3{font-size:clamp(32px,4vw,52px);line-height:1.05;letter-spacing:-.035em;font-weight:500;max-width:11em;margin:24px 0}
+.article-side{grid-column:9 / span 4;display:flex;flex-direction:column}
+.article-item{display:block;padding:32px 0;border-top:1px solid var(--border);flex:1}
+.article-item:first-child{border-top:0;padding-top:0}
+.article-item h3{margin:12px 0 18px;transition:color var(--t-micro) ease}
+.article-item:hover h3,.article-item:hover .arrow{color:var(--accent)}
+.meta{font-size:14px;color:var(--text-secondary)}
+.arrow{display:inline-flex;gap:8px;align-items:center;font-weight:500;transition:color var(--t-micro) ease}
+.arrow svg{width:16px;height:16px;transition:transform var(--t-micro) ease}
+a:hover>.arrow svg,a:hover .arrow svg{transform:translateX(4px)}
+
+.bank{background:var(--surface-subtle)}
+.bank-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+.tasks{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
+.task-card{display:flex;flex-direction:column;gap:14px;padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);transition:transform var(--t-ui) var(--ease),border-color var(--t-ui) ease}
+.task-card:hover{transform:translateY(-4px);border-color:var(--text)}
+.task-id{font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.task-card h3{font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.2}
+.task-card p{color:var(--text-secondary);font-size:16px;flex:1}
+.task-foot{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--text-secondary);padding-top:16px;border-top:1px solid var(--border)}
+.diff{display:inline-flex;gap:4px;align-items:center;margin-right:8px;vertical-align:middle}
+.diff i{width:14px;height:4px;border-radius:2px;background:var(--border-strong)}
+.diff i.on{background:var(--text)}
+.bank-cta{margin-top:56px}
+
+.tutor-grid{align-items:start}
+.tutor-head{grid-column:1 / span 6}
+.tutor-head .button{margin-top:40px}
+.tutor-list{grid-column:8 / span 5;list-style:none;margin:0;padding:0}
+.tutor-list li{display:flex;gap:16px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--border)}
+.tutor-list li:first-child{border-top:1px solid var(--border)}
+.tutor-list b{font-weight:500;min-width:170px}
+.tutor-list span{color:var(--text-secondary);font-size:16px}
+
+.about{background:var(--surface)}
+.about-grid{align-items:center}
+.about-art{grid-column:1 / span 5}
+.about-art svg{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--r-xl);background:var(--bg)}
+.about-text{grid-column:7 / span 6}
+.quote{font-size:clamp(28px,3.4vw,46px);line-height:1.15;letter-spacing:-.03em;font-weight:500}
+.about-text .body-large{margin-top:32px}
+
+.armed .draw{stroke-dasharray:1;stroke-dashoffset:1}
+.armed .a-fade{opacity:0}
+.steps .step{opacity:0;transform:translateX(-8px);transition:opacity 500ms var(--ease),transform 500ms var(--ease);padding:6px 10px;border-left:2px solid var(--border);border-radius:0 var(--r-sm) var(--r-sm) 0}
+.steps .step.on{opacity:1;transform:none}
+.steps .step.final{border-left-color:var(--success);background:#E8F5EE}
+.steps .step.hl{border-left-color:var(--accent)}
+.explain .link,.explain .retry{opacity:0;transition:opacity 400ms ease}
+.explain.done .link,.explain.done .retry{opacity:1}
+
+.code-grid{align-items:start}
+.code-intro{grid-column:1 / span 5}
+.code-demo{grid-column:7 / span 6;display:grid;gap:16px;justify-items:start}
+.code-task{margin-top:40px;padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);font-size:16px;display:grid;gap:12px}
+.code-task ol{margin:0;padding-left:20px;color:var(--text-secondary)}
+.code-task i{font-family:var(--serif);font-size:1.1em}
+.editor{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden}
+.editor-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-secondary);background:var(--surface-subtle)}
+.editor-bar .tag{background:var(--surface);color:var(--text-secondary);border:1px solid var(--border);transition:all var(--t-ui) ease}
+.editor-bar .tag.run{background:var(--accent-subtle);border-color:transparent;color:var(--accent)}
+.editor-bar .tag.ok{background:#E8F5EE;border-color:transparent;color:var(--success)}
+.code{margin:0;padding:20px 0;font:400 15px/1.75 ui-monospace,"SF Mono","Geist Mono",Menlo,Consolas,monospace;min-height:300px;overflow-x:auto;counter-reset:ln}
+.code .ln{display:block;padding:0 20px 0 56px;position:relative;white-space:pre;min-height:1.75em;border-left:2px solid transparent;transition:background var(--t-micro) ease}
+.code .ln::before{counter-increment:ln;content:counter(ln);position:absolute;left:18px;width:24px;text-align:right;color:var(--text-muted)}
+.code .ln.active{background:var(--accent-subtle);border-left-color:var(--accent)}
+.code .k{color:var(--accent)}.code .f{color:var(--text);font-weight:600}.code .s{color:var(--success)}.code .n{color:var(--warning)}.code .c{color:var(--text-muted)}
+.caret{display:inline-block;width:8px;height:1.1em;background:var(--accent);vertical-align:text-bottom;margin-left:1px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.runout{width:100%;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface);padding:20px;display:grid;gap:16px}
+.vars{display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px}
+.vars div{border:1px solid var(--border);border-radius:var(--r-md);padding:10px 14px;background:var(--bg);min-width:0}
+.vars small{display:block;font-size:12px;color:var(--text-muted)}
+.vars b{font:500 20px/1.3 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.log{font:400 14px/1.7 ui-monospace,Menlo,Consolas,monospace;color:var(--text-secondary);min-height:120px;display:flex;flex-direction:column;justify-content:flex-end}
+.log div{display:flex;gap:16px;padding:0 8px;border-radius:var(--r-sm);animation:rowin 250ms var(--ease)}
+.log div span:first-child{min-width:5ch}
+.log div.hit{background:#E8F5EE;color:var(--success);font-weight:600}
+@keyframes rowin{from{opacity:0;transform:translateY(6px)}}
+.result,.insight{opacity:0;transition:opacity 500ms var(--ease);margin:0}
+.result.on,.insight.on{opacity:1}
+.result b{font:600 28px ui-monospace,Menlo,Consolas,monospace;color:var(--success);margin-left:8px}
+.insight{font-size:15px;color:var(--text-secondary);padding-top:14px;border-top:1px solid var(--border)}
+
+.final{text-align:left;padding:160px 0}
+.final h2{font-size:clamp(48px,8vw,120px);line-height:.95;letter-spacing:-.05em;font-weight:500}
+.final p{font-size:24px;color:var(--text-secondary);margin:28px 0 44px}
+.footer{border-top:1px solid var(--border);padding:64px 0 48px}
+.footer-grid{align-items:start;row-gap:40px}
+.f-brand{grid-column:1 / span 5}
+.f-brand b{font-size:20px;font-weight:600;display:block}
+.f-nav{grid-column:7 / span 3;display:grid;gap:4px}
+.f-nav a,.f-contact a,.f-contact span{color:var(--text-secondary);padding:6px 0;display:inline-block;transition:color var(--t-micro) ease}
+.f-nav a:hover,.f-contact a:hover{color:var(--accent)}
+.f-contact{grid-column:10 / span 3}
+.copy{grid-column:1 / -1;font-size:14px;color:var(--text-muted);padding-top:32px;border-top:1px solid var(--border)}
+
+@media (max-width:1199px){
+  .container{padding:0 32px}
+  .section{padding:104px 0}
+  .hero-copy,.hero-viz,.try-intro,.try-card,.tutor-head,.tutor-list,.about-art,.about-text{grid-column:1 / -1}
+  .hero{padding-top:128px}
+  .hero-viz{margin-top:48px}
+  .try-card{margin-top:24px}
+  .article-lead{grid-column:1 / -1;min-height:380px}
+  .article-side{grid-column:1 / -1;flex-direction:row;gap:32px;margin-top:16px}
+  .article-item{border-top:0;padding:16px 0 0;flex:1}
+  .tutor-list{margin-top:48px}
+  .about-art{max-width:480px}
+  .about-text{margin-top:48px}
+  .tasks{grid-template-columns:repeat(2,1fr)}
+  .f-brand{grid-column:1 / -1}.f-nav{grid-column:1 / span 6}.f-contact{grid-column:7 / span 6}
+}
+@media (max-width:767px){
+  body{font-size:16px}
+  .container{padding:0 20px}
+  .grid{gap:16px}
+  .section{padding:80px 0}
+  .section-head{margin-bottom:48px}
+  .nav-links,.nav .button{display:none}
+  .burger{display:inline-flex}
+  .mobile-menu{display:none;flex-direction:column;padding:8px 20px 20px;background:var(--bg);border-bottom:1px solid var(--border)}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{padding:14px 0;border-bottom:1px solid var(--border);font-size:18px}
+  .mobile-menu .button{margin-top:16px;justify-content:center;border:0}
+  .hero{padding:104px 0 72px}
+  .body-large{font-size:18px}
+  .hero-actions .button{flex:1;justify-content:center}
+  .viz{padding:18px 16px 14px}
+  .formulas{font-size:17px}
+  .try-card{padding:24px}
+  .options{grid-template-columns:repeat(2,1fr)}
+  .article-lead{padding:24px;min-height:340px}
+  .article-num{font-size:64px}
+  .article-side{flex-direction:column;gap:0}
+  .article-item{border-top:1px solid var(--border);padding:24px 0}
+  .tasks{grid-template-columns:1fr;margin-top:40px}
+  .tutor-list li{flex-direction:column;gap:2px}
+  .tutor-list b{min-width:0}
+  .final{padding:96px 0}
+  .final p{font-size:19px}
+  .f-nav,.f-contact{grid-column:1 / -1}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-property:opacity,background-color,border-color,color!important;transition-duration:200ms!important;transform:none!important}
+  .reveal,.formulas .f,.formulas .f span.part{transform:none!important}
+}
+@media (max-width:1199px){.code-intro,.code-demo{grid-column:1 / -1}.code-demo{margin-top:24px}}
+@media (max-width:767px){.code{font-size:13px;min-height:260px}.code .ln{padding-left:44px;padding-right:12px}.code .ln::before{left:10px}.vars{grid-template-columns:1fr 1fr}.vars div:nth-child(2){grid-column:1 / -1;order:3}.code-task{padding:20px}.code-demo .button{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+
+<a class="sr-only" href="#main">Перейти к содержимому</a>
+
+<header class="nav" id="nav">
+  <div class="container">
+    <nav class="nav-inner" aria-label="Основная навигация">
+      <a href="#top" class="brand">Имя Фамилия<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#tasks">Задачи</a></li>
+        <li><a href="#articles">Статьи</a></li>
+        <li><a href="#tutoring">Репетиторство</a></li>
+      </ul>
+      <a href="#try" class="button button-primary button-sm">Начать решать</a>
+      <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mmenu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </nav>
+  </div>
+  <div class="mobile-menu" id="mmenu">
+    <a href="#tasks">Задачи</a><a href="#articles">Статьи</a><a href="#tutoring">Репетиторство</a>
+    <a href="#try" class="button button-primary">Начать решать</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="container">
+    <div class="grid hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow reveal">Математика · Информатика</span>
+        <h1 class="display-title reveal" style="--i:1" id="hero-title">Математика<br>начинается<br>с <span class="serif">понимания.</span></h1>
+        <p class="body-large reveal" style="--i:2">Разбираю математику и информатику так, чтобы вы понимали не только ответ, но и способ мышления.</p>
+        <div class="hero-actions reveal" style="--i:3">
+          <a href="#try" class="button button-primary">Попробовать задачи <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="#tutoring" class="button button-secondary">О репетиторстве</a>
+        </div>
+      </div>
+
+      <div class="hero-viz">
+        <div class="viz" id="viz" role="img" aria-label="График функции f(x) = x³ − 4x² + 7x с касательной в точке x = 2">
+          <div class="viz-top"><b>Математика · Производная</b><span>x = 2</span></div>
+          <div class="formulas" aria-hidden="true">
+            <div class="f" id="f1"><span class="part" data-tex="f(x)\ =\ "></span><span class="part" data-tex="x^3"></span><span class="part" data-tex="-\,4x^2"></span><span class="part" data-tex="+\,7x"></span></div>
+            <div class="f d" id="f2"><span class="part" data-tex="f'(x)\ =\ "></span><span class="part" data-tex="3x^2"></span><span class="part" data-tex="-\,8x"></span><span class="part" data-tex="+\,7"></span></div>
+          </div>
+          <div class="graph-wrap">
+            <svg class="graph" id="graph" viewBox="0 0 520 380" aria-hidden="true">
+              <g class="g-grid" id="g-grid"></g>
+              <line class="g-axis" x1="40" y1="340" x2="500" y2="340"/>
+              <line class="g-axis" x1="40" y1="20" x2="40" y2="340"/>
+              <g class="g-text" id="g-ticks"></g>
+              <text class="g-text" x="498" y="330" text-anchor="end">x</text>
+              <text class="g-text" x="48" y="30">y</text>
+              <path class="g-curve" id="curve" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+              <line class="g-drop fade-el" id="drop"/>
+              <line class="g-tan" id="tan" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+              <circle class="g-pt fade-el" id="pt" r="7"/>
+              <text class="g-label fade-el" id="lbl">f′(2) = 3</text>
+            </svg>
+          </div>
+          <p class="viz-note">Касательная в точке x = 2: её наклон равен значению производной.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="try" aria-labelledby="try-title">
+  <div class="container">
+    <div class="grid try-grid">
+      <div class="try-intro reveal">
+        <span class="eyebrow">Проверьте себя</span>
+        <h2 class="h2" id="try-title">Не смотрите решение. Попробуйте <span class="serif">сами.</span></h2>
+        <p class="body-large" style="margin-top:24px">Выберите ответ — и сразу увидите, как он получается.</p>
+      </div>
+      <article class="try-card reveal" style="--i:1" aria-labelledby="try-q">
+        <span class="tag">ЕГЭ · Профиль</span>
+        <h3 class="h3" id="try-q">Производная</h3>
+        <p class="try-q">Найдите значение <span data-tex="f'(2)"></span>, если</p>
+        <div class="try-f" data-tex="f(x)=x^3-4x^2+7x" aria-label="f от x равно x в кубе минус 4 x в квадрате плюс 7 x"></div>
+        <div class="options" id="options" role="group" aria-label="Варианты ответа">
+          <button class="option" data-v="0">0</button>
+          <button class="option" data-v="3">3</button>
+          <button class="option" data-v="7">7</button>
+          <button class="option" data-v="12">12</button>
+        </div>
+        <div class="feedback" id="feedback" aria-live="polite"><div>
+          <div class="explain">
+            <span class="status" id="status"></span>
+            <div id="why" class="muted"></div>
+            <div class="steps" id="steps"></div>
+            <a href="#tasks" class="link">Разобрать подробнее <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <button class="retry" id="retry">Попробовать снова</button>
+          </div>
+        </div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="code" aria-labelledby="code-title">
+  <div class="container">
+    <div class="grid code-grid">
+      <div class="code-intro reveal">
+        <span class="eyebrow">Информатика</span>
+        <h2 class="h2" id="code-title">Алгоритм — это тоже способ мышления</h2>
+        <article class="code-task">
+          <span class="tag">ЕГЭ · Информатика · Задание 5</span>
+          <p>По натуральному числу <i>N</i> строится число <i>R</i>:</p>
+          <ol>
+            <li>Строится двоичная запись числа <i>N</i>.</li>
+            <li>Справа дописывается остаток от деления суммы её цифр на 2.</li>
+            <li>То же действие повторяется с полученной записью.</li>
+          </ol>
+          <p>Результат — двоичная запись числа <i>R</i>. Найдите наименьшее <i>R</i>, большее 83.</p>
+          <p class="meta" style="margin-top:12px">Условие в формате заданий ЕГЭ, переписано в сокращённом виде.</p>
+        </article>
+      </div>
+      <div class="code-demo reveal" style="--i:1">
+        <div class="editor" role="img" aria-label="Код на Python, который перебирает N и находит наименьшее R больше 83">
+          <div class="editor-bar"><span>task5.py</span><span class="tag" id="code-status">Python</span></div>
+          <pre class="code" id="code-view" aria-hidden="true"></pre>
+        </div>
+        <div class="runout" aria-live="polite">
+          <div class="vars">
+            <div><small>N</small><b id="v-n">—</b></div>
+            <div><small>bin(N)</small><b id="v-b">—</b></div>
+            <div><small>R</small><b id="v-r">—</b></div>
+          </div>
+          <div class="log" id="log"></div>
+          <div class="result" id="result"><span class="muted">Вывод:</span> <b id="out"></b></div>
+          <p class="insight" id="insight">Что заметить: вторая дописанная цифра всегда 0 — после первой чётность единиц уже выровнена. Поэтому R всегда чётное, и 84 и 85 отпадают сразу.</p>
+        </div>
+        <button class="button button-secondary button-sm" id="code-replay" type="button">Показать ещё раз</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="articles" aria-labelledby="art-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Разборы и идеи</span>
+      <h2 class="h2" id="art-title">Как думать, а не заучивать</h2>
+      <p class="body-large">Разбираю задачи, ошибки и способы мышления, которые помогают решать быстрее и увереннее.</p>
+    </div>
+    <div class="grid articles-grid">
+      <a href="#" class="article-lead reveal" aria-label="Читать: Почему производная на самом деле не про формулы">
+        <div>
+          <span class="article-num">1</span>
+          <h3>Почему производная на самом деле не про формулы</h3>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="meta">Математика · ЕГЭ</span>
+          <span class="arrow">Читать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <div class="article-side">
+        <a href="#" class="article-item reveal" style="--i:1">
+          <span class="meta">Математика · ОГЭ</span>
+          <h3 class="h3">Откуда берутся ошибки в дробях</h3>
+          <span class="arrow">Читать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a href="#" class="article-item reveal" style="--i:2">
+          <span class="meta">Информатика · ЕГЭ</span>
+          <h3 class="h3">Как читать чужой код и не бояться его</h3>
+          <span class="arrow">Читать <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bank" id="tasks" aria-labelledby="bank-title">
+  <div class="container">
+    <div class="section-head reveal" style="margin-bottom:0">
+      <span class="eyebrow">Банк задач</span>
+      <div class="bank-head">
+        <h2 class="h2" id="bank-title">Задачи по математике<br>и информатике</h2>
+        <p class="body-large" style="margin:0">Без регистрации. Бесплатно.</p>
+      </div>
+    </div>
+    <div class="tasks">
+      <a href="#" class="task-card reveal">
+        <span class="task-id">#1042</span>
+        <h3>Производная</h3>
+        <span class="tag" style="align-self:flex-start">ЕГЭ · Профиль</span>
+        <p>Найдите значение производной функции в заданной точке.</p>
+        <div class="task-foot"><span><span class="diff" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>Средняя · ~3 мин</span><span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Открыть"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a href="#" class="task-card reveal" style="--i:1">
+        <span class="task-id">#2107</span>
+        <h3>Системы счисления</h3>
+        <span class="tag" style="align-self:flex-start">ЕГЭ · Информатика</span>
+        <p>Переведите число между системами и определите основание.</p>
+        <div class="task-foot"><span><span class="diff" aria-hidden="true"><i class="on"></i><i></i><i></i></span>Лёгкая · ~2 мин</span><span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Открыть"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a href="#" class="task-card reveal" style="--i:2">
+        <span class="task-id">#1318</span>
+        <h3>Задача с параметром</h3>
+        <span class="tag" style="align-self:flex-start">ЕГЭ · Профиль</span>
+        <p>Найдите значения параметра, при которых уравнение имеет единственное решение.</p>
+        <div class="task-foot"><span><span class="diff" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span>Сложная · ~15 мин</span><span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Открыть"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+    </div>
+    <div class="bank-cta reveal"><a href="#" class="button button-primary">Открыть весь банк задач <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<section class="section" id="tutoring" aria-labelledby="tut-title">
+  <div class="container">
+    <div class="grid tutor-grid">
+      <div class="tutor-head reveal">
+        <span class="eyebrow">Индивидуальные занятия</span>
+        <h2 class="h2" id="tut-title">Хотите системный результат?</h2>
+        <p class="body-large" style="margin-top:24px">Если задач из открытого доступа недостаточно, можно заниматься лично: найдём, где именно теряются баллы, и выстроим работу вокруг этого.</p>
+        <a href="#" class="button button-primary">Обсудить занятия <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <ul class="tutor-list">
+        <li class="reveal"><b>Предметы</b><span>Математика и информатика</span></li>
+        <li class="reveal" style="--i:1"><b>Экзамены</b><span>ОГЭ и ЕГЭ</span></li>
+        <li class="reveal" style="--i:2"><b>Формат</b><span>Индивидуальные занятия</span></li>
+        <li class="reveal" style="--i:3"><b>Пробелы</b><span>Находим и закрываем по темам</span></li>
+        <li class="reveal" style="--i:4"><b>Ошибки</b><span>Разбираем причины, а не только ответы</span></li>
+        <li class="reveal" style="--i:5"><b>Домашние задания</b><span>Посильные и по делу</span></li>
+        <li class="reveal" style="--i:6"><b>Прогресс</b><span>Отслеживаем по темам</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section about" id="about" aria-labelledby="about-title">
+  <div class="container">
+    <div class="grid about-grid">
+      <div class="about-art reveal">
+        <svg id="about-svg" viewBox="0 0 400 480" role="img" aria-label="Абстрактный математический рисунок: окружность, касательная и оси">
+          <g class="a-fade" stroke="var(--border)" stroke-width="1"><path d="M0 120h400M0 240h400M0 360h400M100 0v480M200 0v480M300 0v480"/></g>
+          <g fill="none" stroke="var(--border-strong)" stroke-width="1.25"><path class="draw" pathLength="1" d="M40 420h320M40 420V60"/></g>
+          <circle class="draw" pathLength="1" cx="200" cy="240" r="110" fill="none" stroke="var(--text)" stroke-width="2"/>
+          <path class="draw" pathLength="1" d="M60 330 Q200 60 340 150" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <path class="a-fade" d="M120 120 L330 330" stroke="var(--text)" stroke-width="1" stroke-dasharray="4 5"/>
+          <circle class="a-fade" cx="278" cy="162" r="6" fill="var(--accent)"/>
+          <text class="a-fade" x="292" y="156" font-family="Instrument Serif,serif" font-style="italic" font-size="26" fill="var(--text)">x</text>
+        </svg>
+      </div>
+      <div class="about-text">
+        <span class="eyebrow reveal">Подход</span>
+        <h2 class="quote reveal" id="about-title" style="--i:1">Хорошее обучение — это не запоминание большего количества формул. Это понимание того, <span class="serif" style="color:var(--accent)">почему они работают.</span></h2>
+        <p class="body-large reveal" style="--i:2">Поэтому в каждой задаче мы идём от идеи к записи, а не наоборот.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section final" aria-labelledby="final-title">
+  <div class="container reveal">
+    <h2 id="final-title">Готовы<br>попробовать?</h2>
+    <p>Начните с одной задачи.</p>
+    <a href="#" class="button button-primary">Открыть банк задач <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="grid footer-grid">
+      <div class="f-brand"><b>Имя Фамилия</b><span class="muted">Математика × Информатика</span></div>
+      <nav class="f-nav" aria-label="Нижняя навигация"><a href="#tasks">Задачи</a><a href="#articles">Статьи</a><a href="#tutoring">Репетиторство</a></nav>
+      <div class="f-contact"><span>Telegram: <em>@username (добавить)</em></span></div>
+      <p class="copy">© 2026</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const NS = 'http://www.w3.org/2000/svg';
+
+function renderMath() {
+  $$('[data-tex]').forEach(el => {
+    if (el.dataset.done) return;
+    try { if (window.katex) { katex.render(el.dataset.tex, el, { throwOnError: false }); el.dataset.done = 1; return; } } catch (e) {}
+    el.textContent = el.dataset.tex.replace(/\\ |\\,/g, ' ').replace(/\^3/g, '³').replace(/\^2/g, '²').replace(/\\/g, '');
+  });
+}
+
+const nav = $('#nav'), burger = $('#burger'), mmenu = $('#mmenu');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+burger.addEventListener('click', () => {
+  const open = mmenu.classList.toggle('open');
+  burger.setAttribute('aria-expanded', open);
+});
+$$('#mmenu a').forEach(a => a.addEventListener('click', () => { mmenu.classList.remove('open'); burger.setAttribute('aria-expanded', false); }));
+
+const f = x => x ** 3 - 4 * x ** 2 + 7 * x;
+const X = x => 40 + x * 115, Y = y => 340 - y * (310 / 28);
+
+function buildGraph() {
+  const g = $('#g-grid'), t = $('#g-ticks');
+  for (let i = 0; i <= 4; i++) {
+    g.insertAdjacentHTML('beforeend', `<line x1="${X(i)}" y1="20" x2="${X(i)}" y2="340"/>`);
+    t.insertAdjacentHTML('beforeend', `<text x="${X(i)}" y="360" text-anchor="middle">${i}</text>`);
+  }
+  for (let v = 0; v <= 28; v += 7) {
+    g.insertAdjacentHTML('beforeend', `<line x1="40" y1="${Y(v)}" x2="500" y2="${Y(v)}"/>`);
+    if (v) t.insertAdjacentHTML('beforeend', `<text x="30" y="${Y(v) + 4}" text-anchor="end">${v}</text>`);
+  }
+  let d = '';
+  for (let x = 0; x <= 4.001; x += 0.05) d += (d ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(f(x)).toFixed(1);
+  $('#curve').setAttribute('d', d);
+  const px = X(2), py = Y(6);
+  const tn = $('#tan');
+  tn.setAttribute('x1', X(0.7)); tn.setAttribute('y1', Y(6 + 3 * (0.7 - 2)));
+  tn.setAttribute('x2', X(3.3)); tn.setAttribute('y2', Y(6 + 3 * (3.3 - 2)));
+  const dr = $('#drop');
+  dr.setAttribute('x1', px); dr.setAttribute('x2', px); dr.setAttribute('y1', py); dr.setAttribute('y2', 340);
+  $('#pt').setAttribute('cx', px); $('#pt').setAttribute('cy', py);
+  $('#lbl').setAttribute('x', px + 14); $('#lbl').setAttribute('y', py + 28);
+}
+
+function drawStroke(el, ms) {
+  if (reduced) { el.style.strokeDashoffset = 0; return; }
+  el.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: ms, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' });
+}
+
+async function heroSequence() {
+  const on = el => el.classList.add('on');
+  if (reduced) {
+    $$('.formulas .f, .formulas .part, .fade-el').forEach(on);
+    drawStroke($('#curve')); drawStroke($('#tan')); return;
+  }
+  on($('#f1')); await wait(150);
+  for (const p of $$('#f1 .part')) { on(p); await wait(110); }
+  await wait(250);
+  on($('#f2'));
+  for (const p of $$('#f2 .part')) { on(p); await wait(110); }
+  drawStroke($('#curve'), 1100); await wait(900);
+  on($('#drop')); on($('#pt')); on($('#lbl')); await wait(250);
+  drawStroke($('#tan'), 600);
+}
+
+const viz = $('#viz');
+if (!reduced) {
+  let tick = false;
+  addEventListener('scroll', () => {
+    if (tick) return; tick = true;
+    requestAnimationFrame(() => {
+      const p = Math.min(scrollY / 600, 1);
+      viz.style.transform = `translateY(${p * -24}px) scale(${1 + p * 0.04})`;
+      tick = false;
+    });
+  }, { passive: true });
+}
+
+const task = {
+  correct: '3',
+  steps: [
+    { tex: "f'(x)=3x^2-8x+7", plain: "f′(x) = 3x² − 8x + 7", note: "Производная каждого слагаемого" },
+    { tex: "f'(2)=3\\cdot 2^2-8\\cdot 2+7", plain: "f′(2) = 3·2² − 8·2 + 7", note: "Подставляем x = 2" },
+    { tex: "f'(2)=12-16+7=\\mathbf{3}", plain: "f′(2) = 12 − 16 + 7 = 3", note: "Считаем" }
+  ],
+  hints: {
+    '0': 'Похоже, часть слагаемых потерялась при подстановке. Проверьте: производная x³ — это 3x², а не x².',
+    '7': '7 — это свободный коэффициент производной. Но x = 2 нужно подставить и в 3x², и в −8x.',
+    '12': '12 — это только 3·2². Не забудьте слагаемые −8x и +7.'
+  }
+};
+const opts = $$('.option'), fb = $('#feedback');
+function answer(btn) {
+  const v = btn.dataset.v, ok = v === task.correct;
+  opts.forEach(o => o.disabled = true);
+  btn.classList.add(ok ? 'right' : 'wrong');
+  if (!ok) $(`.option[data-v="${task.correct}"]`).classList.add('right');
+  const s = $('#status');
+  s.textContent = ok ? 'Верно.' : 'Не совсем.';
+  s.className = 'status ' + (ok ? 'ok' : 'no');
+  $('#why').textContent = ok ? 'Сначала находим производную, затем подставляем x = 2.' : task.hints[v] + ' Правильный ход решения:';
+  const box = $('#steps'), ex = $('.explain');
+  ex.classList.remove('done');
+  box.innerHTML = task.steps.map((t, i) => `<div class="step${i === 2 ? ' final' : ''}"><small class="muted" style="display:block;font-size:13px">${t.note}</small><span class="m"></span></div>`).join('');
+  $$('.step .m', box).forEach((m, i) => {
+    const t = task.steps[i];
+    try { if (window.katex) katex.render(t.tex, m, { throwOnError: false }); else m.textContent = t.plain; } catch (e) { m.textContent = t.plain; }
+  });
+  fb.classList.add('open');
+  const items = $$('.step', box);
+  items.forEach((el, i) => setTimeout(() => {
+    el.classList.add('on');
+    if (i === items.length - 1) setTimeout(() => ex.classList.add('done'), reduced ? 0 : 300);
+  }, reduced ? 0 : 450 + i * 650));
+}
+opts.forEach(o => o.addEventListener('click', () => answer(o)));
+$('#retry').addEventListener('click', () => {
+  opts.forEach(o => { o.disabled = false; o.classList.remove('right', 'wrong'); });
+  fb.classList.remove('open');
+  $('.explain').classList.remove('done');
+});
+
+const aboutSvg = $('#about-svg');
+aboutSvg.classList.add('armed');
+function buildAbout() {
+  const fade = (el, d, ms = 600) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ms, delay: d, easing: 'ease-out', fill: 'forwards' });
+  const draw = (el, d, ms) => el.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: ms, delay: d, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' });
+  const fades = $$('.a-fade', aboutSvg), draws = $$('.draw', aboutSvg);
+  const [grid, line, point, label] = fades, [axes, circle, curve] = draws;
+  if (reduced) { fades.forEach(e => fade(e, 0, 200)); draws.forEach(e => draw(e, 0, 1)); return; }
+  fade(grid, 0); draw(axes, 200, 800); draw(circle, 700, 1100); draw(curve, 1400, 1200);
+  fade(line, 2500); fade(point, 2800, 400); fade(label, 3000, 500);
+}
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { buildAbout(); o.disconnect(); } }, { threshold: .4 }).observe(aboutSvg);
+
+const CODE = [
+  "def r(n):",
+  "    s = bin(n)[2:]",
+  "    s += str(s.count('1') % 2)",
+  "    s += str(s.count('1') % 2)",
+  "    return int(s, 2)",
+  "",
+  "n = 1",
+  "while r(n) <= 83:",
+  "    n += 1",
+  "",
+  "print(r(n))  # 86"
+];
+const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const hlCode = t => esc(t).replace(/(#.*$)|('[^']*')|\b(def|return|while)\b|\b(bin|str|int|print|count)\b|\b(\d+)\b/g,
+  (m, c, st, kw, fn, num) => c ? `<span class="c">${m}</span>` : st ? `<span class="s">${m}</span>` : kw ? `<span class="k">${m}</span>` : fn ? `<span class="f">${m}</span>` : `<span class="n">${m}</span>`);
+const rOf = n => { let b = n.toString(2); b += (b.split('1').length - 1) % 2; b += (b.split('1').length - 1) % 2; return parseInt(b, 2); };
+
+const codeEl = $('#code-view'), logEl = $('#log'), stat = $('#code-status');
+let codeRun = 0;
+codeEl.innerHTML = CODE.map(() => '<span class="ln"></span>').join('');
+const lines = $$('.ln', codeEl);
+const setActive = i => lines.forEach((l, k) => l.classList.toggle('active', k === i));
+const setStat = (t, c) => { stat.textContent = t; stat.className = 'tag' + (c ? ' ' + c : ''); };
+
+function resetCode() {
+  lines.forEach(l => { l.innerHTML = ''; l.classList.remove('active'); });
+  logEl.innerHTML = '';
+  ['v-n', 'v-b', 'v-r'].forEach(id => $('#' + id).textContent = '—');
+  $('#result').classList.remove('on'); $('#insight').classList.remove('on');
+  setStat('Python');
+}
+function showCodeFinal() {
+  CODE.forEach((t, i) => lines[i].innerHTML = hlCode(t));
+  $('#v-n').textContent = 21; $('#v-b').textContent = (21).toString(2); $('#v-r').textContent = 86;
+  logEl.innerHTML = '<div class="hit"><span>N=21</span><span>R=86</span><span>86 &gt; 83</span></div>';
+  $('#out').textContent = '86';
+  $('#result').classList.add('on'); $('#insight').classList.add('on');
+  setStat('Готово', 'ok');
+}
+
+async function playCode() {
+  const id = ++codeRun, alive = () => id === codeRun;
+  resetCode();
+  if (reduced) { showCodeFinal(); return; }
+  for (let i = 0; i < CODE.length; i++) {
+    for (let c = 1; c <= CODE[i].length; c++) {
+      if (!alive()) return;
+      lines[i].innerHTML = hlCode(CODE[i].slice(0, c)) + '<span class="caret"></span>';
+      await wait(CODE[i].trim().startsWith('#') ? 5 : 16);
+    }
+    lines[i].innerHTML = hlCode(CODE[i]);
+    await wait(CODE[i] ? 140 : 40);
+  }
+  await wait(500);
+  setStat('Выполняется', 'run');
+  for (let n = 1; n <= 21; n++) {
+    if (!alive()) return;
+    const R = rOf(n), hit = R > 83, slow = n >= 18;
+    setActive(7);
+    $('#v-n').textContent = n; $('#v-b').textContent = n.toString(2); $('#v-r').textContent = R;
+    logEl.insertAdjacentHTML('beforeend', `<div class="${hit ? 'hit' : ''}"><span>N=${n}</span><span>R=${R}</span><span>${R} ${hit ? '&gt;' : '≤'} 83</span></div>`);
+    while (logEl.children.length > 6) logEl.firstChild.remove();
+    await wait(slow ? 400 : 110);
+    if (hit) break;
+    setActive(8); await wait(slow ? 250 : 60);
+  }
+  if (!alive()) return;
+  setActive(10); await wait(500);
+  $('#out').textContent = rOf(21);
+  $('#result').classList.add('on');
+  setStat('Готово', 'ok');
+  await wait(600);
+  if (alive()) $('#insight').classList.add('on');
+}
+let codeStarted = false;
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { codeStarted = true; playCode(); o.disconnect(); } }, { threshold: .45 }).observe($('.editor'));
+$('#code-replay').addEventListener('click', playCode);
+
+
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+$$('.reveal').forEach(el => io.observe(el));
+
+
+buildGraph();
+addEventListener('load', () => { renderMath(); heroSequence(); });
+document.addEventListener('DOMContentLoaded', () => { if (window.katex) renderMath(); });
+</script>
+</body>
+</html>
