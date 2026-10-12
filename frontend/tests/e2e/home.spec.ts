@@ -98,4 +98,17 @@ test.describe("home page", () => {
       )
       .toBe(true);
   });
+
+  test("code walkthrough auto-plays when scrolled into view", async ({ page }) => {
+    await page.goto("/");
+
+    await page
+      .locator('section[aria-labelledby="code-title"]')
+      .scrollIntoViewIfNeeded();
+
+    // Анимация запускается без клика: первая строка программы набирается.
+    await expect
+      .poll(() => page.locator(".js-only .code .ln").first().textContent())
+      .toContain("def r(n):");
+  });
 });

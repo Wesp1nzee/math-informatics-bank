@@ -24,20 +24,21 @@ export function AboutIllustration() {
         <path d="M0 120h400M0 240h400M0 360h400M100 0v480M200 0v480M300 0v480" />
       </g>
 
-      <g
+      <path
         className="draw stroke-line-strong"
-        strokeWidth={1.25}
+        d="M40 420h320M40 420V60"
+        pathLength={1}
         fill="none"
+        strokeWidth={1.25}
         style={delay(200, 800)}
-      >
-        <path d="M40 420h320M40 420V60" />
-      </g>
+      />
 
       <circle
         className="draw stroke-ink"
         cx={200}
         cy={240}
         r={110}
+        pathLength={1}
         fill="none"
         strokeWidth={2}
         style={delay(700, 1100)}
@@ -46,6 +47,7 @@ export function AboutIllustration() {
       <path
         className="draw stroke-accent"
         d="M60 330 Q200 60 340 150"
+        pathLength={1}
         fill="none"
         strokeWidth={2}
         style={delay(1400, 1200)}

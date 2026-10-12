@@ -47,7 +47,6 @@ const VAR_VALUE =
 export function CodeDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
   const runIdRef = useRef(0);
-  const startedRef = useRef(false);
 
   const [typedLines, setTypedLines] = useState<string[]>(() =>
     TASK5_CODE.map(() => ""),
@@ -165,8 +164,7 @@ export function CodeDemo() {
 
   useEffect(() => {
     const element = containerRef.current;
-    if (!element || startedRef.current) return;
-    startedRef.current = true;
+    if (!element) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       playRef.current();
