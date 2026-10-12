@@ -1,0 +1,680 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/*
+ * Design tokens extracted from the original prototype (ideal.html).
+ * Kept as Tailwind v4 theme variables so they are available both as
+ * utilities (bg-accent, text-ink-soft, ...) and as CSS custom properties.
+ */
+@theme {
+  --color-canvas: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f0f0ed;
+
+  --color-ink: #111111;
+  --color-ink-soft: #686865;
+  --color-ink-faint: #989895;
+
+  --color-line: #deded9;
+  --color-line-strong: #c9c9c3;
+
+  --color-accent: #3157d5;
+  --color-accent-strong: #2547b8;
+  --color-accent-soft: #e9edff;
+
+  --color-success: #208a5a;
+  --color-success-soft: #e8f5ee;
+  --color-danger: #c83b3b;
+  --color-danger-soft: #fbeded;
+  --color-warning: #b7791f;
+
+  --font-sans:
+    var(--font-geist), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", "Geist Mono", Menlo, Consolas, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /*
+   * Custom "desk" breakpoint (1200px), matching the original prototype's
+   * `max-width: 1199px` switch. Must be expressed in `rem` like Tailwind's
+   * built-in breakpoints, otherwise the generated media queries are ordered
+   * incorrectly and the desktop overrides silently lose to `sm`/`md`.
+   */
+  --breakpoint-desk: 75rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (max-width: 767px) {
+    body {
+      font-size: 16px;
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+@layer components {
+  /* ---- typography ------------------------------------------------------ */
+  .eyebrow {
+    display: block;
+    margin-bottom: 1.5rem;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+  }
+
+  .display-title {
+    font-size: clamp(46px, 7.2vw, 108px);
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .heading-2 {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+  }
+
+  .heading-3 {
+    font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+
+  .body-large {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--color-ink-soft);
+    max-width: 34em;
+  }
+
+  @media (max-width: 767px) {
+    .body-large {
+      font-size: 18px;
+    }
+  }
+
+  .serif-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .display-title .serif-accent {
+    text-transform: none;
+    letter-spacing: -0.03em;
+    font-size: 1.05em;
+    color: var(--color-accent);
+  }
+
+  /* ---- scroll reveal --------------------------------------------------- */
+  /*
+   * The hidden state is only applied when <html> has the `js` class, which a
+   * tiny inline script adds before first paint. Without JavaScript the content
+   * stays visible, so the reveal is a pure enhancement.
+   */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 700ms var(--ease-soft),
+      transform 700ms var(--ease-soft);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+
+  .js .reveal[data-reveal-in] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /*
+   * ---- JavaScript availability switch -----------------------------------
+   * The `js` class is added to <html> before first paint (see the root
+   * layout). Components can then ship two presentations: a scripted one
+   * (`.js-only`) and a static fallback (`.no-js-only`).
+   *
+   * `!important` is required because Tailwind utilities live in a later
+   * cascade layer, so a plain component rule would lose to e.g. `grid`.
+   */
+  .no-js-only {
+    display: block;
+  }
+
+  html.js .no-js-only {
+    display: none !important;
+  }
+
+  html:not(.js) .js-only {
+    display: none !important;
+  }
+
+  /*
+   * Collapsible task solution: collapsed by default, opened by React once the
+   * answer is correct (or on request). Without JavaScript it is simply open.
+   */
+  .solution-panel {
+    display: none;
+  }
+
+  .solution-panel[data-open="true"] {
+    display: block;
+  }
+
+  html:not(.js) .solution-panel {
+    display: block !important;
+  }
+
+  /*
+   * Entrance animation that never hides content when it cannot run: the base
+   * state is fully visible, the keyframes only animate *into* place. Used for
+   * content above the fold so the first paint is complete without JavaScript.
+   */
+  .rise {
+    animation: fade-up 700ms var(--ease-soft) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+
+  /* ---- hero visualisation --------------------------------------------- */
+  .viz {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xl);
+    padding: 28px 28px 20px;
+  }
+
+  .viz-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--color-ink-soft);
+    margin-bottom: 22px;
+  }
+
+  .viz-top b {
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .formulas {
+    display: grid;
+    gap: 6px;
+    font-size: 22px;
+    min-height: 84px;
+  }
+
+  .formulas .f {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    animation: fade-up 600ms var(--ease-soft) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .formulas .part {
+    display: inline-block;
+    animation: fade-up 500ms var(--ease-soft) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .formulas .derivative {
+    color: var(--color-accent);
+  }
+
+  .graph-wrap {
+    margin-top: 8px;
+  }
+
+  .graph {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .g-grid line {
+    stroke: var(--color-line);
+    stroke-width: 1;
+  }
+
+  .g-axis {
+    stroke: var(--color-line-strong);
+    stroke-width: 1.25;
+  }
+
+  .g-text {
+    fill: var(--color-ink-faint);
+    font-family: var(--font-sans);
+    font-size: 12px;
+  }
+
+  .g-curve {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  .g-tan {
+    stroke: var(--color-accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .g-pt {
+    fill: var(--color-accent);
+    stroke: var(--color-surface);
+    stroke-width: 3;
+  }
+
+  .g-label {
+    fill: var(--color-accent);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .g-drop {
+    stroke: var(--color-accent);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+    opacity: 0.6;
+  }
+
+  .draw-in {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1100ms var(--ease-soft) both;
+    animation-delay: var(--d, 0ms);
+    animation-duration: var(--dur, 1100ms);
+  }
+
+  .fade-el {
+    opacity: 0;
+    animation: fade-in 600ms var(--ease-soft) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .viz-note {
+    font-size: 13px;
+    color: var(--color-ink-faint);
+    margin-top: 8px;
+  }
+
+  /* ---- quiz ------------------------------------------------------------ */
+  .option {
+    min-height: 60px;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-canvas);
+    border-radius: var(--radius-md);
+    font-size: 22px;
+    font-weight: 500;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      transform 300ms var(--ease-soft);
+  }
+
+  .option:hover:not(:disabled) {
+    border-color: var(--color-ink);
+    background: var(--color-surface);
+  }
+
+  .option:disabled {
+    cursor: default;
+  }
+
+  .option[data-state="wrong"] {
+    border-color: var(--color-danger);
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+    animation: nudge 300ms var(--ease-soft);
+  }
+
+  .option[data-state="right"] {
+    border-color: var(--color-success);
+    background: var(--color-success-soft);
+    color: var(--color-success);
+  }
+
+  .feedback {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms var(--ease-soft);
+  }
+
+  .feedback[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+
+  .feedback > div {
+    overflow: hidden;
+  }
+
+  .step {
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+      opacity 500ms var(--ease-soft),
+      transform 500ms var(--ease-soft);
+    padding: 6px 10px;
+    border-left: 2px solid var(--color-line);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .step[data-visible] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .step[data-final] {
+    border-left-color: var(--color-success);
+    background: var(--color-success-soft);
+  }
+
+  /* ---- difficulty meter ------------------------------------------------ */
+  .diff {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    margin-right: 8px;
+  }
+
+  .diff i {
+    width: 14px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--color-line-strong);
+  }
+
+  .diff i[data-on] {
+    background: var(--color-ink);
+  }
+
+  /* ---- code demo ------------------------------------------------------- */
+  .editor {
+    width: 100%;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .editor-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 13px;
+    color: var(--color-ink-soft);
+    background: var(--color-surface-subtle);
+  }
+
+  .code {
+    margin: 0;
+    padding: 20px 0;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 300px;
+    overflow-x: auto;
+    counter-reset: line;
+  }
+
+  .code .ln {
+    display: block;
+    padding: 0 20px 0 56px;
+    position: relative;
+    white-space: pre;
+    min-height: 1.75em;
+    border-left: 2px solid transparent;
+    transition: background-color 150ms ease;
+  }
+
+  .code .ln::before {
+    counter-increment: line;
+    content: counter(line);
+    position: absolute;
+    left: 18px;
+    width: 24px;
+    text-align: right;
+    color: var(--color-ink-faint);
+  }
+
+  .code .ln[data-active] {
+    background: var(--color-accent-soft);
+    border-left-color: var(--color-accent);
+  }
+
+  .code .tok-keyword {
+    color: var(--color-accent);
+  }
+
+  .code .tok-fn {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .code .tok-string {
+    color: var(--color-success);
+  }
+
+  .code .tok-number {
+    color: var(--color-warning);
+  }
+
+  .code .tok-comment {
+    color: var(--color-ink-faint);
+  }
+
+  @media (max-width: 767px) {
+    .code {
+      font-size: 13px;
+      min-height: 260px;
+    }
+
+    .code .ln {
+      padding-left: 44px;
+      padding-right: 12px;
+    }
+
+    .code .ln::before {
+      left: 10px;
+    }
+  }
+
+  .caret {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    background: var(--color-accent);
+    vertical-align: text-bottom;
+    margin-left: 1px;
+    animation: blink 1s steps(2) infinite;
+  }
+
+  .log {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0;
+  }
+
+  .log-row {
+    display: flex;
+    gap: 16px;
+    padding: 0 8px;
+    border-radius: var(--radius-sm);
+    animation: row-in 250ms var(--ease-soft);
+  }
+
+  .log-row > span:first-child {
+    min-width: 5ch;
+  }
+
+  .log-row[data-hit] {
+    background: var(--color-success-soft);
+    color: var(--color-success);
+    font-weight: 600;
+  }
+
+  /* ---- about illustration --------------------------------------------- */
+  .about-art .draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .about-art .a-fade {
+    opacity: 0;
+  }
+
+  .about-art[data-reveal-in] .draw {
+    animation: draw var(--dur, 1000ms) var(--ease-soft) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .about-art[data-reveal-in] .a-fade {
+    animation: fade-in var(--dur, 600ms) ease-out both;
+    animation-delay: var(--d, 0ms);
+  }
+}
+
+/* ---- keyframes --------------------------------------------------------- */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes nudge {
+  30% {
+    transform: translateX(-4px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transform: none !important;
+    transition-property: opacity, background-color, border-color, color !important;
+    transition-duration: 200ms !important;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .formulas .f,
+  .formulas .part,
+  .fade-el,
+  .about-art .a-fade {
+    opacity: 1;
+  }
+
+  .draw-in,
+  .about-art .draw {
+    stroke-dashoffset: 0;
+  }
+}
+
+/*
+ * The original prototype rendered KaTeX from a CDN and had no styles for
+ * inline formulas inside prose. Slightly reduce the display size so formulas
+ * sit comfortably in the task statement without overflowing on mobile.
+ */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
