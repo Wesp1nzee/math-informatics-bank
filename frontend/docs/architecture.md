@@ -42,17 +42,17 @@
 
 Клиентских модулей всего восемь, каждый обоснован:
 
-| Компонент                                       | Почему клиентский                                                        |
-| ----------------------------------------------- | ------------------------------------------------------------------------ |
-| `features/home/components/task-quiz.tsx`        | Состояние ответа и отложенное раскрытие шагов.                           |
-| `features/home/components/code-demo.tsx`        | Пошаговая анимация набора кода и прогон цикла (`setTimeout`, состояние). |
-| `features/home/components/hero-parallax.tsx`    | Параллакс по `scroll` через `requestAnimationFrame`.                     |
-| `features/tasks/components/answer-form.tsx`     | Ввод ответа, проверка, раскрытие решения.                                |
-| `features/tutor-leads/components/lead-form.tsx` | Форма: React Hook Form + Zod, состояние отправки.                        |
-| `components/layout/site-header.tsx`             | Класс `scrolled` по событию прокрутки.                                   |
-| `components/layout/mobile-nav.tsx`              | Radix Dialog: фокус-трап, Escape, возврат фокуса.                        |
-| `components/ui/scroll-reveal.tsx`               | Один `IntersectionObserver` на всю страницу для класса `.reveal`.        |
-| `components/ui/label.tsx`                       | Обёртка над Radix Label (нужен клиентский контекст).                     |
+| Компонент                                       | Почему клиентский                                                                     |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `features/home/components/task-quiz.tsx`        | Состояние ответа и отложенное раскрытие шагов.                                        |
+| `features/home/components/code-demo.tsx`        | Пошаговая анимация набора кода и прогон цикла (`setTimeout`, состояние).              |
+| `features/home/components/hero-parallax.tsx`    | Параллакс по `scroll` через `requestAnimationFrame`.                                  |
+| `features/tasks/components/answer-form.tsx`     | Ввод ответа, проверка, раскрытие решения.                                             |
+| `features/tutor-leads/components/lead-form.tsx` | Форма: React Hook Form + Zod, состояние отправки.                                     |
+| `components/layout/site-header.tsx`             | Класс `scrolled` по событию прокрутки.                                                |
+| `components/layout/mobile-nav.tsx`              | Radix Dialog: фокус-трап, Escape, возврат фокуса.                                     |
+| `components/ui/scroll-reveal.tsx`               | Показ `.reveal`-секций: проверка по `scroll`/`resize`, перезапуск по `usePathname()`. |
+| `components/ui/label.tsx`                       | Обёртка над Radix Label (нужен клиентский контекст).                                  |
 
 Вспомогательно: `lib/utils/use-prefers-reduced-motion.ts` — хук на
 `useSyncExternalStore`.
@@ -73,12 +73,21 @@
 Наличие скриптов определяется CSS-медиафункцией `scripting`:
 
 ```css
-.reveal { opacity: 0; /* состояние для браузера со скриптами */ }
+.reveal {
+  opacity: 0; /* состояние для браузера со скриптами */
+}
 
 @media (scripting: none) {
-  .reveal { opacity: 1; transform: none; }
-  .js-only { display: none !important; }
-  .no-js-only { display: block; }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .js-only {
+    display: none !important;
+  }
+  .no-js-only {
+    display: block;
+  }
 }
 ```
 

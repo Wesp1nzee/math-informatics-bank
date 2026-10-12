@@ -62,15 +62,40 @@ test.describe("home page", () => {
     ).toHaveAttribute("href", "/zadachi/1042");
   });
 
-  test("scroll reveal activates below-the-fold sections", async ({ page }) => {
+  test("every revealed section becomes visible after scrolling", async ({ page }) => {
     await page.goto("/");
-    await page.mouse.wheel(0, 4000);
+
+    // Прыжок в конец: раньше IntersectionObserver пропускал элементы, которые
+    // проскочили мимо окна, и часть секций оставалась невидимой.
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
     await expect
       .poll(async () =>
-        page.evaluate(
-          () => document.querySelectorAll(".reveal[data-reveal-in]").length,
-        ),
+        page.evaluate(() => {
+          const all = Array.from(document.querySelectorAll(".reveal"));
+          return all.length > 0 && all.every((el) => el.hasAttribute("data-reveal-in"));
+        }),
       )
-      .toBeGreaterThan(0);
+      .toBe(true);
+  });
+
+  test("reveal still works after client-side navigation", async ({ page }) => {
+    // Regression: ScrollReveal живёт в layout, который при soft-навигации не
+    // перемонтируется. Без зависимости от pathname observer продолжал следить
+    // за узлами предыдущей страницы, и вся главная оставалась прозрачной.
+    await page.goto("/articles");
+    await page.getByRole("link", { name: "Главная" }).first().click();
+    await expect(page).toHaveURL(/\/$/);
+
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+    await expect
+      .poll(async () =>
+        page.evaluate(() => {
+          const all = Array.from(document.querySelectorAll(".reveal"));
+          return all.length > 0 && all.every((el) => el.hasAttribute("data-reveal-in"));
+        }),
+      )
+      .toBe(true);
   });
 });
