@@ -3,7 +3,6 @@ import { absoluteUrl } from "@/lib/seo/metadata";
 
 export type JsonLdObject = Record<string, unknown>;
 
-/** WebSite entity for the home page. */
 export function webSiteJsonLd(): JsonLdObject {
   return {
     "@context": "https://schema.org",
@@ -64,5 +63,53 @@ export function learningResourceJsonLd(input: {
     inLanguage: "ru-RU",
     learningResourceType: "Задача с решением",
     ...(input.educationalLevel ? { educationalLevel: input.educationalLevel } : {}),
+  };
+}
+
+export function personJsonLd(input: {
+  name: string;
+  description?: string;
+  image?: string;
+  sameAs?: readonly string[];
+}): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: input.name,
+    ...(input.description ? { description: input.description } : {}),
+    ...(input.image ? { image: absoluteUrl(input.image) } : {}),
+    ...(input.sameAs && input.sameAs.length > 0
+      ? { sameAs: [...input.sameAs] }
+      : {}),
+  };
+}
+
+export function serviceJsonLd(input: {
+  name: string;
+  description: string;
+  providerName?: string;
+  areaServed?: string;
+}): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: input.name,
+    description: input.description,
+    ...(input.providerName
+      ? { provider: { "@type": "Person", name: input.providerName } }
+      : {}),
+    ...(input.areaServed ? { areaServed: input.areaServed } : {}),
+  };
+}
+
+export function faqPageJsonLd(items: readonly { question: string; answer: string }[]): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
   };
 }

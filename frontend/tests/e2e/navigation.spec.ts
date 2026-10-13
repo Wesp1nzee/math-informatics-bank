@@ -15,7 +15,7 @@ test.describe("navigation and layout", () => {
   test("tutoring CTA reaches the request page", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("link", { name: /Обсудить занятия/ }).click();
-    await expect(page).toHaveURL(/\/podgotovka$/);
+    await expect(page).toHaveURL(/\/podgotovka(#request)?$/);
     await expect(
       page.getByRole("heading", { level: 1, name: /системный результат/ }),
     ).toBeVisible();

@@ -3,12 +3,11 @@ import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
 import { Button, ButtonArrow } from "@/components/ui/button";
-import { TUTORING_INTRO } from "@/features/tutor-leads/content";
 import { TutoringFacts } from "@/features/tutor-leads/components/tutoring-facts";
+import { AI_POSITIONING, TUTORING_INTRO } from "@/features/tutor-leads/content";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
-/** Home page preview of individual lessons. */
 export function TutoringSection() {
   return (
     <Section id="tutoring" labelledBy="tutoring-title">
@@ -19,8 +18,9 @@ export function TutoringSection() {
             Хотите системный результат?
           </h2>
           <p className="body-large mt-6">{TUTORING_INTRO}</p>
+          <p className="text-ink mt-4 font-medium">{AI_POSITIONING}</p>
           <Button asChild className="mt-10">
-            <Link href="/podgotovka">
+            <Link href="/podgotovka#request">
               Обсудить занятия <ButtonArrow />
             </Link>
           </Button>

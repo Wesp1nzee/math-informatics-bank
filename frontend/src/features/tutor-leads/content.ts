@@ -1,4 +1,10 @@
-import type { TutorLeadInput, TutorLeadSubject } from "@/features/tutor-leads/types";
+import type {
+  FaqItem,
+  PricingInfo,
+  Review,
+  TutorLeadInput,
+  TutorLeadSubject,
+} from "@/features/tutor-leads/types";
 
 export const TUTORING_INTRO =
   "Если задач из открытого доступа недостаточно, можно заниматься лично: найдём, где именно теряются баллы, и выстроим работу вокруг этого.";
@@ -69,14 +75,78 @@ export const CTA_CONTENT: Record<CtaPlacement, CtaCopy> = {
   },
 };
 
-export const TUTORING_FACTS: readonly { label: string; value: string }[] = [
-  { label: "Предметы", value: "Математика и информатика" },
-  { label: "Экзамены", value: "ОГЭ и ЕГЭ" },
-  { label: "Формат", value: "Индивидуальные занятия" },
-  { label: "Пробелы", value: "Находим и закрываем по темам" },
-  { label: "Ошибки", value: "Разбираем причины, а не только ответы" },
-  { label: "Домашние задания", value: "Посильные и по делу" },
-  { label: "Прогресс", value: "Отслеживаем по темам" },
+/**
+ * Benefits for the student, shown as a bento grid (not a key/value table).
+ * Everything here is process, not invented numbers, prices or results.
+ */
+export const TUTORING_FACTS: readonly { title: string; text: string }[] = [
+  {
+    title: "Разбор причин ошибок",
+    text: "Не просто показываю верное решение, а разбираю, почему ошибка возникла именно у вас.",
+  },
+  {
+    title: "Программа под ваш уровень",
+    text: "Начинаем с диагностики и двигаемся от того, что не получается сейчас.",
+  },
+  {
+    title: "Математика и информатика",
+    text: "Подготовка к ОГЭ и ЕГЭ по обоим предметам — можно заниматься только одним.",
+  },
+  {
+    title: "Домашние задания по делу",
+    text: "Посильные задания, чтобы закреплять разобранное, а не заваливать объёмом.",
+  },
+  {
+    title: "Обратная связь",
+    text: "После занятия понятно, что получилось и над чем работать дальше.",
+  },
+  {
+    title: "Прогресс по темам",
+    text: "Отмечаем, какие темы закрыты, а какие ещё проседают.",
+  },
+];
+
+/**
+ * Pricing is configured by the owner. `null` means "not announced yet": the UI
+ * then shows only the neutral line below and never an invented number.
+ */
+export const PRICING: PricingInfo | null = null;
+
+export const PRICING_FALLBACK_NOTE =
+  "Стоимость обсуждаем после диагностики — она зависит от цели и количества занятий.";
+
+/**
+ * Reviews are shown only with explicit consent (`consentGiven: true`). The list
+ * is empty by default: no real reviews means no review block.
+ */
+export const REVIEWS: readonly Review[] = [];
+
+/** FAQ shown on the tutoring page and mirrored into FAQPage JSON-LD. */
+export const FAQ_ITEMS: readonly FaqItem[] = [
+  {
+    question: "В каком формате проходят занятия?",
+    answer:
+      "Индивидуально, онлайн. Работаем по вашему уровню и цели: от разбора конкретных ошибок до системной подготовки.",
+  },
+  {
+    question: "Как проходит пробное занятие?",
+    answer:
+      "Начинаем с диагностики: разбираем несколько задач и находим темы, где теряются баллы. По результату понятно, с чего начать.",
+  },
+  {
+    question: "Сколько занятий в неделю нужно?",
+    answer:
+      "Зависит от цели и запаса времени. После диагностики предложу ритм, который реально выдержать вместе со школой.",
+  },
+  {
+    question: "Что делать с ИИ-решателями?",
+    answer:
+      "Задача — чтобы вы решали сами. На экзамене готовый ответ не поможет: важен ход мысли, поэтому мы разбираем его, а не копируем.",
+  },
+  {
+    question: "Как отменить или перенести занятие?",
+    answer: "Напишите заранее — согласуем другое время.",
+  },
 ];
 
 export const SUBJECT_OPTIONS: readonly {

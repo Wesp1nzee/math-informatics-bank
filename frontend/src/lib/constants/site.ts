@@ -1,10 +1,3 @@
-/**
- * Central site configuration.
- *
- * Values that were placeholders in the original prototype (tutor name and
- * contacts) are read from the environment and are empty by default. UI must
- * not invent them — blocks that depend on missing data are hidden.
- */
 
 function normalizeSiteUrl(raw: string | undefined): string {
   const value = raw?.trim();
@@ -16,9 +9,11 @@ function normalizeSiteUrl(raw: string | undefined): string {
 const tutorName = process.env.NEXT_PUBLIC_TUTOR_NAME?.trim() ?? "";
 const tutorTelegram = process.env.NEXT_PUBLIC_TUTOR_TELEGRAM?.trim() ?? "";
 const tutorEmail = process.env.NEXT_PUBLIC_TUTOR_EMAIL?.trim() ?? "";
+const tutorPhoto = process.env.NEXT_PUBLIC_TUTOR_PHOTO?.trim() ?? "";
+const tutorVideo = process.env.NEXT_PUBLIC_TUTOR_VIDEO?.trim() ?? "";
+const tutorAbout = process.env.NEXT_PUBLIC_TUTOR_ABOUT?.trim() ?? "";
 
 export const siteConfig = {
-  /** Fallback name used when no real tutor name is configured. */
   name: "Математика и информатика",
   url: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL),
   locale: "ru_RU",
@@ -28,18 +23,21 @@ export const siteConfig = {
     name: tutorName,
     telegram: tutorTelegram,
     email: tutorEmail,
+    photo: tutorPhoto,
+    video: tutorVideo,
+    about: tutorAbout,
   },
 } as const;
 
-/** True when at least one real contact channel is configured. */
 export const hasTutorContacts = tutorTelegram.length > 0 || tutorEmail.length > 0;
 
-/** Header/footer brand. Falls back to the subject name, never to a fake person. */
+/** True when there is enough real data to render a teacher block. */
+export const hasTutorProfile = tutorName.length > 0 && tutorAbout.length > 0;
+
 export const brand: { text: string; accent: string } = tutorName
   ? { text: tutorName, accent: "." }
   : { text: "Математика", accent: "· Информатика" };
 
-/** Turns "@username" or a full URL into a telegram link, or null when unset. */
 export function telegramHref(value: string): string | null {
   const handle = value.trim();
   if (!handle) return null;
