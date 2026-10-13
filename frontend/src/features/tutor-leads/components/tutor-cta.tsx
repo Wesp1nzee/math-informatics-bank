@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +10,7 @@ import {
   REQUEST_PATH,
   type CtaPlacement,
 } from "@/features/tutor-leads/content";
+import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
 
 type TutorCtaProps = {
@@ -26,9 +28,27 @@ type TutorCtaProps = {
 export function TutorCta({ placement, size = "default", className }: TutorCtaProps) {
   const copy = CTA_CONTENT[placement];
   const compact = size === "compact";
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        track(ANALYTICS_EVENTS.ctaView, { placement });
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [placement]);
 
   return (
     <aside
+      ref={ref}
       aria-label={copy.title}
       data-cta-placement={placement}
       className={cn(
@@ -50,7 +70,10 @@ export function TutorCta({ placement, size = "default", className }: TutorCtaPro
       </p>
       <p className="text-ink-soft mt-2 text-[15px] leading-relaxed">{copy.text}</p>
       <Button asChild size="sm" className="mt-4">
-        <Link href={REQUEST_PATH}>
+        <Link
+          href={REQUEST_PATH}
+          onClick={() => track(ANALYTICS_EVENTS.ctaClick, { placement })}
+        >
           {copy.action}
           <ArrowRight aria-hidden className="size-4" />
         </Link>

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleAlert, CircleCheck, Send } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   type TutorLeadFormValues,
 } from "@/features/tutor-leads/schema";
 import type { ContactChannels, TutorLeadDelivery } from "@/features/tutor-leads/types";
+import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { describeApiError } from "@/lib/api/errors";
 
 const DELIVERY_MESSAGE: Record<TutorLeadDelivery, string> = {
@@ -37,6 +38,13 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
   const [delivery, setDelivery] = useState<TutorLeadDelivery | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const startedRef = useRef(false);
+
+  function markStarted() {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    track(ANALYTICS_EVENTS.leadFormStart);
+  }
 
   const {
     register,
@@ -69,9 +77,11 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
         channels,
       );
       setDelivery(result);
+      track(ANALYTICS_EVENTS.leadFormSubmit, { channel: result });
       reset();
     } catch (error) {
       setFailure(describeApiError(error));
+      track(ANALYTICS_EVENTS.leadFormError, { stage: "submit" });
     } finally {
       setPending(false);
     }
@@ -105,6 +115,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
   return (
     <form
       onSubmit={onSubmit}
+      onFocusCapture={markStarted}
       noValidate
       data-lead-form=""
       className="border-line bg-surface flex flex-col gap-5 rounded-xl border p-6 md:p-8"

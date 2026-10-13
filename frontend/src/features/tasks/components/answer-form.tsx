@@ -1,12 +1,13 @@
 "use client";
 
 import { Eye, EyeOff, RotateCcw } from "lucide-react";
-import { useId, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
+import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { isAnswerCorrect, type AnswerKind } from "@/lib/utils/check-answer";
 import { cn } from "@/lib/utils/cn";
 
@@ -27,16 +28,28 @@ export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormP
   const [attempts, setAttempts] = useState(0);
   const [revealed, setRevealed] = useState(false);
 
+  useEffect(() => {
+    if (revealed) track(ANALYTICS_EVENTS.solutionOpen);
+  }, [revealed]);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!value.trim()) {
       setStatus("wrong");
       setAttempts((count) => count + 1);
+      track(ANALYTICS_EVENTS.taskAnswerAttempt, {
+        correct: false,
+        attempt: attempts + 1,
+      });
       return;
     }
     const correct = isAnswerCorrect(value, expected, kind);
     setStatus(correct ? "correct" : "wrong");
     setAttempts((count) => count + 1);
+    track(ANALYTICS_EVENTS.taskAnswerAttempt, {
+      correct,
+      attempt: attempts + 1,
+    });
     if (correct) setRevealed(true);
   }
 

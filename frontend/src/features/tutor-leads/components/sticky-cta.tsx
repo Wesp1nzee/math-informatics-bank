@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
+import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
 
 /** Sticky CTA is only useful where a "warm" moment exists. */
@@ -25,6 +26,7 @@ export function StickyCta() {
   const relevant = isRelevantPath(pathname);
   const [scrolledPast, setScrolledPast] = useState(false);
   const [formVisible, setFormVisible] = useState(false);
+  const viewedRef = useRef(false);
 
   useEffect(() => {
     if (!relevant) return;
@@ -42,7 +44,7 @@ export function StickyCta() {
     if (!relevant) return;
 
     const forms = Array.from(document.querySelectorAll("[data-lead-form]"));
-    if (forms.length === 0) {
+    if (forms.length === 0 || typeof IntersectionObserver === "undefined") {
       const frame = window.requestAnimationFrame(() => setFormVisible(false));
       return () => window.cancelAnimationFrame(frame);
     }
@@ -57,9 +59,15 @@ export function StickyCta() {
     return () => observer.disconnect();
   }, [relevant, pathname]);
 
-  if (!relevant) return null;
-
   const visible = scrolledPast && !formVisible;
+
+  useEffect(() => {
+    if (!visible || viewedRef.current) return;
+    viewedRef.current = true;
+    track(ANALYTICS_EVENTS.ctaView, { placement: "sticky-mobile" });
+  }, [visible]);
+
+  if (!relevant) return null;
 
   return (
     <div className="md:hidden">
@@ -74,6 +82,9 @@ export function StickyCta() {
         >
           <Link
             href={REQUEST_PATH}
+            onClick={() =>
+              track(ANALYTICS_EVENTS.ctaClick, { placement: "sticky-mobile" })
+            }
             className="bg-accent hover:bg-accent-strong flex min-h-12 items-center justify-center gap-2 rounded-md text-base font-medium text-white transition-colors"
           >
             Записаться на пробное
