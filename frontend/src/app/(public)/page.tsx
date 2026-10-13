@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { JsonLd } from "@/components/seo/json-ld";
 import { Section } from "@/components/layout/section";
+import { JsonLd } from "@/components/seo/json-ld";
 import {
   AboutSection,
   ArticlesSection,
@@ -12,9 +12,11 @@ import {
   TryTaskSection,
   TutoringSection,
 } from "@/features/home";
+import { Faq } from "@/features/tutor-leads/components/faq";
 import { TutorProfile } from "@/features/tutor-leads/components/tutor-profile";
+import { FAQ_ITEMS } from "@/features/tutor-leads/content";
 import { hasTutorProfile, siteConfig } from "@/lib/constants/site";
-import { personJsonLd, webSiteJsonLd } from "@/lib/seo/json-ld";
+import { faqPageJsonLd, personJsonLd, webSiteJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -29,6 +31,7 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={webSiteJsonLd()} />
+      <JsonLd data={faqPageJsonLd(FAQ_ITEMS)} />
       {hasTutorProfile ? (
         <JsonLd
           data={personJsonLd({
@@ -38,18 +41,30 @@ export default function HomePage() {
           })}
         />
       ) : null}
+
       <HeroSection />
       <TryTaskSection />
-      <CodeSection />
+
       {hasTutorProfile ? (
         <Section id="tutor" labelledBy="tutor-title">
           <TutorProfile />
         </Section>
       ) : null}
-      <TutoringSection />
-      <ArticlesSection />
+
+      <CodeSection />
       <TasksSection />
+      <ArticlesSection />
       <AboutSection />
+      <TutoringSection />
+
+      <Section id="faq" labelledBy="home-faq-title">
+        <span className="eyebrow">Частые вопросы</span>
+        <h2 id="home-faq-title" className="heading-2 mb-8">
+          Вопросы и ответы
+        </h2>
+        <Faq className="max-w-3xl" />
+      </Section>
+
       <FinalCta />
     </>
   );

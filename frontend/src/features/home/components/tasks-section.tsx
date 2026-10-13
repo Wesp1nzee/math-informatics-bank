@@ -8,7 +8,6 @@ import { Button, ButtonArrow } from "@/components/ui/button";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
-/** Home page preview of the task bank — links go to real task pages. */
 export async function TasksSection() {
   const tasks = await getFeaturedTasks(3);
 
@@ -16,7 +15,7 @@ export async function TasksSection() {
     <section
       id="tasks"
       aria-labelledby="bank-title"
-      className="border-line bg-surface-subtle desk:py-[140px] border-t py-20 md:py-[104px]"
+      className="border-line bg-surface-subtle desk:py-24 border-t py-16 md:py-20"
     >
       <Container>
         <div className="reveal flex flex-wrap items-end justify-between gap-8">

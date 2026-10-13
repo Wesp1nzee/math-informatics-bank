@@ -8,7 +8,6 @@ import { SUBJECT_LABEL } from "@/features/tasks/labels";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
-/** Home page article preview: one lead article plus a compact list. */
 export async function ArticlesSection() {
   const { items } = await getArticles();
   const [lead, ...rest] = items;
@@ -17,7 +16,10 @@ export async function ArticlesSection() {
   const side = rest.slice(0, 2);
 
   return (
-    <Section labelledBy="articles-title">
+    <Section
+      labelledBy="articles-title"
+      className="desk:py-24 bg-surface py-16 md:py-20"
+    >
       <div className="reveal mb-[72px] max-md:mb-12">
         <span className="eyebrow">Разборы и идеи</span>
         <h2 id="articles-title" className="heading-2">

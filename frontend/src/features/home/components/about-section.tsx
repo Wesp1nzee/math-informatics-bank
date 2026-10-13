@@ -7,12 +7,12 @@ const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
 export function AboutSection() {
   return (
-    <Section id="about" labelledBy="about-title" className="bg-surface">
+    <Section
+      id="about"
+      labelledBy="about-title"
+      className="desk:py-24 py-16 md:py-20"
+    >
       <div className="grid grid-cols-12 items-center gap-4 md:gap-6">
-        {/*
-          `about-art` also carries `reveal`: once the element becomes visible,
-          `data-reveal-in` starts the SVG draw-in animations (see globals.css).
-        */}
         <div className="about-art reveal border-line bg-canvas desk:col-span-5 col-span-12 max-w-[480px] overflow-hidden rounded-xl border">
           <AboutIllustration />
         </div>
