@@ -4,7 +4,6 @@ import type { CSSProperties } from "react";
 import { Container } from "@/components/layout/container";
 import { Button, ButtonArrow } from "@/components/ui/button";
 import { DerivativeViz } from "@/features/home/components/derivative-viz";
-import { HeroParallax } from "@/features/home/components/hero-parallax";
 import { AI_POSITIONING, REQUEST_PATH } from "@/features/tutor-leads/content";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
@@ -20,7 +19,7 @@ export function HeroSection() {
         <div className="grid grid-cols-12 items-center gap-4 md:gap-6">
           <div className="desk:col-span-6 col-span-12">
             <span className="eyebrow rise">ОГЭ и ЕГЭ · математика и информатика</span>
-            <h1 id="hero-title" className="display-title rise" style={step(1)}>
+            <h1 id="hero-title" className="display-title rise-lcp" style={step(1)}>
               Математика
               <br />
               начинается
@@ -46,9 +45,7 @@ export function HeroSection() {
           </div>
 
           <div className="desk:col-span-6 desk:mt-0 col-span-12 mt-12">
-            <HeroParallax>
-              <DerivativeViz />
-            </HeroParallax>
+            <DerivativeViz />
           </div>
         </div>
       </Container>

@@ -64,16 +64,19 @@ test.describe("home page", () => {
 
   test("every revealed section becomes visible after scrolling", async ({ page }) => {
     await page.goto("/");
-
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForLoadState("networkidle");
+    await page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
 
     await expect
-      .poll(async () =>
-        page.evaluate(() => {
+      .poll(async () => {
+        await page.evaluate(() =>
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
+        );
+        return page.evaluate(() => {
           const all = Array.from(document.querySelectorAll(".reveal"));
           return all.length > 0 && all.every((el) => el.hasAttribute("data-reveal-in"));
-        }),
-      )
+        });
+      })
       .toBe(true);
   });
 
@@ -81,16 +84,19 @@ test.describe("home page", () => {
     await page.goto("/articles");
     await page.getByRole("link", { name: "Главная" }).first().click();
     await expect(page).toHaveURL(/\/$/);
-
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForLoadState("networkidle");
+    await page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
 
     await expect
-      .poll(async () =>
-        page.evaluate(() => {
+      .poll(async () => {
+        await page.evaluate(() =>
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
+        );
+        return page.evaluate(() => {
           const all = Array.from(document.querySelectorAll(".reveal"));
           return all.length > 0 && all.every((el) => el.hasAttribute("data-reveal-in"));
-        }),
-      )
+        });
+      })
       .toBe(true);
   });
 

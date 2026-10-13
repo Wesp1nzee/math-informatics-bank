@@ -1,5 +1,6 @@
 "use client";
 
+import { Pause, Play, SkipForward } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -39,14 +40,14 @@ const VAR_LABEL = "block text-xs text-ink-faint";
 const VAR_VALUE =
   "block font-mono text-xl leading-snug tabular-nums [overflow-wrap:anywhere]";
 
-/**
- * Animated walkthrough of the task-5 program: types the code, then replays the
- * loop step by step and prints the result. All animation is skipped when the
- * user prefers reduced motion — the final state is shown instead.
- */
+const CONTROL =
+  "border-line-strong text-ink hover:border-ink hover:bg-surface inline-flex min-h-10 items-center gap-2 rounded-md border bg-transparent px-4 text-[15px] font-medium transition-colors";
+
 export function CodeDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
   const runIdRef = useRef(0);
+  const pausedRef = useRef(false);
+  const skipRef = useRef(false);
 
   const [typedLines, setTypedLines] = useState<string[]>(() =>
     TASK5_CODE.map(() => ""),
@@ -54,6 +55,7 @@ export function CodeDemo() {
   const [typingLine, setTypingLine] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [activeLine, setActiveLine] = useState<number | null>(null);
+  const [paused, setPaused] = useState(false);
   const [vars, setVars] = useState<Partial<Task5Run>>({});
   const [log, setLog] = useState<Task5Run[]>([]);
   const [result, setResult] = useState<number | null>(null);
@@ -64,6 +66,9 @@ export function CodeDemo() {
     setTypingLine(null);
     setStatus("idle");
     setActiveLine(null);
+    setPaused(false);
+    pausedRef.current = false;
+    skipRef.current = false;
     setVars({});
     setLog([]);
     setResult(null);
@@ -104,55 +109,75 @@ export function CodeDemo() {
       return;
     }
 
+    /** Resolves in small steps so pause/skip apply immediately. */
+    const pauseable = async (ms: number) => {
+      let waited = 0;
+      while (waited < ms) {
+        if (skipRef.current) return;
+        if (!pausedRef.current) waited += 40;
+        await sleep(40);
+      }
+    };
+
+    /** Returns true when the run was cancelled or skipped. */
+    const bail = () => {
+      if (!alive()) return true;
+      if (skipRef.current) {
+        showFinal();
+        return true;
+      }
+      return false;
+    };
+
     setStatus("typing");
 
     for (let lineIndex = 0; lineIndex < TASK5_CODE.length; lineIndex += 1) {
       const line = TASK5_CODE[lineIndex];
       setTypingLine(lineIndex);
       for (let charIndex = 1; charIndex <= line.length; charIndex += 1) {
-        if (!alive()) return;
+        if (bail()) return;
         const slice = line.slice(0, charIndex);
         setTypedLines((previous) => {
           const next = [...previous];
           next[lineIndex] = slice;
           return next;
         });
-        await sleep(line.trimStart().startsWith("#") ? 5 : 16);
+        await pauseable(line.trimStart().startsWith("#") ? 5 : 16);
       }
-      if (!alive()) return;
+      if (bail()) return;
       setTypedLines((previous) => {
         const next = [...previous];
         next[lineIndex] = line;
         return next;
       });
       setTypingLine(null);
-      await sleep(line ? 140 : 40);
+      await pauseable(line ? 140 : 40);
     }
 
-    if (!alive()) return;
+    if (bail()) return;
     setStatus("running");
     setActiveLine(7);
 
     for (const run of solveTask5()) {
-      if (!alive()) return;
+      if (bail()) return;
       setActiveLine(7);
       setVars(run);
       setLog((previous) => [...previous, run].slice(-6));
-      await sleep(run.n >= 18 ? 400 : 110);
+      await pauseable(run.n >= 18 ? 400 : 110);
       if (run.hit) break;
       setActiveLine(8);
-      await sleep(run.n >= 18 ? 250 : 60);
+      await pauseable(run.n >= 18 ? 250 : 60);
     }
 
-    if (!alive()) return;
+    if (bail()) return;
     setActiveLine(10);
-    await sleep(500);
-    if (!alive()) return;
+    await pauseable(500);
+    if (bail()) return;
 
     setResult(TASK5_SOLUTION.r);
     setStatus("done");
     setActiveLine(null);
-    await sleep(600);
+    await pauseable(600);
     if (alive()) setInsightVisible(true);
   }, [reset, showFinal]);
 
@@ -171,6 +196,11 @@ export function CodeDemo() {
       return;
     }
 
+    if (typeof IntersectionObserver === "undefined") {
+      playRef.current();
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
@@ -184,9 +214,21 @@ export function CodeDemo() {
     return () => observer.disconnect();
   }, []);
 
+  const isRunning = status === "typing" || status === "running";
+
+  function togglePause() {
+    pausedRef.current = !pausedRef.current;
+    setPaused(pausedRef.current);
+  }
+
+  function skip() {
+    skipRef.current = true;
+    pausedRef.current = false;
+    setPaused(false);
+  }
+
   return (
     <div ref={containerRef} className="grid justify-items-start gap-4">
-      {/* Scripted presentation: types the code and replays the loop. */}
       <div className="js-only grid w-full justify-items-start gap-4">
         <div
           className="editor"
@@ -201,9 +243,6 @@ export function CodeDemo() {
           <pre className="code" aria-hidden="true">
             {TASK5_CODE.map((line, index) => (
               <span
-                // The listing is a fixed, ordered sequence: the line index is
-                // the stable identity. (Lines are not unique as strings — the
-                // program repeats `s += str(s.count('1') % 2)` twice.)
                 key={index}
                 className="ln"
                 data-active={activeLine === index ? "" : undefined}
@@ -238,11 +277,7 @@ export function CodeDemo() {
             </div>
           </div>
 
-          <div
-            className="log min-h-[120px]"
-            aria-live="polite"
-            aria-label="Ход выполнения"
-          >
+          <div className="log min-h-[120px]" aria-label="Ход выполнения">
             {log.map((row) => (
               <div key={row.n} className="log-row" data-hit={row.hit ? "" : undefined}>
                 <span>N={row.n}</span>
@@ -255,6 +290,9 @@ export function CodeDemo() {
           </div>
 
           <p
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
             className={cn(
               "m-0 transition-opacity duration-500",
               result !== null ? "opacity-100" : "opacity-0",
@@ -277,21 +315,32 @@ export function CodeDemo() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => void play()}
-          className="border-line-strong text-ink hover:border-ink hover:bg-surface inline-flex min-h-10 items-center rounded-md border bg-transparent px-4 text-[15px] font-medium transition-colors"
-        >
-          Показать ещё раз
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          {isRunning ? (
+            <>
+              <button type="button" onClick={togglePause} className={CONTROL}>
+                {paused ? (
+                  <Play aria-hidden className="size-4" />
+                ) : (
+                  <Pause aria-hidden className="size-4" />
+                )}
+                {paused ? "Продолжить" : "Пауза"}
+              </button>
+              <button type="button" onClick={skip} className={CONTROL}>
+                <SkipForward aria-hidden className="size-4" />
+                Пропустить
+              </button>
+            </>
+          ) : null}
+
+          {status === "done" ? (
+            <button type="button" onClick={() => void play()} className={CONTROL}>
+              Повторить
+            </button>
+          ) : null}
+        </div>
       </div>
 
-      {/*
-        Static presentation for browsers without JavaScript: the full listing
-        and the result, so the demo's content is never lost. The wrapper is
-        deliberately free of display utilities — the grid lives on an inner
-        element — so the `display` switch in globals.css stays in control.
-      */}
       <div className="no-js-only">
         <div className="grid w-full gap-3">
           <div className="editor">

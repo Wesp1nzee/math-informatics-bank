@@ -3,76 +3,94 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-/** Насколько раньше нижней границы окна показывать элемент. */
 const OFFSET = 40;
 
 /**
- * Показывает элементы с классом `.reveal`, когда они попадают во вьюпорт.
+ * Progressive enhancement for `.reveal` sections.
  *
- * Почему не `IntersectionObserver`:
- *
- * 1. Он живёт в layout, а layout при client-side навигации не перемонтируется.
- *    Observer продолжал бы следить за узлами предыдущей страницы, а новые
- *    `.reveal` никогда бы не показались. Поэтому эффект перезапускается по
- *    `usePathname()`, а не один раз за загрузку.
- * 2. При быстрой прокрутке, нажатии <kbd>End</kbd> или перетаскивании
- *    скроллбара `IntersectionObserver` может не увидеть элемент ни в одном
- *    кадре, и он навсегда остался бы скрытым.
- *
- * Проверка по `scroll`/`resize` детерминирована: показывается всё, что находится
- * в окне или уже выше него. Без JavaScript контент виден всегда — скрытие
- * включает только `@media (scripting: enabled)` (см. globals.css).
+ * Normal scrolling is handled by a single IntersectionObserver; an
+ * rAF-throttled scroll/resize flush covers elements that an instant jump (or a
+ * layout shift) skipped over — those never cross an intersection threshold on
+ * their own. Browsers with CSS scroll-driven animations animate the reveal in
+ * CSS as well; this component only marks `data-reveal-in` and never runs
+ * per-frame geometry reads.
  */
 export function ScrollReveal() {
   const pathname = usePathname();
 
   useEffect(() => {
-    let pending = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
-    if (pending.length === 0) return;
+    const all = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
+    if (all.length === 0) return;
 
-    function show(element: HTMLElement) {
-      element.dataset.revealIn = "";
-    }
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      for (const element of pending) show(element);
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      typeof IntersectionObserver === "undefined"
+    ) {
+      for (const element of all) element.dataset.revealIn = "";
       return;
     }
 
+    const pending = new Set(all);
     let frame = 0;
-    let detached = false;
 
-    function detach() {
-      if (detached) return;
-      detached = true;
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      if (frame) window.cancelAnimationFrame(frame);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) reveal(entry.target as HTMLElement);
+        }
+      },
+      { rootMargin: `0px 0px -${OFFSET}px 0px`, threshold: 0 },
+    );
+
+    function reveal(element: HTMLElement) {
+      if (!pending.delete(element)) return;
+      element.dataset.revealIn = "";
+      observer.unobserve(element);
+      if (pending.size === 0) detach();
     }
 
     function flush() {
       frame = 0;
       const limit = window.innerHeight - OFFSET;
-      const remaining: HTMLElement[] = [];
-
-      for (const element of pending) {
-        if (element.getBoundingClientRect().top < limit) show(element);
-        else remaining.push(element);
+      for (const element of Array.from(pending)) {
+        if (element.getBoundingClientRect().top < limit) reveal(element);
       }
-
-      pending = remaining;
-      if (pending.length === 0) detach();
     }
 
     function schedule() {
       if (frame === 0) frame = window.requestAnimationFrame(flush);
     }
 
+    function detach() {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (frame) window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    }
+
+    function rescan() {
+      for (const element of document.querySelectorAll<HTMLElement>(".reveal")) {
+        if (element.dataset.revealIn !== undefined || pending.has(element)) continue;
+        pending.add(element);
+        observer.observe(element);
+      }
+    }
+
+    for (const element of pending) observer.observe(element);
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
+
+    // Sections rendered by async server components can appear after this effect.
+    const timers = [250, 800, 1800].map((delay) =>
+      window.setTimeout(rescan, delay),
+    );
+
     flush();
 
-    return detach;
+    return () => {
+      for (const timer of timers) window.clearTimeout(timer);
+      detach();
+    };
   }, [pathname]);
 
   return null;
