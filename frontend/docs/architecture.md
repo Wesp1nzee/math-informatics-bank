@@ -30,9 +30,11 @@
 | `src/components/seo`     | Общие SEO-компоненты: `Breadcrumbs`, `JsonLd`.                                                                                                                       |
 | `src/features/<feature>` | Всё про конкретную область: типы, доступ к данным (`api.ts`), фикстуры (`fixtures/`), компоненты (`components/`). Публичный API фичи — `index.ts`.                   |
 | `src/lib/api`            | Транспортный слой: конфигурация URL, серверный и клиентский `fetch`, нормализация ошибок, задел под генерацию типов из OpenAPI.                                      |
-| `src/lib/seo`            | `buildMetadata`, `absoluteUrl`, генераторы JSON-LD.                                                                                                                  |
-| `src/lib/constants`      | Конфигурация сайта и навигации.                                                                                                                                      |
+| `src/lib/analytics`      | Тонкий слой событий (`track`) и провайдер Яндекс Метрики, подключаемый только при `NEXT_PUBLIC_YM_ID`.                                                               |
+| `src/lib/seo`            | `buildMetadata`, `absoluteUrl`, генераторы JSON-LD (в т.ч. `Person`, `Service`, `FAQPage`).                                                                          |
+| `src/lib/constants`      | Конфигурация сайта (включая данные преподавателя из env) и навигации.                                                                                                |
 | `src/lib/utils`          | Чистые утилиты (`cn`, `check-answer`, `format`, `url`) и клиентские хуки.                                                                                            |
+| `src/assets/fonts`       | Встроенный subset Noto Sans (latin + cyrillic) для `next/og`.                                                                                                        |
 
 **Правило зависимостей:** `app → features → components → lib`. Обратные
 зависимости и циклы запрещены. `lib` не знает о `features`; временный источник
@@ -40,33 +42,40 @@
 
 ## 3. Server Components и клиентские компоненты
 
-Клиентских модулей всего восемь, каждый обоснован:
+Клиентских модулей двенадцать, каждый обоснован:
 
-| Компонент                                       | Почему клиентский                                                                     |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `features/home/components/task-quiz.tsx`        | Состояние ответа и отложенное раскрытие шагов.                                        |
-| `features/home/components/code-demo.tsx`        | Пошаговая анимация набора кода и прогон цикла (`setTimeout`, состояние).              |
-| `features/home/components/hero-parallax.tsx`    | Параллакс по `scroll` через `requestAnimationFrame`.                                  |
-| `features/tasks/components/answer-form.tsx`     | Ввод ответа, проверка, раскрытие решения.                                             |
-| `features/tutor-leads/components/lead-form.tsx` | Форма: React Hook Form + Zod, состояние отправки.                                     |
-| `components/layout/site-header.tsx`             | Класс `scrolled` по событию прокрутки.                                                |
-| `components/layout/mobile-nav.tsx`              | Radix Dialog: фокус-трап, Escape, возврат фокуса.                                     |
-| `components/ui/scroll-reveal.tsx`               | Показ `.reveal`-секций: проверка по `scroll`/`resize`, перезапуск по `usePathname()`. |
-| `components/ui/label.tsx`                       | Обёртка над Radix Label (нужен клиентский контекст).                                  |
+| Компонент                                          | Почему клиентский                                                                     |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `features/home/components/task-quiz.tsx`           | Состояние ответа и отложенное раскрытие шагов.                                        |
+| `features/home/components/derivative-graph.tsx`    | Перетаскивание точки на графике (pointer + клавиатура), живой пересчёт производной.   |
+| `features/home/components/code-demo.tsx`           | Пошаговая анимация набора кода, пауза/пропуск (`setTimeout`, состояние).              |
+| `features/tasks/components/answer-form.tsx`        | Ввод ответа, проверка, раскрытие решения и CTA.                                       |
+| `features/tutor-leads/components/lead-form.tsx`    | Форма: React Hook Form + Zod, состояние отправки.                                     |
+| `features/tutor-leads/components/tutor-cta.tsx`    | Показ/клик CTA и аналитика (`IntersectionObserver`).                                  |
+| `features/tutor-leads/components/sticky-cta.tsx`   | Мобильная sticky-панель: `usePathname`, скролл и скрытие у формы.                     |
+| `features/diagnostics/components/diagnostics-runner.tsx` | Ответы и отчёт диагностики.                                                     |
+| `components/layout/site-header.tsx`                | Класс `scrolled` по событию прокрутки.                                                |
+| `components/layout/mobile-nav.tsx`                 | Radix Dialog: фокус-трап, Escape, возврат фокуса.                                     |
+| `components/ui/scroll-reveal.tsx`                  | Показ `.reveal`: `IntersectionObserver` + rAF-flush, перезапуск по `usePathname()`.    |
+| `components/ui/label.tsx`                          | Обёртка над Radix Label (нужен клиентский контекст).                                  |
 
 Вспомогательно: `lib/utils/use-prefers-reduced-motion.ts` — хук на
 `useSyncExternalStore`.
 
-Три ключевых приёма, которые позволяют держать клиентский JS маленьким:
+Пять ключевых приёмов, которые позволяют держать клиентский JS маленьким:
 
 - **KaTeX рендерится на сервере.** `components/ui/math.tsx` вызывает
   `katex.renderToString` в Server Component: формулы приходят готовым HTML, без
   CDN и без лишнего веса в бандле.
-- **Hero-график считается на сервере.** Путь кривой и координаты касательной
-  вычисляются в `derivative-viz.tsx` и уезжают в HTML как статический SVG;
-  анимация — чистый CSS.
+- **Hero-график считается на сервере.** Формулы и путь кривой вычисляются на
+  сервере; интерактивной остаётся только точка и касательная в маленьком
+  `derivative-graph.tsx`, который получает готовые формулы как React-узлы.
 - **Серверные данные передаются в клиент как React-узлы.** `TaskQuiz` получает
   уже отрендеренные формулы в пропсах `prompt`, `formula`, `steps[].content`.
+- **Аналитика — тонкий слой.** `lib/analytics` не тянет сторонний код, пока не
+  задан `NEXT_PUBLIC_YM_ID`; без него `track` — no-op.
+- **OG-картинки — на сервере.** `opengraph-image.tsx` у задач и статей генерирует
+  изображение через `next/og` на этапе сборки, с встроенным subset-шрифтом.
 
 ### Прогрессивное улучшение
 
@@ -177,12 +186,12 @@ return listLocalTasks(filters, page); // локальные фикстуры
 | Метаданные               | `lib/seo/metadata.ts` → `buildMetadata()` для каждой страницы                                  |
 | `metadataBase`           | Корневой layout, из `NEXT_PUBLIC_SITE_URL`                                                     |
 | Canonical                | Абсолютный URL на каждой странице; фильтры каталога канонизируются на `/zadachi`               |
-| Open Graph / Twitter     | Заполняются всегда; `og:image` **не выводится**, пока нет реального изображения 1200×630       |
+| Open Graph / Twitter     | Заполняются всегда; `og:image` выводится только при реальном изображении. У задач и статей генерируется динамически (`opengraph-image.tsx`, `next/og`). |
 | robots.txt               | `app/robots.ts`                                                                                |
 | sitemap.xml              | `app/sitemap.ts` — только реально существующие маршруты                                        |
 | Семантика                | Один `<h1>` на страницу, упорядоченные `h2`/`h3`, `main`, `nav`, `footer`, `figure/figcaption` |
 | Хлебные крошки           | `components/seo/breadcrumbs.tsx` + `BreadcrumbList` JSON-LD                                    |
-| Структурированные данные | `WebSite`, `BreadcrumbList`, `Article`, `LearningResource`                                     |
+| Структурированные данные | `WebSite`, `BreadcrumbList`, `Article`, `LearningResource`, `Person`, `Service`, `FAQPage`     |
 | 404                      | Реальный HTTP 404 (`notFound()` в динамических маршрутах)                                      |
 | Черновые страницы        | `buildMetadata({ noIndex: true })` для отсутствующих сущностей                                 |
 | Рендеринг                | SSG для главной, хабов, статей и задач; SSR для каталога (зависит от `searchParams`)           |
@@ -226,9 +235,9 @@ return listLocalTasks(filters, page); // локальные фикстуры
 
 | Уровень    | Файлы                                                                                                       | Что покрыто                                                                          |
 | ---------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Unit       | `lib/utils/check-answer.test.ts`, `features/tasks/search-params.test.ts`, `features/home/lib/task5.test.ts` | Нормализация ответов, парсинг фильтров, эталонный алгоритм задачи 5 и подсветка кода |
+| Unit       | `lib/utils/check-answer.test.ts`, `features/tasks/search-params.test.ts`, `features/home/lib/task5.test.ts`, `lib/analytics/track.test.ts`, `features/diagnostics/scoring.test.ts`, `features/tutor-leads/reviews.test.ts` | Нормализация ответов, парсинг фильтров, аналитика, подбор и подсчёт диагностики, публикация отзывов |
 | Fixtures   | `features/content-fixtures.test.ts`                                                                         | Целостность демонстрационных наборов, генерация оглавления                           |
-| Компоненты | `features/tasks/components/answer-form.test.tsx`, `features/home/components/task-quiz.test.tsx`             | Проверка ответа, подсказки, раскрытие решения, повтор                                |
-| E2E        | `tests/e2e/{home,navigation,task-page,seo,no-js}.spec.ts`                                                   | Smoke главной, интерактив, фильтры, ссылки, адаптив, 404, SEO-теги, работа без JS    |
+| Компоненты | `features/tasks/components/answer-form.test.tsx`, `features/home/components/task-quiz.test.tsx`, `features/tutor-leads/components/lead-form.test.tsx` | Проверка ответа, подсказки, раскрытие решения, обязательные поля заявки, Telegram-путь |
+| E2E        | `tests/e2e/{home,navigation,task-page,seo,no-js,conversion-cta,analytics,trust,diagnostics,animations}.spec.ts` | Smoke, интерактив, CTA, аналитика, доверие/FAQ, диагностика, анимации, адаптив, 404, SEO, работа без JS |
 
 E2E запускаются в двух проектах: `desktop` (1440×900) и `mobile` (Pixel 7).
