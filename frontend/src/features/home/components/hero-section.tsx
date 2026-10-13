@@ -14,7 +14,7 @@ export function HeroSection() {
     <section
       id="top"
       aria-labelledby="hero-title"
-      className="desk:pt-[150px] desk:pb-[110px] pt-[104px] pb-[72px] md:pt-32 md:pb-[88px]"
+      className="grain desk:pt-[150px] desk:pb-[110px] pt-[104px] pb-[72px] md:pt-32 md:pb-[88px]"
     >
       <Container>
         <div className="grid grid-cols-12 items-center gap-4 md:gap-6">

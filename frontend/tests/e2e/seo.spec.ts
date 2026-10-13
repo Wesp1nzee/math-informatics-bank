@@ -54,4 +54,24 @@ test.describe("SEO basics", () => {
       expect(() => JSON.parse(block)).not.toThrow();
     }
   });
+
+  test("task and article pages expose a generated og image", async ({
+    page,
+    request,
+  }) => {
+    for (const path of ["/zadachi/1042", "/articles/kak-chitat-chuzhoy-kod"]) {
+      await page.goto(path);
+
+      const og = page.locator('meta[property="og:image"]');
+      await expect(og).toHaveCount(1);
+
+      const content = await og.getAttribute("content");
+      expect(content).toMatch(/opengraph-image/);
+
+      const pathname = new URL(content ?? "").pathname;
+      const response = await request.get(pathname);
+      expect(response.status(), path).toBe(200);
+      expect(response.headers()["content-type"]).toContain("image/png");
+    }
+  });
 });

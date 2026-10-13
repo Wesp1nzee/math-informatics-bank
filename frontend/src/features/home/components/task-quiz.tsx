@@ -90,7 +90,7 @@ export function TaskQuiz({
   return (
     <article
       aria-labelledby="try-q"
-      className="border-line bg-surface rounded-xl border p-6 md:p-10"
+      className="border-line bg-surface shadow-card rounded-xl border p-6 md:p-10"
     >
       <Badge>{tag}</Badge>
       <h3 className="heading-3 mt-5 mb-1.5" id="try-q">

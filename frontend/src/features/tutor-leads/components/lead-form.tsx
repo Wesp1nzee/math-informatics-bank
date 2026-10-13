@@ -118,7 +118,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       <div
         role="status"
         data-lead-form=""
-        className="border-success/40 bg-success-soft flex flex-col items-start gap-3 rounded-xl border p-6 md:p-8"
+        className="border-success/40 bg-success-soft shadow-card flex flex-col items-start gap-3 rounded-xl border p-6 md:p-8"
       >
         <CircleCheck aria-hidden className="text-success size-6" />
         <p className="text-ink text-lg font-medium">
@@ -144,7 +144,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       onFocusCapture={markStarted}
       noValidate
       data-lead-form=""
-      className="border-line bg-surface flex flex-col gap-5 rounded-xl border p-6 md:p-8"
+      className="border-line bg-surface shadow-card flex flex-col gap-5 rounded-xl border p-6 md:p-8"
     >
       <p className="text-ink-soft text-sm">
         Достаточно контакта и экзамена — остальное можно не заполнять.

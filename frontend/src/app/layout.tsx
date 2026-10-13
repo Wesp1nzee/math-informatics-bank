@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Instrument_Serif } from "next/font/google";
+import { Geist, Source_Serif_4 } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { siteConfig } from "@/lib/constants/site";
@@ -12,11 +12,10 @@ const geist = Geist({
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin", "cyrillic"],
   style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
+  variable: "--font-source-serif",
   display: "swap",
 });
 
@@ -32,7 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="ru"
-      className={`${geist.variable} ${instrumentSerif.variable}`}
+      className={`${geist.variable} ${sourceSerif.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

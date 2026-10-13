@@ -5,13 +5,12 @@ import { ArticleMeta } from "@/features/articles/components/article-meta";
 import { getArticlePath } from "@/features/articles/api";
 import type { Article } from "@/features/articles/types";
 
-/** Article preview for lists. The whole card is a single link. */
 export function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="h-full">
       <Link
         href={getArticlePath(article.slug)}
-        className="group border-line bg-surface ease-soft hover:border-ink flex h-full flex-col gap-3 rounded-xl border p-7 transition-[border-color,transform] duration-300 hover:-translate-y-1"
+        className="group border-line bg-surface ease-soft hover:border-ink shadow-card hover:shadow-float flex h-full flex-col gap-3 rounded-xl border p-7 transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1"
       >
         <ArticleMeta article={article} />
         <h3 className="group-hover:text-accent text-2xl leading-tight font-medium tracking-[-0.02em] transition-colors">

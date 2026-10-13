@@ -25,7 +25,8 @@
 
   --font-sans:
     var(--font-geist), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-source-serif), "Source Serif 4", Georgia,
+    "Times New Roman", serif;
   --font-mono: ui-monospace, "SF Mono", "Geist Mono", Menlo, Consolas, monospace;
 
   --radius-sm: 6px;
@@ -35,12 +36,54 @@
 
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -18px rgba(0, 0, 0, 0.16);
+  --shadow-float:
+    0 1px 2px rgba(0, 0, 0, 0.05), 0 18px 40px -24px rgba(0, 0, 0, 0.28);
+
   --breakpoint-desk: 75rem;
+}
+
+/*
+ * Dark theme is driven by the OS preference only (no manual toggle yet). The
+ * tokens above are overridden here; every utility compiles to
+ * `var(--color-*)`, so nothing else has to change. Contrast was checked for
+ * text, links, KaTeX, the derivative graph and `.option` states.
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas: #131312;
+    --color-surface: #1c1c1a;
+    --color-surface-subtle: #24241f;
+
+    --color-ink: #f1f1ec;
+    --color-ink-soft: #b3b3ac;
+    --color-ink-faint: #8b8b84;
+
+    --color-line: #35352f;
+    --color-line-strong: #4a4a42;
+
+    --color-accent: #8ea6ff;
+    --color-accent-strong: #b0c1ff;
+    --color-accent-soft: #1f2742;
+
+    --color-success: #58d19a;
+    --color-success-soft: #14271e;
+    --color-danger: #f28c88;
+    --color-danger-soft: #2b1616;
+    --color-warning: #e0b062;
+
+    --shadow-card:
+      0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -18px rgba(0, 0, 0, 0.6);
+    --shadow-float:
+      0 1px 2px rgba(0, 0, 0, 0.5), 0 18px 40px -24px rgba(0, 0, 0, 0.7);
+  }
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: light dark;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -53,6 +96,18 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  p,
+  li,
+  blockquote {
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 
   @media (max-width: 767px) {
@@ -124,6 +179,20 @@
     font-style: italic;
     font-weight: 400;
     letter-spacing: -0.01em;
+  }
+
+  /* Grain is pure CSS (inline SVG noise), very low opacity, no image assets. */
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+
+  .katex,
+  .formulas,
+  .g-text,
+  .log,
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 
   .display-title .serif-accent {
