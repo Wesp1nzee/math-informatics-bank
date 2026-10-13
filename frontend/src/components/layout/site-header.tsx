@@ -6,14 +6,11 @@ import { useEffect, useState } from "react";
 import { Container } from "@/components/layout/container";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { Button } from "@/components/ui/button";
+import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { mainNav } from "@/lib/constants/navigation";
 import { brand } from "@/lib/constants/site";
 import { cn } from "@/lib/utils/cn";
 
-/**
- * Fixed site header. Becomes opaque once the page is scrolled, matching the
- * original prototype's `.nav.scrolled` behaviour.
- */
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
 
@@ -38,7 +35,7 @@ export function SiteHeader() {
         >
           <Link href="/" className="text-lg font-semibold tracking-[-0.01em]">
             {brand.text}
-            <span className="text-accent">{brand.accent}</span>
+            <span className="text-accent hidden sm:inline">{brand.accent}</span>
           </Link>
 
           <ul className="text-ink-soft hidden list-none gap-8 p-0 text-[15px] md:flex">
@@ -54,14 +51,18 @@ export function SiteHeader() {
             ))}
           </ul>
 
-          <div className="ml-auto hidden md:block">
-            <Button asChild size="sm">
-              <Link href="/zadachi">Начать решать</Link>
+          <div className="ml-auto flex items-center gap-2">
+            <Button asChild size="sm" className="hidden md:inline-flex">
+              <Link href={REQUEST_PATH}>Записаться на пробное</Link>
             </Button>
-          </div>
 
-          <div className="ml-auto md:hidden">
-            <MobileNav />
+            <Button asChild size="sm" className="md:hidden">
+              <Link href={REQUEST_PATH}>Записаться</Link>
+            </Button>
+
+            <div className="md:hidden">
+              <MobileNav />
+            </div>
           </div>
         </nav>
       </Container>

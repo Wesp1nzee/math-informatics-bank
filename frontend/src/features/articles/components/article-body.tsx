@@ -1,3 +1,5 @@
+import { Fragment, type ReactNode } from "react";
+
 import { Math } from "@/components/ui/math";
 import { RichText } from "@/components/ui/rich-text";
 import type { ArticleBlock } from "@/features/articles/types";
@@ -52,14 +54,23 @@ function ArticleBlockView({ block }: { block: ArticleBlock }) {
   }
 }
 
-export function ArticleBody({ blocks }: { blocks: readonly ArticleBlock[] }) {
+export function ArticleBody({
+  blocks,
+  midSlot,
+}: {
+  blocks: readonly ArticleBlock[];
+  /** Inline conversion block inserted around the middle of the article. */
+  midSlot?: ReactNode;
+}) {
+  const midIndex = globalThis.Math.floor((blocks.length - 1) / 2);
+
   return (
     <div className="flex max-w-[68ch] flex-col gap-5">
       {blocks.map((block, index) => (
-        <ArticleBlockView
-          key={`${block.type}-${"id" in block ? block.id : index}`}
-          block={block}
-        />
+        <Fragment key={`${block.type}-${"id" in block ? block.id : index}`}>
+          <ArticleBlockView block={block} />
+          {midSlot && index === midIndex ? midSlot : null}
+        </Fragment>
       ))}
     </div>
   );

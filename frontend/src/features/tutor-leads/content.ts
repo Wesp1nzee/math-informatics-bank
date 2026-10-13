@@ -3,11 +3,72 @@ import type { TutorLeadInput, TutorLeadSubject } from "@/features/tutor-leads/ty
 export const TUTORING_INTRO =
   "Если задач из открытого доступа недостаточно, можно заниматься лично: найдём, где именно теряются баллы, и выстроим работу вокруг этого.";
 
+/** Where every conversion CTA on the site leads. */
+export const REQUEST_PATH = "/podgotovka#request";
+
+/** Honest positioning line used in the hero and the tutoring section. */
+export const AI_POSITIONING =
+  "Нейросеть даёт решение. Я нахожу, почему ошиблись вы.";
+
 /**
- * Service description taken from the original prototype. These are factual
- * statements about how lessons are organised, not invented achievements or
- * testimonials.
+ * Short, placement-specific copy for the conversion CTAs. The wording talks
+ * about diagnosing mistakes, not about "buying lessons": each block sits at a
+ * moment where the visitor is already thinking about their own solution.
  */
+export type CtaPlacement =
+  | "after-solution"
+  | "after-wrong-answers"
+  | "article-mid"
+  | "article-end"
+  | "quiz-success"
+  | "home-final";
+
+export type CtaCopy = {
+  eyebrow: string;
+  title: string;
+  text: string;
+  action: string;
+};
+
+export const CTA_CONTENT: Record<CtaPlacement, CtaCopy> = {
+  "after-solution": {
+    eyebrow: "Индивидуальные занятия",
+    title: "Решение видно. А причина ошибки — нет",
+    text: "На занятиях разбираем, где именно вы теряете баллы и как разбирать такие задачи, чтобы не повторять ошибку.",
+    action: "Записаться на пробное",
+  },
+  "after-wrong-answers": {
+    eyebrow: "Разбор ошибок",
+    title: "Ошибка — это точка роста",
+    text: "Покажу, почему решение не сошлось, и научу разбирать похожие задачи самостоятельно.",
+    action: "Разобрать на пробном",
+  },
+  "article-mid": {
+    eyebrow: "По вашему случаю",
+    title: "Разобрать именно ваши ошибки?",
+    text: "Статья объясняет тему в целом. На занятии смотрим на ваши решения и находим слабые места.",
+    action: "Записаться на пробное",
+  },
+  "article-end": {
+    eyebrow: "Индивидуальные занятия",
+    title: "Дочитать — не то же самое, что научиться",
+    text: "Если тема всё ещё не идёт, разберём её на пробном занятии под ваш уровень.",
+    action: "Записаться на пробное",
+  },
+  "quiz-success": {
+    eyebrow: "Что дальше",
+    title: "Ответ верный",
+    text: "На экзамене важна не только правильность, но и скорость. Разберём, как выйти на стабильный результат.",
+    action: "Записаться на пробное",
+  },
+  "home-final": {
+    eyebrow: "Пробное занятие",
+    title: "Начнём с вашей ошибки",
+    text: "Оставьте контакт — проведу диагностику и покажу, где вы теряете баллы.",
+    action: "Записаться на пробное",
+  },
+};
+
 export const TUTORING_FACTS: readonly { label: string; value: string }[] = [
   { label: "Предметы", value: "Математика и информатика" },
   { label: "Экзамены", value: "ОГЭ и ЕГЭ" },
@@ -31,7 +92,6 @@ export function subjectLabel(subject: TutorLeadSubject): string {
   return SUBJECT_OPTIONS.find((option) => option.value === subject)?.label ?? subject;
 }
 
-/** Plain-text message the applicant sends from their own client. */
 export function buildLeadMessage(input: TutorLeadInput): string {
   const lines = [
     "Заявка на занятия",

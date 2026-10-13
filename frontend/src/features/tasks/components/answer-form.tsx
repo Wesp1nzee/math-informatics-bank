@@ -6,28 +6,19 @@ import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import { isAnswerCorrect, type AnswerKind } from "@/lib/utils/check-answer";
 import { cn } from "@/lib/utils/cn";
 
 type AnswerFormProps = {
-  /** Canonical answer used for comparison (never shown before revealing). */
   expected: string;
   kind: AnswerKind;
-  /** Shown together with the solution once it is revealed. */
   answerNote: string;
-  /** Server-rendered solution steps. */
   solution: ReactNode;
 };
 
 type Status = "idle" | "correct" | "wrong";
 
-/**
- * Answer input with checking.
- *
- * The solution is always part of the server-rendered HTML (good for search
- * engines and for users without JavaScript) and is only *hidden* visually
- * until the answer is correct or the student asks to see it.
- */
 export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormProps) {
   const inputId = useId();
   const statusId = useId();
@@ -137,6 +128,15 @@ export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormP
       </p>
 
       <div
+        className="cta-reveal mt-6"
+        data-open={attempts >= 2 && !revealed ? "true" : "false"}
+      >
+        <div>
+          <TutorCta placement="after-wrong-answers" />
+        </div>
+      </div>
+
+      <div
         data-solution=""
         data-open={revealed ? "true" : undefined}
         className="solution-panel border-line mt-6 border-t pt-6"
@@ -147,6 +147,7 @@ export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormP
         <p className="text-ink-faint mt-4 text-sm">
           Ответ: <span className="text-ink font-medium">{expected}</span>
         </p>
+        <TutorCta placement="after-solution" className="mt-6" />
       </div>
     </div>
   );

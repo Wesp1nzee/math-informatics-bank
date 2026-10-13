@@ -7,7 +7,7 @@ const SECTION_HEADINGS = [
   "Задачи по математике",
   "Хотите системный результат?",
   "Хорошее обучение",
-  "Готовы",
+  "Начнём с вашей ошибки",
 ];
 
 test.describe("home page", () => {
@@ -65,8 +65,6 @@ test.describe("home page", () => {
   test("every revealed section becomes visible after scrolling", async ({ page }) => {
     await page.goto("/");
 
-    // Прыжок в конец: раньше IntersectionObserver пропускал элементы, которые
-    // проскочили мимо окна, и часть секций оставалась невидимой.
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
     await expect
@@ -80,9 +78,6 @@ test.describe("home page", () => {
   });
 
   test("reveal still works after client-side navigation", async ({ page }) => {
-    // Regression: ScrollReveal живёт в layout, который при soft-навигации не
-    // перемонтируется. Без зависимости от pathname observer продолжал следить
-    // за узлами предыдущей страницы, и вся главная оставалась прозрачной.
     await page.goto("/articles");
     await page.getByRole("link", { name: "Главная" }).first().click();
     await expect(page).toHaveURL(/\/$/);
@@ -106,7 +101,6 @@ test.describe("home page", () => {
       .locator('section[aria-labelledby="code-title"]')
       .scrollIntoViewIfNeeded();
 
-    // Анимация запускается без клика: первая строка программы набирается.
     await expect
       .poll(() => page.locator(".js-only .code .ln").first().textContent())
       .toContain("def r(n):");

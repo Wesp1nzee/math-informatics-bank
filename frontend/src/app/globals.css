@@ -1,11 +1,6 @@
 @import "tailwindcss";
 @import "katex/dist/katex.min.css";
 
-/*
- * Design tokens extracted from the original prototype (ideal.html).
- * Kept as Tailwind v4 theme variables so they are available both as
- * utilities (bg-accent, text-ink-soft, ...) and as CSS custom properties.
- */
 @theme {
   --color-canvas: #f7f7f5;
   --color-surface: #ffffff;
@@ -40,12 +35,6 @@
 
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /*
-   * Custom "desk" breakpoint (1200px), matching the original prototype's
-   * `max-width: 1199px` switch. Must be expressed in `rem` like Tailwind's
-   * built-in breakpoints, otherwise the generated media queries are ordered
-   * incorrectly and the desktop overrides silently lose to `sm`/`md`.
-   */
   --breakpoint-desk: 75rem;
 }
 
@@ -85,7 +74,6 @@
 }
 
 @layer components {
-  /* ---- typography ------------------------------------------------------ */
   .eyebrow {
     display: block;
     margin-bottom: 1.5rem;
@@ -145,17 +133,6 @@
     color: var(--color-accent);
   }
 
-  /* ---- scroll reveal --------------------------------------------------- */
-  /*
-   * The entrance animation is a pure enhancement: the hidden state is applied
-   * by default and a single `ScrollReveal` client island adds
-   * `data-reveal-in` when an element reaches the viewport.
-   *
-   * Whether scripting is available is detected with the CSS `scripting` media
-   * feature, **not** with a class set by an inline script. Mutating
-   * `<html class>` from a script desynchronises the attribute React renders
-   * during hydration and produces a hydration mismatch.
-   */
   .reveal {
     opacity: 0;
     transform: translateY(20px);
@@ -170,20 +147,10 @@
     transform: none;
   }
 
-  /*
-   * ---- JavaScript availability switch -----------------------------------
-   * Components can ship two presentations: the interactive one (`.js-only`)
-   * and a static fallback (`.no-js-only`). The fallback wrappers carry no
-   * display utility of their own, so no `!important` is needed to show them.
-   */
   .no-js-only {
     display: none;
   }
 
-  /*
-   * Collapsible task solution: collapsed by default, opened by React once the
-   * answer is correct (or on request). Without scripting it is simply open.
-   */
   .solution-panel {
     display: none;
   }
@@ -192,11 +159,6 @@
     display: block;
   }
 
-  /*
-   * Without scripting the static fallback takes over. `!important` is required
-   * for `.js-only` because those elements carry Tailwind display utilities
-   * (`grid`, `inline-flex`) that live in a later cascade layer.
-   */
   @media (scripting: none) {
     .reveal {
       opacity: 1;
@@ -217,17 +179,11 @@
     }
   }
 
-  /*
-   * Entrance animation that never hides content when it cannot run: the base
-   * state is fully visible, the keyframes only animate *into* place. Used for
-   * content above the fold so the first paint is complete without JavaScript.
-   */
   .rise {
     animation: fade-up 700ms var(--ease-soft) both;
     animation-delay: calc(var(--i, 0) * 70ms);
   }
 
-  /* ---- hero visualisation --------------------------------------------- */
   .viz {
     background: var(--color-surface);
     border: 1px solid var(--color-line);
@@ -354,7 +310,6 @@
     margin-top: 8px;
   }
 
-  /* ---- quiz ------------------------------------------------------------ */
   .option {
     min-height: 60px;
     border: 1px solid var(--color-line-strong);
@@ -404,6 +359,28 @@
     overflow: hidden;
   }
 
+  .cta-reveal {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 420ms var(--ease-soft);
+  }
+
+  .cta-reveal[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+
+  .cta-reveal > div {
+    overflow: hidden;
+  }
+
+  .cta-reveal[data-open="false"] > div {
+    visibility: hidden;
+  }
+
+  .cta-reveal[data-open="true"] > div {
+    visibility: visible;
+  }
+
   .step {
     opacity: 0;
     transform: translateX(-8px);
@@ -425,7 +402,6 @@
     background: var(--color-success-soft);
   }
 
-  /* ---- difficulty meter ------------------------------------------------ */
   .diff {
     display: inline-flex;
     gap: 4px;
@@ -444,7 +420,6 @@
     background: var(--color-ink);
   }
 
-  /* ---- code demo ------------------------------------------------------- */
   .editor {
     width: 100%;
     background: var(--color-surface);
@@ -578,7 +553,6 @@
     font-weight: 600;
   }
 
-  /* ---- about illustration --------------------------------------------- */
   .about-art .draw {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
@@ -599,7 +573,6 @@
   }
 }
 
-/* ---- keyframes --------------------------------------------------------- */
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -651,6 +624,24 @@
   }
 }
 
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.quiz-check {
+  animation: pop 380ms var(--ease-soft) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -683,11 +674,6 @@
   }
 }
 
-/*
- * The original prototype rendered KaTeX from a CDN and had no styles for
- * inline formulas inside prose. Slightly reduce the display size so formulas
- * sit comfortably in the task statement without overflowing on mobile.
- */
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;

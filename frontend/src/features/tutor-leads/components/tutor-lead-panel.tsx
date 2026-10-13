@@ -3,17 +3,15 @@ import { TutorLeadForm } from "@/features/tutor-leads/components/lead-form";
 import { isPublicApiConfigured } from "@/lib/api/config";
 import { mailHref, siteConfig, telegramHref } from "@/lib/constants/site";
 
-/**
- * Decides how a tutoring request can actually be delivered:
- * backend → Telegram → e-mail. When nothing is configured the form is replaced
- * by an explicit notice instead of a button that pretends to work.
- */
 export function TutorLeadPanel() {
   const telegram = telegramHref(siteConfig.tutor.telegram);
   const email = mailHref(siteConfig.tutor.email);
   const apiConfigured = isPublicApiConfigured();
 
   if (!apiConfigured && !telegram && !email) {
+    // In production an unconfigured form is simply absent — no service notices.
+    if (process.env.NODE_ENV === "production") return null;
+
     return (
       <StateMessage
         title="Приём заявок пока не настроен"

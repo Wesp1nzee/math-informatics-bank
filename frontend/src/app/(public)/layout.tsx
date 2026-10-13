@@ -3,11 +3,8 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { StickyCta } from "@/features/tutor-leads/components/sticky-cta";
 
-/**
- * Layout for all public pages: skip link, header, main landmark, footer and
- * the single `ScrollReveal` client island that drives `.reveal` animations.
- */
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <>
@@ -22,6 +19,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         {children}
       </main>
       <SiteFooter />
+      <StickyCta />
       <ScrollReveal />
     </>
   );

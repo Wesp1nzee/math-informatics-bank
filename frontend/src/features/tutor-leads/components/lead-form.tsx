@@ -33,14 +33,6 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-/**
- * Tutoring request form.
- *
- * Validation is shared with the (future) API contract through the Zod schema.
- * Depending on configuration the submit either POSTs to the backend or opens
- * the applicant's own Telegram / mail client with a prefilled message, so the
- * form is functional even before the backend exists.
- */
 export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
   const [delivery, setDelivery] = useState<TutorLeadDelivery | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
@@ -89,6 +81,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
     return (
       <div
         role="status"
+        data-lead-form=""
         className="border-success/40 bg-success-soft flex flex-col items-start gap-3 rounded-xl border p-6 md:p-8"
       >
         <CircleCheck aria-hidden className="text-success size-6" />
@@ -113,6 +106,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
     <form
       onSubmit={onSubmit}
       noValidate
+      data-lead-form=""
       className="border-line bg-surface flex flex-col gap-5 rounded-xl border p-6 md:p-8"
     >
       <div>

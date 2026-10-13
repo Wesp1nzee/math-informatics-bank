@@ -5,16 +5,11 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
+import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { brand } from "@/lib/constants/site";
 import { mainNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
 
-/**
- * Mobile navigation drawer (below the `md` breakpoint).
- *
- * Uses Radix Dialog so focus is trapped, Escape closes the drawer, background
- * scroll is locked and focus returns to the trigger — all for free.
- */
 export function MobileNav() {
   return (
     <Dialog.Root>
@@ -69,10 +64,10 @@ export function MobileNav() {
 
           <Dialog.Close asChild>
             <Link
-              href="/zadachi"
+              href={REQUEST_PATH}
               className={cn(buttonVariants({ variant: "primary" }), "mt-4 w-full")}
             >
-              Начать решать
+              Записаться на пробное
             </Link>
           </Dialog.Close>
         </Dialog.Content>

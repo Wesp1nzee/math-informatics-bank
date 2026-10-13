@@ -1,10 +1,11 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CircleCheck } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import { cn } from "@/lib/utils/cn";
 import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
 
@@ -14,30 +15,18 @@ export type QuizStep = { note: string; content: ReactNode };
 type TaskQuizProps = {
   tag: string;
   title: string;
-  /** Server-rendered prompt (may contain formulas). */
   prompt: ReactNode;
-  /** Server-rendered formula block. */
   formula: ReactNode;
   options: readonly QuizOption[];
   correctValue: string;
-  /** Message shown for each wrong option. */
   hints: Record<string, string>;
-  /** Message shown when the answer is correct. */
   successNote: string;
-  /** Solution steps; `content` is pre-rendered on the server. */
   steps: readonly QuizStep[];
   moreHref: string;
 };
 
 type Answer = { value: string; correct: boolean };
 
-/**
- * "Try it yourself" quiz.
- *
- * The formulas are rendered by the server and passed in as React nodes, so the
- * client bundle does not need KaTeX. Steps are revealed one by one; reduced
- * motion skips the stagger.
- */
 export function TaskQuiz({
   tag,
   title,
@@ -55,7 +44,6 @@ export function TaskQuiz({
   const reducedMotion = usePrefersReducedMotion();
   const timersRef = useRef<number[]>([]);
 
-  /** Pending reveal timers, cleared on unmount. */
   useEffect(() => {
     return () => {
       for (const timer of timersRef.current) window.clearTimeout(timer);
@@ -143,10 +131,13 @@ export function TaskQuiz({
               <>
                 <span
                   className={cn(
-                    "mb-2.5 block font-semibold",
+                    "mb-2.5 flex items-center gap-2 font-semibold",
                     answer.correct ? "text-success" : "text-danger",
                   )}
                 >
+                  {answer.correct ? (
+                    <CircleCheck aria-hidden className="quiz-check size-5" />
+                  ) : null}
                   {answer.correct ? "Верно." : "Не совсем."}
                 </span>
 
@@ -188,6 +179,10 @@ export function TaskQuiz({
                     Попробовать снова
                   </button>
                 </div>
+
+                {answer.correct ? (
+                  <TutorCta placement="quiz-success" size="compact" className="mt-6" />
+                ) : null}
               </>
             ) : null}
           </div>

@@ -33,7 +33,10 @@ export default function TutoringPage() {
             <TutoringFacts />
           </div>
 
-          <div className="desk:col-span-5 desk:col-start-8 desk:mt-0 col-span-12 mt-12">
+          <div
+            id="request"
+            className="desk:col-span-5 desk:col-start-8 desk:mt-0 col-span-12 mt-12 scroll-mt-24"
+          >
             <h2 id="tutoring-request-title" className="heading-3 mb-8">
               Оставить заявку
             </h2>

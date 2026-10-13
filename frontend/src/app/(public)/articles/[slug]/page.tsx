@@ -10,6 +10,7 @@ import { ArticleBody } from "@/features/articles/components/article-body";
 import { ArticleMeta } from "@/features/articles/components/article-meta";
 import { ArticleToc } from "@/features/articles/components/article-toc";
 import { RelatedArticles } from "@/features/articles/components/related-articles";
+import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import {
   getArticleBySlug,
   getArticleSlugList,
@@ -21,7 +22,6 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
 
-/** Pre-render known entries; unknown ids fall through to notFound(). */
 export function generateStaticParams() {
   return getArticleSlugList().map((slug) => ({ slug }));
 }
@@ -101,7 +101,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 : "col-span-12"
             }
           >
-            <ArticleBody blocks={article.blocks} />
+            <ArticleBody
+              blocks={article.blocks}
+              midSlot={<TutorCta placement="article-mid" className="my-2" />}
+            />
+            <TutorCta placement="article-end" className="mt-8" />
           </div>
         </div>
       </Section>
