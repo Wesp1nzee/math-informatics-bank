@@ -3,7 +3,6 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
 
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
-import { track, ANALYTICS_EVENTS } from "@/lib/analytics";
 
 function f(x: number): number {
   return x ** 3 - 4 * x ** 2 + 7 * x;
@@ -55,10 +54,7 @@ export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
 
   function update(next: number) {
     setX(clamp(next, MIN_X, MAX_X));
-    if (!interacted) {
-      setInteracted(true);
-      track(ANALYTICS_EVENTS.ctaView, { placement: "hero-viz" });
-    }
+    if (!interacted) setInteracted(true);
   }
 
   return (
