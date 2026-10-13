@@ -3,6 +3,8 @@ export {
   AI_POSITIONING,
   buildLeadMessage,
   CTA_CONTENT,
+  EXAM_OPTIONS,
+  examLabel,
   FAQ_ITEMS,
   PRICING,
   PRICING_FALLBACK_NOTE,
@@ -29,6 +31,7 @@ export type {
   PricingInfo,
   Review,
   TutorLeadDelivery,
+  TutorLeadExam,
   TutorLeadInput,
   TutorLeadSubject,
 } from "@/features/tutor-leads/types";

@@ -4,7 +4,6 @@ import { getArticleSlugList } from "@/features/articles/api";
 import { getTaskIdList } from "@/features/tasks/api";
 import { siteConfig } from "@/lib/constants/site";
 
-/** Evaluated once per build — used as `lastModified` for static routes. */
 const BUILD_DATE = new Date();
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -41,6 +40,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${siteConfig.url}/podgotovka`,
+      lastModified: BUILD_DATE,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteConfig.url}/diagnostika`,
       lastModified: BUILD_DATE,
       changeFrequency: "monthly",
       priority: 0.7,

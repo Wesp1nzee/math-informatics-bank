@@ -1,9 +1,12 @@
 export type TutorLeadSubject = "matematika" | "informatika" | "both";
+export type TutorLeadExam = "oge" | "ege" | "other";
 
 export type TutorLeadInput = {
-  name: string;
+  /** Optional: the fast path only requires contact and exam. */
+  name?: string;
   contact: string;
-  subject: TutorLeadSubject;
+  exam: TutorLeadExam;
+  subject?: TutorLeadSubject;
   message?: string;
   consent: true;
 };

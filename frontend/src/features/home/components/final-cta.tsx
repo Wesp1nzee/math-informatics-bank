@@ -47,7 +47,6 @@ export function FinalCta() {
           </div>
 
           <div
-            id="request"
             className="reveal desk:col-span-5 desk:col-start-8 desk:mt-0 col-span-12 mt-12 scroll-mt-24"
             style={step(1)}
           >

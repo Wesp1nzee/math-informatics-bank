@@ -7,6 +7,7 @@ const PAGES = [
   { path: "/informatika", title: /Информатика/ },
   { path: "/articles", title: /Статьи и разборы/ },
   { path: "/podgotovka", title: /Репетиторство/ },
+  { path: "/diagnostika", title: /Диагностика/ },
 ];
 
 test.describe("SEO basics", () => {
@@ -25,7 +26,6 @@ test.describe("SEO basics", () => {
       const canonical = page.locator('link[rel="canonical"]');
       await expect(canonical).toHaveAttribute("href", /^https?:\/\/.+/);
 
-      // Open Graph without an image must not emit an empty og:image.
       expect(await page.locator('meta[property="og:image"]').count()).toBe(0);
     });
   }
@@ -38,7 +38,6 @@ test.describe("SEO basics", () => {
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.status()).toBe(200);
     const body = await sitemap.text();
-    // URLs are built from NEXT_PUBLIC_SITE_URL, not from the test server origin.
     expect(body).toContain("/zadachi/1042</loc>");
     expect(body).toContain("/articles/kak-chitat-chuzhoy-kod</loc>");
     expect(body).not.toContain("/zadachi/does-not-exist");

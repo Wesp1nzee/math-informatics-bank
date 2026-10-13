@@ -2,6 +2,7 @@ import type {
   FaqItem,
   PricingInfo,
   Review,
+  TutorLeadExam,
   TutorLeadInput,
   TutorLeadSubject,
 } from "@/features/tutor-leads/types";
@@ -158,18 +159,26 @@ export const SUBJECT_OPTIONS: readonly {
   { value: "both", label: "Математика и информатика" },
 ];
 
+export const EXAM_OPTIONS: readonly { value: TutorLeadExam; label: string }[] = [
+  { value: "oge", label: "ОГЭ" },
+  { value: "ege", label: "ЕГЭ" },
+  { value: "other", label: "Другое" },
+];
+
 export function subjectLabel(subject: TutorLeadSubject): string {
   return SUBJECT_OPTIONS.find((option) => option.value === subject)?.label ?? subject;
 }
 
+export function examLabel(exam: TutorLeadExam): string {
+  return EXAM_OPTIONS.find((option) => option.value === exam)?.label ?? exam;
+}
+
 export function buildLeadMessage(input: TutorLeadInput): string {
-  const lines = [
-    "Заявка на занятия",
-    "",
-    `Имя: ${input.name}`,
-    `Связь: ${input.contact}`,
-    `Предмет: ${subjectLabel(input.subject)}`,
-  ];
+  const lines = ["Заявка на занятия", "", `Экзамен: ${examLabel(input.exam)}`];
+
+  if (input.name?.trim()) lines.push(`Имя: ${input.name.trim()}`);
+  lines.push(`Связь: ${input.contact}`);
+  if (input.subject) lines.push(`Предмет: ${subjectLabel(input.subject)}`);
 
   if (input.message?.trim()) {
     lines.push(`Комментарий: ${input.message.trim()}`);

@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
 import { Button, ButtonArrow } from "@/components/ui/button";
+import { TutorLeadPanel } from "@/features/tutor-leads/components/tutor-lead-panel";
 import { TutoringFacts } from "@/features/tutor-leads/components/tutoring-facts";
 import { AI_POSITIONING, TUTORING_INTRO } from "@/features/tutor-leads/content";
 
@@ -19,18 +20,30 @@ export function TutoringSection() {
           </h2>
           <p className="body-large mt-6">{TUTORING_INTRO}</p>
           <p className="text-ink mt-4 font-medium">{AI_POSITIONING}</p>
-          <Button asChild className="mt-10">
-            <Link href="/podgotovka#request">
-              Обсудить занятия <ButtonArrow />
+
+          <TutoringFacts className="mt-10" />
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Button asChild variant="secondary" size="sm">
+              <Link href="/podgotovka#request">
+                Обсудить занятия <ButtonArrow />
+              </Link>
+            </Button>
+            <Link
+              href="/diagnostika"
+              className="text-accent hover:text-accent-strong inline-flex min-h-11 items-center gap-2 font-medium transition-colors"
+            >
+              Пройти диагностику бесплатно →
             </Link>
-          </Button>
+          </div>
         </div>
 
         <div
           className="reveal desk:col-span-5 desk:col-start-8 desk:mt-0 col-span-12 mt-12"
           style={step(1)}
         >
-          <TutoringFacts />
+          <h2 className="heading-3 mb-6">Оставить заявку</h2>
+          <TutorLeadPanel />
         </div>
       </div>
     </Section>
