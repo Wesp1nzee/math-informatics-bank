@@ -6,9 +6,10 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
-from app.core.exceptions import RateLimitedError
-from app.core.security import generate_token
+from app.core.exceptions import NotFoundError, RateLimitedError
+from app.core.security import hash_ip
 from app.domains.leads.models import LeadStatus, TutorLead
+from app.domains.leads.notify import notify_lead
 from app.domains.leads.schemas import TutorLeadCreate, TutorLeadCreated
 
 
@@ -41,10 +42,13 @@ async def create_lead(
         message=payload.message,
         consent=payload.consent,
         status=LeadStatus.NEW,
-        ip_hash=generate_token(16) if ip else None,
+        ip_hash=hash_ip(ip, salt=settings.ip_hash_salt) if ip else None,
     )
     session.add(lead)
     await session.flush()
+
+    await notify_lead(lead)
+
     return TutorLeadCreated(ok=True, id=lead.id)
 
 
@@ -53,3 +57,17 @@ async def list_leads(session: AsyncSession, *, status: LeadStatus | None = None)
     if status is not None:
         query = query.where(TutorLead.status == status)
     return list((await session.scalars(query)).all())
+
+
+async def get_lead(session: AsyncSession, lead_id: int) -> TutorLead:
+    lead = await session.get(TutorLead, lead_id)
+    if lead is None:
+        raise NotFoundError(f"Заявка №{lead_id} не найдена.")
+    return lead
+
+
+async def update_lead_status(session: AsyncSession, lead_id: int, status: LeadStatus) -> TutorLead:
+    lead = await get_lead(session, lead_id)
+    lead.status = status
+    await session.flush()
+    return lead

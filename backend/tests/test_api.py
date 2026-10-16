@@ -201,3 +201,36 @@ async def test_lead_validation_rejects_bad_contact(client: httpx.AsyncClient) ->
     )
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "validation_error"
+
+
+async def test_admin_can_update_lead_status(client: httpx.AsyncClient) -> None:
+    created = await client.post(
+        "/api/v1/tutor-leads",
+        json={"contact": "student@example.com", "exam": "ege", "consent": True},
+    )
+    lead_id = created.json()["id"]
+
+    anonymous = await client.patch(f"/api/v1/tutor-leads/{lead_id}", json={"status": "contacted"})
+    assert anonymous.status_code == 401
+
+    async with get_sessionmaker()() as session:
+        session.add(
+            User(
+                email="admin@example.com",
+                hashed_password=hash_password("supersecret"),
+                role=UserRole.ADMIN,
+            )
+        )
+        await session.commit()
+
+    await client.post(
+        "/api/v1/auth/login", json={"email": "admin@example.com", "password": "supersecret"}
+    )
+
+    updated = await client.patch(f"/api/v1/tutor-leads/{lead_id}", json={"status": "contacted"})
+    assert updated.status_code == 200
+    assert updated.json()["status"] == "contacted"
+
+    listed = await client.get("/api/v1/tutor-leads?status=contacted")
+    assert listed.status_code == 200
+    assert listed.json()[0]["id"] == lead_id

@@ -62,6 +62,11 @@ def hash_session_token(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
+def hash_ip(ip: str, *, salt: str = "") -> str:
+    """Pseudonymize an IP address as SHA-256(salt + ip) so the raw value is never stored."""
+    return hashlib.sha256(f"{salt}:{ip}".encode()).hexdigest()
+
+
 # --- misc ----------------------------------------------------------------------
 
 

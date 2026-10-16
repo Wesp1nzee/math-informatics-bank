@@ -1,0 +1,51 @@
+"""Best-effort Telegram notification for new tutor leads.
+
+The teacher is notified via the Telegram Bot API only when both
+``TELEGRAM_BOT_TOKEN`` and ``TELEGRAM_ADMIN_CHAT_ID`` are configured. The
+notification is fire-and-forget from the lead's perspective: it never raises,
+so a notification failure can never turn a stored lead into a 500.
+"""
+
+from __future__ import annotations
+
+import logging
+
+import httpx
+
+from app.core.config import get_settings
+from app.domains.leads.models import TutorLead
+
+logger = logging.getLogger(__name__)
+
+_EXAM_LABELS = {"oge": "ОГЭ", "ege": "ЕГЭ", "other": "Другое"}
+_SUBJECT_LABELS = {"matematika": "Математика", "informatika": "Информатика", "both": "Оба"}
+
+
+def _lead_text(lead: TutorLead) -> str:
+    lines = ["📩 Новая заявка на занятия", ""]
+    if lead.name:
+        lines.append(f"Имя: {lead.name}")
+    lines.append(f"Связь: {lead.contact}")
+    lines.append(f"Экзамен: {_EXAM_LABELS.get(lead.exam.value, lead.exam.value)}")
+    if lead.subject:
+        lines.append(f"Предмет: {_SUBJECT_LABELS.get(lead.subject.value, lead.subject.value)}")
+    if lead.message:
+        lines.append(f"Комментарий: {lead.message}")
+    return "\n".join(lines)
+
+
+async def notify_lead(lead: TutorLead) -> None:
+    """Send a Telegram message about a new lead. Never raises."""
+    settings = get_settings()
+    token = settings.telegram_bot_token
+    chat_id = settings.telegram_admin_chat_id
+    if not token or not chat_id:
+        return
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    try:
+        async with httpx.AsyncClient(timeout=5) as client:
+            response = await client.post(url, json={"chat_id": chat_id, "text": _lead_text(lead)})
+            response.raise_for_status()
+    except Exception:  # noqa: BLE001 — notification must never break the request
+        logger.exception("Failed to notify about lead %s", lead.id)

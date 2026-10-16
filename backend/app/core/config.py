@@ -55,6 +55,14 @@ class Settings(BaseSettings):
     # --- business ---
     lead_rate_limit_per_hour: int = 5
 
+    # Telegram notification for new leads. Optional: when either value is unset
+    # the notification is a no-op and the lead is still stored.
+    telegram_bot_token: str | None = None
+    telegram_admin_chat_id: str | None = None
+
+    # Salt for pseudonymizing client IPs (``hash_ip``). Set a secret value in prod.
+    ip_hash_salt: str = ""
+
     @field_validator("cors_origins", "allowed_hosts", mode="before")
     @classmethod
     def _split_csv(cls, value: object) -> object:

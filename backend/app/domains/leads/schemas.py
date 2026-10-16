@@ -37,6 +37,10 @@ class TutorLeadCreated(BaseModel):
     id: int
 
 
+class TutorLeadUpdate(BaseModel):
+    status: LeadStatus
+
+
 class TutorLeadRead(ORMModel):
     id: int
     name: str | None
