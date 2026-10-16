@@ -28,6 +28,8 @@ export async function clientRequest<T>(
 
   try {
     const response = await fetch(joinUrl(apiConfig.publicBaseUrl, path), {
+      // Cookie-based sessions: send/receive the HttpOnly session cookie.
+      credentials: "include",
       ...rest,
       signal: rest.signal ?? controller.signal,
       headers: {
