@@ -120,6 +120,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
 
           <div className="desk:col-span-5 col-span-12">
             <AnswerForm
+              taskId={task.id}
               expected={task.answer.value}
               kind={task.answer.kind}
               answerNote={task.answer.explanation}

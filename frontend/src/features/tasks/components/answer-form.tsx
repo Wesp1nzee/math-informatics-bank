@@ -7,11 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
+import { checkTaskAnswer } from "@/features/tasks/api-client";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
+import { isPublicApiConfigured } from "@/lib/api/config";
+import { describeApiError } from "@/lib/api/errors";
 import { isAnswerCorrect, type AnswerKind } from "@/lib/utils/check-answer";
 import { cn } from "@/lib/utils/cn";
 
 type AnswerFormProps = {
+  taskId: string;
   expected: string;
   kind: AnswerKind;
   answerNote: string;
@@ -20,21 +24,24 @@ type AnswerFormProps = {
 
 type Status = "idle" | "correct" | "wrong";
 
-export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormProps) {
+export function AnswerForm({ taskId, expected, kind, answerNote, solution }: AnswerFormProps) {
   const inputId = useId();
   const statusId = useId();
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [attempts, setAttempts] = useState(0);
   const [revealed, setRevealed] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
 
   useEffect(() => {
     if (revealed) track(ANALYTICS_EVENTS.solutionOpen);
   }, [revealed]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!value.trim()) {
+    const trimmed = value.trim();
+    if (!trimmed) {
       setStatus("wrong");
       setAttempts((count) => count + 1);
       track(ANALYTICS_EVENTS.taskAnswerAttempt, {
@@ -43,7 +50,28 @@ export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormP
       });
       return;
     }
-    const correct = isAnswerCorrect(value, expected, kind);
+
+    let correct: boolean;
+    if (isPublicApiConfigured()) {
+      setChecking(true);
+      setFailure(null);
+      try {
+        const result = await checkTaskAnswer(taskId, trimmed);
+        correct = result.isCorrect;
+      } catch (error) {
+        setChecking(false);
+        setFailure(describeApiError(error));
+        track(ANALYTICS_EVENTS.taskAnswerAttempt, {
+          correct: false,
+          attempt: attempts + 1,
+        });
+        return;
+      }
+      setChecking(false);
+    } else {
+      correct = isAnswerCorrect(trimmed, expected, kind);
+    }
+
     setStatus(correct ? "correct" : "wrong");
     setAttempts((count) => count + 1);
     track(ANALYTICS_EVENTS.taskAnswerAttempt, {
@@ -58,6 +86,7 @@ export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormP
     setStatus("idle");
     setAttempts(0);
     setRevealed(false);
+    setFailure(null);
   }
 
   const statusMessage =
@@ -88,9 +117,9 @@ export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormP
           <Button
             type="submit"
             className="shrink-0 sm:w-auto"
-            disabled={status === "correct"}
+            disabled={status === "correct" || checking}
           >
-            Проверить
+            {checking ? "Проверяем…" : "Проверить"}
           </Button>
         </div>
       </form>
@@ -108,6 +137,12 @@ export function AnswerForm({ expected, kind, answerNote, solution }: AnswerFormP
       >
         {statusMessage}
       </p>
+
+      {failure ? (
+        <p role="alert" className="text-danger mt-2 text-sm">
+          {failure}
+        </p>
+      ) : null}
 
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
         <button

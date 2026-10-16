@@ -7,6 +7,7 @@ import { AnswerForm } from "@/features/tasks/components/answer-form";
 function renderForm() {
   return render(
     <AnswerForm
+      taskId="1042"
       expected="3"
       kind="number"
       answerNote="Сначала производная, потом подстановка."
