@@ -70,9 +70,12 @@ export function SiteFooter() {
             )}
           </div>
 
-          <p className="border-line text-ink-faint col-span-12 border-t pt-8 text-sm">
-            © {COPYRIGHT_YEAR}
-          </p>
+          <div className="border-line text-ink-faint col-span-12 flex flex-wrap items-center gap-x-4 gap-y-2 border-t pt-8 text-sm">
+            <span>© {COPYRIGHT_YEAR}</span>
+            <Link href="/privacy" className="hover:text-ink-soft transition-colors">
+              Политика обработки персональных данных
+            </Link>
+          </div>
         </div>
       </Container>
     </footer>

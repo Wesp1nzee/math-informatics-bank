@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleAlert, CircleCheck, Send, SendHorizontal } from "lucide-react";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -232,7 +233,10 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
             {...register("consent")}
           />
           <Label htmlFor="lead-consent" className="leading-snug font-normal">
-            Согласен на обработку персональных данных для ответа на заявку.
+            Согласен на обработку персональных данных для ответа на заявку.{" "}
+            <Link href="/privacy" className="underline underline-offset-2">
+              Политика обработки данных
+            </Link>
           </Label>
         </div>
         <FieldError id="lead-consent-error" message={errors.consent?.message} />
