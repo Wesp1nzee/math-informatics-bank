@@ -13,7 +13,7 @@ import { DifficultyMeter } from "@/features/tasks/components/difficulty-meter";
 import { RelatedTasks } from "@/features/tasks/components/related-tasks";
 import { SolutionSteps } from "@/features/tasks/components/solution-steps";
 import { TaskStatement } from "@/features/tasks/components/task-statement";
-import { getRelatedTasks, getTaskById, getTaskIdList } from "@/features/tasks/api";
+import { getRelatedTasks, getTaskById, getTaskIds } from "@/features/tasks/api";
 import { SUBJECT_LABEL, SUBJECT_PATH } from "@/features/tasks/labels";
 import { learningResourceJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -22,8 +22,9 @@ import { formatMinutes } from "@/lib/utils/format";
 type TaskPageProps = { params: Promise<{ id: string }> };
 
 
-export function generateStaticParams() {
-  return getTaskIdList().map((id) => ({ id }));
+export async function generateStaticParams() {
+  const ids = await getTaskIds();
+  return ids.map((id) => ({ id }));
 }
 
 export async function generateMetadata({ params }: TaskPageProps): Promise<Metadata> {

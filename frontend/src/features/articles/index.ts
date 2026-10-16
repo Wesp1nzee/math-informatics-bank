@@ -1,7 +1,7 @@
 export {
   getArticleBySlug,
   getArticlePath,
-  getArticleSlugList,
+  getArticleSlugs,
   getArticleToc,
   getArticles,
   getArticlesBySubject,

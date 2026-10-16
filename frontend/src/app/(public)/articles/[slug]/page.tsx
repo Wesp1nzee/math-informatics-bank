@@ -13,7 +13,7 @@ import { RelatedArticles } from "@/features/articles/components/related-articles
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import {
   getArticleBySlug,
-  getArticleSlugList,
+  getArticleSlugs,
   getArticleToc,
   getRelatedArticles,
 } from "@/features/articles/api";
@@ -22,8 +22,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return getArticleSlugList().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getArticleSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

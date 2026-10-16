@@ -55,8 +55,12 @@ export async function getRelatedArticles(
   return [...matching, ...rest].slice(0, limit);
 }
 
-export function getArticleSlugList(): string[] {
-  return demoArticles.map((article) => article.slug);
+export async function getArticleSlugs(): Promise<string[]> {
+  if (!isServerApiConfigured()) {
+    return demoArticles.map((article) => article.slug);
+  }
+  const items = await serverRequest<Article[]>("/articles");
+  return items.map((article) => article.slug);
 }
 
 export function getArticlePath(slug: string): string {

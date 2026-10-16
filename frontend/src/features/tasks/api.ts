@@ -132,10 +132,27 @@ export async function getRelatedTasks(task: Task, limit = 3): Promise<Task[]> {
   return scored.slice(0, limit).map((entry) => entry.candidate);
 }
 
-export function getTaskIdList(): string[] {
-  return demoTasks.map((task) => task.id);
-}
-
 export function getTaskPath(id: string): string {
   return `/zadachi/${id}`;
+}
+
+export async function getTaskIds(): Promise<string[]> {
+  if (!isServerApiConfigured()) {
+    return demoTasks.map((task) => task.id);
+  }
+
+  const ids: string[] = [];
+  const pageSize = 100;
+  let page = 1;
+  let total = 0;
+  do {
+    const response = await serverRequest<TaskListDto>("/tasks", {
+      searchParams: { page, page_size: pageSize },
+    });
+    ids.push(...response.items.map((task) => task.id));
+    total = response.total;
+    page += 1;
+  } while (ids.length < total);
+
+  return ids;
 }

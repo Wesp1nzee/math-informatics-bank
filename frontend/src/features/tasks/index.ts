@@ -2,7 +2,7 @@ export {
   getFeaturedTasks,
   getRelatedTasks,
   getTaskById,
-  getTaskIdList,
+  getTaskIds,
   getTaskPath,
   getTasks,
   getTasksBySubject,
