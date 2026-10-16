@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { brand } from "@/lib/constants/site";
 import { mainNav } from "@/lib/constants/navigation";
@@ -61,6 +62,11 @@ export function MobileNav() {
               </Dialog.Close>
             ))}
           </nav>
+
+          <div className="border-line flex items-center justify-between border-b py-3.5">
+            <span className="text-ink-soft text-sm">Тема</span>
+            <ThemeToggle />
+          </div>
 
           <Dialog.Close asChild>
             <Link

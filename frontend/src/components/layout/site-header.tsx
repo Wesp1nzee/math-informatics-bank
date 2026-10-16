@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Container } from "@/components/layout/container";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { mainNav } from "@/lib/constants/navigation";
 import { brand } from "@/lib/constants/site";
@@ -52,6 +53,8 @@ export function SiteHeader() {
           </ul>
 
           <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle className="hidden md:inline-flex" />
+
             <Button asChild size="sm" className="hidden md:inline-flex">
               <Link href={REQUEST_PATH}>Записаться на пробное</Link>
             </Button>

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Source_Serif_4 } from "next/font/google";
+import Script from "next/script";
 import type { ReactNode } from "react";
 
 import { siteConfig } from "@/lib/constants/site";
+import { themeInitScript } from "@/lib/theme";
 import { YandexMetrika } from "@/lib/analytics/yandex-metrika";
 import "./globals.css";
 
@@ -36,6 +38,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
         {children}
         <YandexMetrika />
       </body>

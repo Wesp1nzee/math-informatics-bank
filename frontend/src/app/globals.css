@@ -25,8 +25,8 @@
 
   --font-sans:
     var(--font-geist), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: var(--font-source-serif), "Source Serif 4", Georgia,
-    "Times New Roman", serif;
+  --font-serif:
+    var(--font-source-serif), "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, "SF Mono", "Geist Mono", Menlo, Consolas, monospace;
 
   --radius-sm: 6px;
@@ -36,22 +36,56 @@
 
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --shadow-card:
-    0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -18px rgba(0, 0, 0, 0.16);
-  --shadow-float:
-    0 1px 2px rgba(0, 0, 0, 0.05), 0 18px 40px -24px rgba(0, 0, 0, 0.28);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -18px rgba(0, 0, 0, 0.16);
+  --shadow-float: 0 1px 2px rgba(0, 0, 0, 0.05), 0 18px 40px -24px rgba(0, 0, 0, 0.28);
 
   --breakpoint-desk: 75rem;
 }
 
 /*
- * Dark theme is driven by the OS preference only (no manual toggle yet). The
- * tokens above are overridden here; every utility compiles to
- * `var(--color-*)`, so nothing else has to change. Contrast was checked for
- * text, links, KaTeX, the derivative graph and `.option` states.
+ * Theme selection (see src/lib/theme.ts). `data-theme="light"` / "dark" on
+ * <html> selects the scheme; the JS bootstrap always sets it (defaulting to the
+ * OS preference). Without JS the attribute is absent and the media query below
+ * keeps the dark theme working. Every utility compiles to `var(--color-*)`, so
+ * nothing else has to change.
+ *
+ * A media query cannot be merged with a selector, so the dark token set is
+ * written twice (forced dark + OS fallback). Keep the two blocks in sync.
+ * Contrast was checked for text, links, KaTeX, the derivative graph and
+ * `.option` states.
  */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-canvas: #131312;
+  --color-surface: #1c1c1a;
+  --color-surface-subtle: #24241f;
+
+  --color-ink: #f1f1ec;
+  --color-ink-soft: #b3b3ac;
+  --color-ink-faint: #8b8b84;
+
+  --color-line: #35352f;
+  --color-line-strong: #4a4a42;
+
+  --color-accent: #8ea6ff;
+  --color-accent-strong: #b0c1ff;
+  --color-accent-soft: #1f2742;
+
+  --color-success: #58d19a;
+  --color-success-soft: #14271e;
+  --color-danger: #f28c88;
+  --color-danger-soft: #2b1616;
+  --color-warning: #e0b062;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -18px rgba(0, 0, 0, 0.6);
+  --shadow-float: 0 1px 2px rgba(0, 0, 0, 0.5), 0 18px 40px -24px rgba(0, 0, 0, 0.7);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+
     --color-canvas: #131312;
     --color-surface: #1c1c1a;
     --color-surface-subtle: #24241f;
@@ -73,11 +107,13 @@
     --color-danger-soft: #2b1616;
     --color-warning: #e0b062;
 
-    --shadow-card:
-      0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -18px rgba(0, 0, 0, 0.6);
-    --shadow-float:
-      0 1px 2px rgba(0, 0, 0, 0.5), 0 18px 40px -24px rgba(0, 0, 0, 0.7);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -18px rgba(0, 0, 0, 0.6);
+    --shadow-float: 0 1px 2px rgba(0, 0, 0, 0.5), 0 18px 40px -24px rgba(0, 0, 0, 0.7);
   }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 @layer base {
@@ -672,6 +708,29 @@
   .about-art[data-reveal-in] .a-fade {
     animation: fade-in var(--dur, 600ms) ease-out both;
     animation-delay: var(--d, 0ms);
+  }
+
+  /*
+   * Theme toggle. The selected option is driven by the `data-theme` attribute
+   * (set before hydration), not by React class state, so the highlight is
+   * correct on the very first paint.
+   */
+  .theme-option {
+    color: var(--color-ink-faint);
+    transition:
+      color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .theme-option:hover {
+    color: var(--color-ink);
+  }
+
+  [data-theme="light"] .theme-option[data-value="light"],
+  [data-theme="dark"] .theme-option[data-value="dark"] {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
   }
 }
 
