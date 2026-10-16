@@ -1,6 +1,6 @@
 import "server-only";
 
-import { apiConfig, joinUrl } from "./config";
+import { apiConfig, apiUrl } from "./config";
 import { ApiError, toApiError } from "./errors";
 
 const serverBaseUrl = process.env.API_BASE_URL?.trim() ?? "";
@@ -28,7 +28,7 @@ export async function serverRequest<T>(
     );
   }
 
-  const url = new URL(joinUrl(serverBaseUrl, path));
+  const url = new URL(apiUrl(serverBaseUrl, path));
   for (const [key, value] of Object.entries(options.searchParams ?? {})) {
     if (value !== undefined && value !== null) {
       url.searchParams.set(key, String(value));

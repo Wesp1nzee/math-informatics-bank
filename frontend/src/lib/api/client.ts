@@ -1,4 +1,4 @@
-import { apiConfig, isPublicApiConfigured, joinUrl } from "./config";
+import { apiConfig, apiUrl, isPublicApiConfigured } from "./config";
 import { ApiError, toApiError } from "./errors";
 
 export type ClientRequestOptions = Omit<RequestInit, "body"> & {
@@ -20,7 +20,7 @@ export async function clientRequest<T>(
   const timeout = setTimeout(() => controller.abort(), apiConfig.timeoutMs);
 
   try {
-    const response = await fetch(joinUrl(apiConfig.publicBaseUrl, path), {
+    const response = await fetch(apiUrl(apiConfig.publicBaseUrl, path), {
       // Cookie-based sessions: send/receive the HttpOnly session cookie.
       credentials: "include",
       ...rest,
