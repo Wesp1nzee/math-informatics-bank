@@ -1,13 +1,5 @@
 import type { Article } from "@/features/articles/types";
 
-/**
- * DEMO DATASET — draft articles authored for the migration.
- *
- * They are real, verified explanations (no invented facts, student results or
- * testimonials), but they mark the *placeholder* state of the blog: the final
- * editorial content is expected to replace them. Hence `isDemo: true`, which
- * the UI surfaces through a notice.
- */
 export const demoArticles: readonly Article[] = [
   {
     slug: "proizvodnaya-ne-pro-formuly",

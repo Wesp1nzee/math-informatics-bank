@@ -1,7 +1,6 @@
 import type { TaskSubject } from "@/features/tasks/types";
 
 export type SubjectContent = {
-  /** Short label for navigation and breadcrumbs. */
   label: string;
   eyebrow: string;
   title: string;

@@ -1,9 +1,5 @@
 import type { ReactNode } from "react";
 
-/**
- * Shared empty / error presentation for data-driven screens. One component
- * keeps the copy and the visual treatment consistent across features.
- */
 export function StateMessage({
   title,
   description,

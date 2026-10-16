@@ -5,13 +5,6 @@ export type ClientRequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
 };
 
-/**
- * Typed fetch wrapper for browser requests. Uses only `NEXT_PUBLIC_API_BASE_URL`
- * so no secrets ever reach the client bundle.
- *
- * The public surface (task catalogue, articles) is rendered on the server, so
- * this is currently used for write operations such as tutor lead submission.
- */
 export async function clientRequest<T>(
   path: string,
   options: ClientRequestOptions = {},

@@ -21,7 +21,6 @@ import { formatMinutes } from "@/lib/utils/format";
 
 type TaskPageProps = { params: Promise<{ id: string }> };
 
-/** Pre-render known entries; unknown ids fall through to notFound(). */
 
 export function generateStaticParams() {
   return getTaskIdList().map((id) => ({ id }));

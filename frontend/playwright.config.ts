@@ -2,14 +2,6 @@ import { defineConfig, devices } from "@playwright/test";
 
 const PORT = Number(process.env.E2E_PORT ?? 3210);
 
-/**
- * End-to-end smoke tests. They run against a production build:
- *
- *   pnpm build
- *   pnpm test:e2e
- *
- * The web server is started automatically; set E2E_PORT to change the port.
- */
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,

@@ -12,10 +12,6 @@ import type { TaskSubject } from "@/features/tasks/types";
 import { SUBJECT_CONTENT } from "@/features/topics/content";
 import { buildQueryHref } from "@/lib/utils/url";
 
-/**
- * Subject hub template, shared by /matematika and /informatika. Keeps the two
- * pages from duplicating markup while still allowing subject-specific content.
- */
 export async function SubjectHub({ subject }: { subject: TaskSubject }) {
   const content = SUBJECT_CONTENT[subject];
   const [{ items: tasks, total }, articles] = await Promise.all([

@@ -40,7 +40,6 @@ function StatementBlockView({ block }: { block: StatementBlock }) {
   }
 }
 
-/** Task condition, rendered from structured blocks. */
 export function TaskStatement({ blocks }: { blocks: readonly StatementBlock[] }) {
   return (
     <div className="flex flex-col gap-4">

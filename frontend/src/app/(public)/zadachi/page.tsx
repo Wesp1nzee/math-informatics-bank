@@ -23,8 +23,6 @@ import { buildQueryHref } from "@/lib/utils/url";
 import Link from "next/link";
 
 export const metadata: Metadata = buildMetadata({
-  // Canonical always points at the unfiltered catalogue so filtered and
-  // paginated views do not compete as duplicate content.
   title: "Банк задач по математике и информатике",
   description:
     "Задачи ОГЭ и ЕГЭ по математике и информатике с ответами и пошаговыми решениями. Фильтры по предмету и сложности, без регистрации.",
@@ -41,7 +39,6 @@ function catalogueHref(filters: TaskFilters, page: number): string {
   });
 }
 
-/** Data-dependent part of the page, streamed inside a Suspense boundary. */
 async function TaskCatalogue({
   searchParams,
 }: {

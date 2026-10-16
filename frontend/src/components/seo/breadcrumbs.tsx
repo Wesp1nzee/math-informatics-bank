@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils/cn";
 
 export type BreadcrumbItem = {
   name: string;
-  /** Omit on the last item — it is rendered as the current page. */
   href?: ComponentProps<typeof Link>["href"];
 };
 

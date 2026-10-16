@@ -4,10 +4,6 @@ import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-/**
- * Global 404. It renders its own header/footer because it lives outside the
- * `(public)` route group.
- */
 export default function NotFound() {
   return (
     <>

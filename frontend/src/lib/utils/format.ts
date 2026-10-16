@@ -1,4 +1,3 @@
-/** Russian plural form helper: 1 задача / 2 задачи / 5 задач. */
 export function pluralize(
   count: number,
   one: string,
@@ -30,7 +29,6 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("ru-RU", {
   year: "numeric",
 });
 
-/** ISO date → "10 февраля 2026 г." */
 export function formatDate(iso: string): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;

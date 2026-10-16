@@ -2,16 +2,6 @@ export type AnswerKind = "number" | "text";
 
 const MINUS_CHARS = /[−–—]/g;
 
-/**
- * Normalizes a free-form answer before comparison.
- *
- * - accepts `,` and `.` as decimal separators;
- * - accepts any unicode minus, `-` and a leading `+`;
- * - ignores whitespace and a trailing `.0`.
- *
- * This is intentionally forgiving: a student should not lose a point over
- * formatting, only over a wrong value.
- */
 export function normalizeAnswer(value: string, kind: AnswerKind): string {
   let result = value.trim().toLowerCase().replace(MINUS_CHARS, "-");
 

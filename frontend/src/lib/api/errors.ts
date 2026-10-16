@@ -6,10 +6,6 @@ type ApiErrorOptions = {
   cause?: unknown;
 };
 
-/**
- * Normalized error for anything that can go wrong while talking to the API.
- * UI components switch on `kind` instead of guessing from the message.
- */
 export class ApiError extends Error {
   readonly kind: ApiErrorKind;
   readonly status?: number;
@@ -56,7 +52,6 @@ export function toApiError(error: unknown): ApiError {
   return new ApiError("unknown", "Unknown API error", { details: error });
 }
 
-/** Human-readable, user-facing message (Russian UI). */
 export function describeApiError(error: unknown): string {
   if (!isApiError(error)) {
     return "Не удалось загрузить данные. Попробуйте обновить страницу.";

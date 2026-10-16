@@ -9,11 +9,6 @@ export type ArticleListResult = {
   isDemo: boolean;
 };
 
-/**
- * Articles in the curated order declared by the content source. Ordering is a
- * content decision (the home page uses the first item as its lead story); the
- * real API will define it once connected.
- */
 export async function getArticles(): Promise<ArticleListResult> {
   if (isServerApiConfigured()) {
     const items = await serverRequest<Article[]>("/articles");
@@ -56,13 +51,10 @@ export async function getRelatedArticles(
       candidate.subject === article.subject || candidate.exam === article.exam,
   );
 
-  // Fill up the limit with the remaining articles when there are few matches,
-  // so the block never looks half-empty.
   const rest = others.filter((candidate) => !matching.includes(candidate));
   return [...matching, ...rest].slice(0, limit);
 }
 
-/** Slugs pre-rendered at build time. */
 export function getArticleSlugList(): string[] {
   return demoArticles.map((article) => article.slug);
 }

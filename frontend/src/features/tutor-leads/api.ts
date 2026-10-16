@@ -7,18 +7,6 @@ import type {
   TutorLeadDelivery,
 } from "@/features/tutor-leads/types";
 
-/**
- * Delivers a tutoring request.
- *
- * Delivery order:
- *  1. `POST /tutor-leads` — used as soon as the FastAPI backend is configured.
- *  2. Telegram deep link with a prefilled message.
- *  3. `mailto:` link with a prefilled subject and body.
- *
- * Until the backend exists, options 2–3 make the form genuinely work without a
- * server — it opens the applicant's own client with the message ready to send.
- * When no channel is configured at all, the caller must not render the form.
- */
 export async function submitTutorLead(
   input: TutorLeadInput,
   channels: ContactChannels,

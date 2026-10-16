@@ -8,10 +8,6 @@ function first(value: string | string[] | undefined): string | undefined {
   return value;
 }
 
-/**
- * Reads the catalogue filters from the URL. Unknown values are ignored rather
- * than rejected, so a hand-edited link can never break the page.
- */
 export function parseTaskFilters(params: RawSearchParams): TaskFilters {
   const subject = first(params.subject);
   const level = first(params.level);

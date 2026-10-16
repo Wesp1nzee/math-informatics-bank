@@ -6,10 +6,6 @@ import { useEffect } from "react";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 
-/**
- * Error boundary for public pages. Logs the error for diagnostics and gives the
- * visitor a working way back instead of a blank screen.
- */
 export default function PublicError({
   error,
   reset,

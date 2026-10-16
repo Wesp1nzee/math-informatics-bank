@@ -26,7 +26,6 @@ export const buttonVariants = cva(
 
 export type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    /** Render the child element (e.g. a `next/link`) with button styling. */
     asChild?: boolean;
   };
 
@@ -43,7 +42,6 @@ export function Button({
   );
 }
 
-/** Arrow that slides on hover of the surrounding `Button`. */
 export function ButtonArrow({ className }: { className?: string }) {
   return (
     <ArrowRight

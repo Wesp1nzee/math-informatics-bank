@@ -1,4 +1,3 @@
-/** Builds a site-relative URL with a query string, dropping empty values. */
 export function buildQueryHref(
   basePath: string,
   params: Record<string, string | number | undefined>,

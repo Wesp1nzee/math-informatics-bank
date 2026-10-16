@@ -28,10 +28,6 @@ const HINTS: Record<string, string> = {
   "12": "12 — это только 3·2². Не забудьте слагаемые −8x и +7.",
 };
 
-/**
- * "Проверьте себя" section: an interactive quiz whose conclusion links to the
- * full task page (#1042), where the same derivative is solved step by step.
- */
 export function TryTaskSection() {
   return (
     <Section labelledBy="try-title">

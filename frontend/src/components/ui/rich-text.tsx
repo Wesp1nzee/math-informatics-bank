@@ -2,12 +2,6 @@ import type { ReactNode } from "react";
 
 import { Math } from "@/components/ui/math";
 
-/**
- * Renders a string where `$...$` fragments are typeset as inline formulas.
- *
- * Content is authored in this repository, so the tiny parser is enough — no
- * full Markdown engine is pulled in for one feature.
- */
 export function RichText({ text, className }: { text: string; className?: string }) {
   const token = /\$([^$]+)\$/g;
   const nodes: ReactNode[] = [];

@@ -1,22 +1,5 @@
 import type { Task } from "@/features/tasks/types";
 
-/**
- * DEMO DATASET — not production content.
- *
- * These tasks exist only so the catalogue, filters, pagination and the task
- * page have something real to render before the FastAPI content API exists.
- * Every answer was verified by hand:
- *
- *   #1042  f(x)=x³−4x²+7x → f′(2) = 12 − 16 + 7 = 3
- *   #2107  101ₓ = x²+1 = 26 → x² = 25 → x = 5
- *   #1318  x²−2ax+9, D = 4a²−36 < 0 → |a| < 3 → наибольшее целое a = 2
- *   #1043  (a²−16)/(a−4) = a+4 → 7+4 = 11
- *   #2108  91 = 1011011₂ → пять единиц
- *   #2109  104 = 1101000₂ — первое число больше 100 с тремя единицами
- *
- * Replace this module with the real API (`getTasks` in `features/tasks/api.ts`
- * switches over automatically as soon as API_BASE_URL is configured).
- */
 export const demoTasks: readonly Task[] = [
   {
     id: "1042",

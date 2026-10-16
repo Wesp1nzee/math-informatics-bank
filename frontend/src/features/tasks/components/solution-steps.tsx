@@ -2,7 +2,6 @@ import { Math } from "@/components/ui/math";
 import { RichText } from "@/components/ui/rich-text";
 import type { SolutionStep } from "@/features/tasks/types";
 
-/** Numbered step-by-step solution. */
 export function SolutionSteps({ steps }: { steps: readonly SolutionStep[] }) {
   return (
     <ol className="m-0 flex list-none flex-col gap-3 p-0">

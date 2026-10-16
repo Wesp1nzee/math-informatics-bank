@@ -11,10 +11,6 @@ type PageHeroProps = {
   children?: ReactNode;
 };
 
-/**
- * Shared header block for every inner page: breadcrumbs, the single `<h1>`,
- * an optional lead paragraph and optional trailing content (filters, CTAs).
- */
 export function PageHero({
   eyebrow,
   title,

@@ -44,7 +44,6 @@ function StepLink({
   );
 }
 
-/** Server-rendered pagination: real links, crawlable and JS-free. */
 export function Pagination({
   page,
   pageCount,

@@ -16,7 +16,6 @@ export type TaskListResult = {
   page: number;
   pageSize: number;
   pageCount: number;
-  /** True while content comes from the local demo dataset. */
   isDemo: boolean;
 };
 
@@ -48,10 +47,6 @@ function listLocalTasks(filters: TaskFilters, page: number): TaskListResult {
   };
 }
 
-/**
- * Page of tasks. Uses the real API when `API_BASE_URL` is configured and the
- * local demo dataset otherwise — the switch lives in exactly one place.
- */
 export async function getTasks(
   filters: TaskFilters = {},
   page = 1,
@@ -137,7 +132,6 @@ export async function getRelatedTasks(task: Task, limit = 3): Promise<Task[]> {
   return scored.slice(0, limit).map((entry) => entry.candidate);
 }
 
-/** Ids that should be pre-rendered at build time. */
 export function getTaskIdList(): string[] {
   return demoTasks.map((task) => task.id);
 }

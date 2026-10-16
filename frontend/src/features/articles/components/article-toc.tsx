@@ -1,9 +1,5 @@
 import type { ArticleTocItem } from "@/features/articles/types";
 
-/**
- * Table of contents. Rendered as plain in-page anchors so it works without
- * JavaScript and is keyboard accessible by default.
- */
 export function ArticleToc({ items }: { items: readonly ArticleTocItem[] }) {
   if (items.length === 0) return null;
 

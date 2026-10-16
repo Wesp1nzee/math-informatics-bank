@@ -8,7 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Nothing draft is public yet, but keep service paths out of the index.
         disallow: ["/api/"],
       },
     ],

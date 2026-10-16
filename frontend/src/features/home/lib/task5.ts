@@ -1,15 +1,3 @@
-/**
- * Reference implementation of the "task 5" demo shown on the home page.
- *
- * The program from the statement, translated into TypeScript so it can be
- * unit-tested and replayed in the browser:
- *
- *   def r(n):
- *       s = bin(n)[2:]
- *       s += str(s.count('1') % 2)
- *       s += str(s.count('1') % 2)
- *       return int(s, 2)
- */
 export const TASK5_CODE: readonly string[] = [
   "def r(n):",
   "    s = bin(n)[2:]",
@@ -26,7 +14,6 @@ export const TASK5_CODE: readonly string[] = [
 
 export const TASK5_THRESHOLD = 83;
 
-/** Verified reference answer: the first R greater than 83 is 86, reached at N = 21. */
 export const TASK5_SOLUTION = { n: 21, r: 86 } as const;
 
 export function isPythonKeyword(word: string): boolean {
@@ -51,7 +38,6 @@ export function countOnes(binary: string): number {
   return count;
 }
 
-/** Builds R from N exactly as the statement describes. */
 export function rOf(n: number): number {
   let binary = n.toString(2);
   for (let step = 0; step < 2; step += 1) {
@@ -60,7 +46,6 @@ export function rOf(n: number): number {
   return Number.parseInt(binary, 2);
 }
 
-/** Minimal Python syntax highlighting for the demo snippet (trusted input). */
 export function highlightPython(line: string): string {
   const escaped = line
     .replace(/&/g, "&amp;")
@@ -95,7 +80,6 @@ export type Task5Run = {
   hit: boolean;
 };
 
-/** Every iteration of the `while` loop, up to and including the first hit. */
 export function solveTask5(threshold = TASK5_THRESHOLD): Task5Run[] {
   const runs: Task5Run[] = [];
   for (let n = 1; n <= 10_000; n += 1) {

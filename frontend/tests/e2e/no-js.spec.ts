@@ -1,12 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-/**
- * Without JavaScript the page must still show its content.
- *
- * The `.reveal` entrance animation, the collapsible solution and the animated
- * code walkthrough are all switched by a `js` class on <html>, so with
- * scripting disabled the static presentation is used instead.
- */
 test.use({ javaScriptEnabled: false });
 
 test.describe("no-JavaScript fallback", () => {
@@ -34,7 +27,6 @@ test.describe("no-JavaScript fallback", () => {
 
     expect(state.hasJsClass).toBe(false);
     expect(state.revealOpacity).toBe("1");
-    // The interactive quiz would be a dead control, so it is hidden.
     expect(state.quizOptionsDisplay).toBe("none");
   });
 

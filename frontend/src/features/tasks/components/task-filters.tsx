@@ -52,10 +52,6 @@ function FilterGroup<T extends string>({
   );
 }
 
-/**
- * Server-rendered filters implemented as links, so filtering works without
- * JavaScript, is shareable and is crawlable.
- */
 export function TaskFilters({
   basePath,
   filters,

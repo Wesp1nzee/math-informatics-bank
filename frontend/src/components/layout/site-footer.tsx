@@ -4,7 +4,6 @@ import { Container } from "@/components/layout/container";
 import { footerNav } from "@/lib/constants/navigation";
 import { brand, mailHref, siteConfig, telegramHref } from "@/lib/constants/site";
 
-/** Copyright year is resolved once at module load (build time for static pages). */
 const COPYRIGHT_YEAR = new Date().getFullYear();
 
 export function SiteFooter() {

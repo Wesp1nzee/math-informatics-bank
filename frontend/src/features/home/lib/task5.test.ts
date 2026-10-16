@@ -11,9 +11,7 @@ import {
 
 describe("rOf", () => {
   it("reproduces the program from the statement", () => {
-    // 1 -> "1" -> "11" -> "110" -> 6
     expect(rOf(1)).toBe(6);
-    // 21 -> "10101" -> "101011" -> "1010110" -> 86
     expect(rOf(21)).toBe(86);
   });
 

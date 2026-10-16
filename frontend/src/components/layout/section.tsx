@@ -5,10 +5,8 @@ import { cn } from "@/lib/utils/cn";
 
 type SectionProps = {
   id?: string;
-  /** id of the heading that labels this section (`aria-labelledby`). */
   labelledBy?: string;
   className?: string;
-  /** Draw the hairline separator used between the prototype's sections. */
   bordered?: boolean;
   children: ReactNode;
 };

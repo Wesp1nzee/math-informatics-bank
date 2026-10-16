@@ -1,4 +1,3 @@
-/** Loading state for the catalogue: mirrors the card grid to avoid layout shift. */
 export function TaskListSkeleton({ count = 4 }: { count?: number }) {
   return (
     <div aria-busy="true" aria-live="polite">

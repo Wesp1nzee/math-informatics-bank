@@ -13,7 +13,6 @@ test.describe("task page", () => {
     await page.getByRole("button", { name: "Проверить" }).click();
 
     await expect(page.getByText("Верно.")).toBeVisible();
-    // A correct answer reveals the step-by-step solution.
     await expect(page.getByRole("heading", { name: "Решение" })).toBeVisible();
     await expect(page.getByText("Считаем")).toBeVisible();
   });

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { siteConfig } from "@/lib/constants/site";
 
-/** Absolute URL for a site-relative path, based on NEXT_PUBLIC_SITE_URL. */
 export function absoluteUrl(path: string): string {
   return new URL(
     path.startsWith("/") ? path : `/${path}`,
@@ -15,12 +14,7 @@ export type PageMetadataInput = {
   description: string;
   path: string;
   type?: "website" | "article";
-  /** Set for drafts / service routes that must not be indexed. */
   noIndex?: boolean;
-  /**
-   * Site-relative path to a real 1200×630 image. Omit it entirely while no
-   * image exists — an empty `og:image` is worse than none.
-   */
   ogImage?: string;
   publishedTime?: string;
   modifiedTime?: string;

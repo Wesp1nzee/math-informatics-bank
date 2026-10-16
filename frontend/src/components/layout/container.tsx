@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils/cn";
 
-/** Page shell: max width and the responsive gutter scale from the prototype. */
 export function Container({
   className,
   children,
