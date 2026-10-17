@@ -47,5 +47,17 @@ async def notify_lead(lead: TutorLead) -> None:
         async with httpx.AsyncClient(timeout=5) as client:
             response = await client.post(url, json={"chat_id": chat_id, "text": _lead_text(lead)})
             response.raise_for_status()
-    except Exception:  # noqa: BLE001 — notification must never break the request
-        logger.exception("Failed to notify about lead %s", lead.id)
+    except httpx.HTTPStatusError as exc:
+        # Never log the exception text or traceback: httpx embeds the request URL,
+        # which contains the bot token. Only the status code is safe.
+        logger.warning(
+            "Telegram lead notification failed: HTTP %s (lead %s)",
+            exc.response.status_code,
+            lead.id,
+        )
+    except Exception as exc:  # noqa: BLE001 — notification must never break the request
+        logger.warning(
+            "Telegram lead notification failed: %s (lead %s)",
+            type(exc).__name__,
+            lead.id,
+        )

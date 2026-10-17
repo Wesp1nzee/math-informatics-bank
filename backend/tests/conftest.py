@@ -8,6 +8,10 @@ from collections.abc import AsyncIterator
 # Must be set before ``app`` (and its cached Settings) is imported.
 os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///./.pytest_backend.db")
 os.environ.setdefault("LEAD_RATE_LIMIT_PER_HOUR", "100")
+# Tests must never send real Telegram messages: env vars override .env, so force
+# the notification path to be a no-op even when a developer has a local .env.
+os.environ["TELEGRAM_BOT_TOKEN"] = ""
+os.environ["TELEGRAM_ADMIN_CHAT_ID"] = ""
 
 import pytest_asyncio  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402

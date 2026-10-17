@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import func, select
@@ -11,6 +12,8 @@ from app.core.security import hash_ip
 from app.domains.leads.models import LeadStatus, TutorLead
 from app.domains.leads.notify import notify_lead
 from app.domains.leads.schemas import TutorLeadCreate, TutorLeadCreated
+
+logger = logging.getLogger(__name__)
 
 
 async def create_lead(
@@ -47,7 +50,16 @@ async def create_lead(
     session.add(lead)
     await session.flush()
 
-    await notify_lead(lead)
+    # Defence in depth: notify_lead already swallows its own errors, but a stored
+    # lead must never be rolled back because of a notification problem.
+    try:
+        await notify_lead(lead)
+    except Exception as exc:  # noqa: BLE001 — notification must never block a stored lead
+        logger.warning(
+            "Lead notification raised unexpectedly for lead %s: %s",
+            lead.id,
+            type(exc).__name__,
+        )
 
     return TutorLeadCreated(ok=True, id=lead.id)
 
