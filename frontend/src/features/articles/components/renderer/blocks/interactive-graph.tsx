@@ -387,8 +387,7 @@ const ParameterSlider = memo(function ParameterSlider({
   const range = parameter.max - parameter.min;
   const dataStep =
     Number.isFinite(parameter.step) && parameter.step > 0 ? parameter.step : 0.1;
-  // A fine step keeps pointer dragging continuous; the value is magnetised
-  // back to the article's step when the gesture ends.
+
   const fineStep = Math.min(dataStep, range / 500);
 
   useEffect(() => {
@@ -694,7 +693,7 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
     const dt =
       previous === null ? 16.6667 : clamp(timestamp - previous, 1, MAX_FRAME_MS);
     lastFrameTimeRef.current = timestamp;
-    // Frame-rate independent exponential smoothing.
+
     const alpha = 1 - Math.exp(-dt / SMOOTHING_TAU_MS);
 
     let valuesMoving = false;
@@ -727,7 +726,6 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
     const targetHalfX = (targetView.x_max - targetView.x_min) / 2;
     const targetHalfY = (targetView.y_max - targetView.y_min) / 2;
 
-    // Scale interpolates in log space, so zooming feels uniform.
     const nextHalfX = Math.exp(
       Math.log(currentHalfX) + (Math.log(targetHalfX) - Math.log(currentHalfX)) * alpha,
     );
@@ -757,8 +755,6 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
     if (traceXRef.current !== null) updateTrace(traceXRef.current);
 
     if (viewMoving) {
-      // Grid labels must follow the animated viewport, so commit view state
-      // once per frame. Parameter-only dragging never takes this branch.
       setView({ ...viewRef.current });
       setCommittedValues({ ...displayed });
     }
@@ -780,8 +776,6 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
 
   const handleParameterChange = useCallback(
     (id: string, value: number) => {
-      // If a zoom is still animating, finish it immediately: a slider drag
-      // must never commit view state on every frame.
       if (!sameView(viewRef.current, viewTargetRef.current)) {
         viewRef.current = { ...viewTargetRef.current };
         setView({ ...viewRef.current });
@@ -798,7 +792,6 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
 
   const zoom = useCallback(
     (factor: number) => {
-      // Finish a parameter animation first, so only the viewport animates.
       displayedRef.current = { ...targetsRef.current };
       updatePaths(displayedRef.current, viewRef.current);
       setCommittedValues({ ...displayedRef.current });

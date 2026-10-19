@@ -1,5 +1,3 @@
-"""API tests for interactive articles (public + editor operations)."""
-
 from __future__ import annotations
 
 import json
@@ -230,7 +228,6 @@ async def test_public_projection_hides_correct_answers(client) -> None:
     assert "tolerance" not in public_text
     assert "correct_option_id" not in public.text
 
-    # The editor (admin) still sees server-only fields.
     draft = await client.get(f"/api/v1/articles/{article_id}/draft")
     assert "correct_option_id" in json.dumps(draft.json(), ensure_ascii=False)
     assert "correct_value" in json.dumps(draft.json(), ensure_ascii=False)

@@ -1,10 +1,5 @@
 import type { DiagnosticItem } from "@/features/diagnostics/types";
 
-/**
- * Development mini-set for the diagnostics lead magnet. It is deliberately
- * small and explicitly marked as demo (`isDemo: true`); the real bank will
- * provide the items. Kept simple so answers are unambiguous.
- */
 export const DEMO_DIAGNOSTIC_ITEMS: readonly DiagnosticItem[] = [
   {
     id: "d1",
@@ -70,8 +65,7 @@ export const DEMO_DIAGNOSTIC_ITEMS: readonly DiagnosticItem[] = [
     id: "d5",
     topic: "Вероятность",
     subject: "matematika",
-    prompt:
-      "В коробке 3 красных и 7 синих шаров. Какова вероятность вытащить красный?",
+    prompt: "В коробке 3 красных и 7 синих шаров. Какова вероятность вытащить красный?",
     options: [
       { value: "0,3", label: "0,3" },
       { value: "0,7", label: "0,7" },

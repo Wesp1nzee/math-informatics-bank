@@ -1,10 +1,6 @@
 import { Info } from "lucide-react";
 import type { ReactNode } from "react";
 
-/**
- * Development-only hint about demo content. It is rendered in dev and fully
- * removed from production builds, so visitors never see service notices.
- */
 export function DemoNotice({ children }: { children: ReactNode }) {
   if (process.env.NODE_ENV === "production") return null;
 

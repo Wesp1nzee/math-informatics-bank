@@ -29,11 +29,6 @@ function formatNumber(value: number): string {
     : value.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
 }
 
-/**
- * Mirrors the real block's geometry: plot aspect ratio, legend row, fixed
- * trace readout, zoom controls and parameter sliders. Text is invisible but
- * occupies the same space, so the chunk swap introduces no layout shift.
- */
 function InteractiveGraphSkeleton({
   data,
   loading,
@@ -138,8 +133,6 @@ export function InteractiveGraphLoader({ data }: { data: InteractiveGraphBlockDa
 
   return (
     <div className="grid">
-      {/* Both layers share one grid cell, so the skeleton reserves the exact
-          geometry and the ready graph simply paints over it. */}
       <div
         aria-hidden={ready || undefined}
         className="pointer-events-none col-start-1 row-start-1"

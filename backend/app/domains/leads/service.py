@@ -25,7 +25,6 @@ async def create_lead(
 ) -> TutorLeadCreated:
     settings = get_settings()
 
-    # Honeypot filled → silently pretend success, store nothing.
     if payload.website:
         return TutorLeadCreated(ok=True, id=0)
 
@@ -51,11 +50,9 @@ async def create_lead(
     session.add(lead)
     await session.flush()
 
-    # Defence in depth: notify_lead already swallows its own errors, but a stored
-    # lead must never be rolled back because of a notification problem.
     try:
         await notify_lead(lead)
-    except Exception as exc:  # noqa: BLE001 — notification must never block a stored lead
+    except Exception as exc:
         logger.warning(
             "Lead notification raised unexpectedly for lead %s: %s",
             lead.id,

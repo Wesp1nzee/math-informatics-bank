@@ -1,5 +1,3 @@
-"""Application settings loaded from environment / .env file."""
-
 from __future__ import annotations
 
 from functools import lru_cache
@@ -18,7 +16,6 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-    # --- general ---
     app_name: str = "Site Bank API"
     app_version: str = "0.1.0"
     env: Literal["dev", "test", "prod"] = "dev"
@@ -31,19 +28,16 @@ class Settings(BaseSettings):
     )
     api_prefix: str = "/api"
 
-    # --- database ---
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/site_bank"
     database_echo: bool = False
 
-    # --- sessions & cookies ---
     session_cookie_name: str = "site_bank_session"
     session_ttl_minutes: int = 60 * 24 * 14
-    # ``None`` → secure cookies are enabled automatically in production.
+
     cookie_secure: bool | None = None
     cookie_samesite: Literal["lax", "strict", "none"] = "lax"
     cookie_domain: str | None = None
 
-    # --- storage ---
     storage_backend: Literal["local", "s3"] = "local"
     storage_local_dir: Path = Path("media")
     s3_endpoint_url: str | None = None
@@ -52,21 +46,17 @@ class Settings(BaseSettings):
     s3_secret_access_key: str | None = None
     s3_region: str | None = None
 
-    # --- business ---
     lead_rate_limit_per_hour: int = 5
 
-    # Telegram notification for new leads. Optional: when either value is unset
-    # the notification is a no-op and the lead is still stored.
     telegram_bot_token: str | None = None
     telegram_admin_chat_id: str | None = None
 
-    # Salt for pseudonymizing client IPs (``hash_ip``). Set a secret value in prod.
     ip_hash_salt: str = ""
 
     @field_validator("cors_origins", "allowed_hosts", mode="before")
     @classmethod
     def _split_csv(cls, value: object) -> object:
-        """Allow both JSON lists and plain comma-separated strings in env vars."""
+        pass
         if isinstance(value, str):
             return [item.strip() for item in value.split(",") if item.strip()]
         return value
@@ -77,7 +67,7 @@ class Settings(BaseSettings):
 
     @property
     def cookie_secure_effective(self) -> bool:
-        """``cookie_secure`` when set, otherwise ``True`` in production."""
+        pass
         return self.is_prod if self.cookie_secure is None else self.cookie_secure
 
 

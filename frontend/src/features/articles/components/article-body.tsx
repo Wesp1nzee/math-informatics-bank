@@ -59,7 +59,7 @@ export function ArticleBody({
   midSlot,
 }: {
   blocks: readonly ArticleBlock[];
-  /** Inline conversion block inserted around the middle of the article. */
+
   midSlot?: ReactNode;
 }) {
   const midIndex = globalThis.Math.floor((blocks.length - 1) / 2);

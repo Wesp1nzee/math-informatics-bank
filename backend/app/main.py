@@ -1,8 +1,3 @@
-"""Application entrypoint.
-
-Run locally: ``uvicorn app.main:app --reload``
-"""
-
 from __future__ import annotations
 
 from collections.abc import AsyncGenerator

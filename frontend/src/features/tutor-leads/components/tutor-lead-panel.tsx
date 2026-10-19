@@ -9,7 +9,6 @@ export function TutorLeadPanel() {
   const apiConfigured = isPublicApiConfigured();
 
   if (!apiConfigured && !telegram && !email) {
-    // In production an unconfigured form is simply absent — no service notices.
     if (process.env.NODE_ENV === "production") return null;
 
     return (

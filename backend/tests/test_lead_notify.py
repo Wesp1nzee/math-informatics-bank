@@ -1,10 +1,3 @@
-"""Tests for the best-effort Telegram lead notification.
-
-These tests never touch the network: httpx is replaced with fakes, and the test
-config forces the notification off. A dummy token is used to prove that failure
-logging does not leak secrets.
-"""
-
 from __future__ import annotations
 
 import logging
@@ -40,7 +33,7 @@ def _settings(token: str | None, chat_id: str | None) -> Settings:
 
 
 def test_test_suite_disables_real_telegram() -> None:
-    """conftest must neutralise a real local .env so tests never send messages."""
+    pass
     from app.core.config import get_settings
 
     settings = get_settings()
@@ -49,18 +42,18 @@ def test_test_suite_disables_real_telegram() -> None:
 
 
 class _FailingClient:
-    """Stand-in for ``httpx.AsyncClient`` that raises a 401 on ``post``."""
+    pass
 
-    def __init__(self, *args, **kwargs) -> None:  # noqa: ANN002, ANN003
+    def __init__(self, *args, **kwargs) -> None:
         pass
 
     async def __aenter__(self):
         return self
 
-    async def __aexit__(self, *args) -> bool:  # noqa: ANN002
+    async def __aexit__(self, *args) -> bool:
         return False
 
-    async def post(self, url, json=None):  # noqa: ANN001
+    async def post(self, url, json=None):
         request = httpx.Request("POST", url)
         response = httpx.Response(401, request=request)
         response.raise_for_status()
@@ -70,7 +63,7 @@ async def test_notify_is_noop_without_config(monkeypatch: pytest.MonkeyPatch) ->
     monkeypatch.setattr(notify_module, "get_settings", lambda: _settings(None, None))
     called = False
 
-    async def fake_post(self, url, **kwargs):  # noqa: ANN001
+    async def fake_post(self, url, **kwargs):
         nonlocal called
         called = True
         raise AssertionError("must not be called without config")
@@ -91,16 +84,16 @@ async def test_notify_sends_expected_payload(monkeypatch: pytest.MonkeyPatch) ->
             return None
 
     class FakeClient:
-        def __init__(self, *args, **kwargs) -> None:  # noqa: ANN002, ANN003
+        def __init__(self, *args, **kwargs) -> None:
             pass
 
         async def __aenter__(self):
             return self
 
-        async def __aexit__(self, *args) -> bool:  # noqa: ANN002
+        async def __aexit__(self, *args) -> bool:
             return False
 
-        async def post(self, url, json=None):  # noqa: ANN001
+        async def post(self, url, json=None):
             captured["url"] = url
             captured["json"] = json
             return FakeResponse()
@@ -131,7 +124,7 @@ async def test_notify_failure_does_not_log_token(
 async def test_api_stores_lead_when_notification_raises(
     client: httpx.AsyncClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    async def boom(lead):  # noqa: ANN001
+    async def boom(lead):
         raise RuntimeError("telegram down")
 
     monkeypatch.setattr(leads_service, "notify_lead", boom)
@@ -155,8 +148,7 @@ async def test_api_survives_telegram_error_and_hides_token(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     monkeypatch.setattr(notify_module, "get_settings", lambda: _settings(DUMMY_TOKEN, "42"))
-    # Patch only the class notify_lead constructs; the already-created ASGI test
-    # client keeps its own bound methods.
+
     monkeypatch.setattr(notify_module.httpx, "AsyncClient", _FailingClient)
 
     with caplog.at_level(logging.WARNING):

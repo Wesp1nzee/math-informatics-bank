@@ -10,20 +10,13 @@ const delay = (ms: number, duration?: number) =>
 
 const TAU = Math.PI * 2;
 
-/*
- * Geometry, in SVG user units. The unit circle and the sine plot share the
- * same vertical scale (radius = amplitude = R) and the same zero line
- * (CY = OY), so the horizontal projection from a point on the circle always
- * lands exactly on the curve y = sin x at x = θ. That is what makes the
- * picture numerically honest rather than decorative.
- */
 const CX = 104;
 const CY = 196;
 const R = 76;
 
 const OX = 246;
 const OY = 196;
-const PPU = 30; // horizontal pixels per radian on the sine plot
+const PPU = 30;
 
 const START_THETA = Math.PI / 2;
 const PERIOD_MS = 7000;
@@ -89,7 +82,7 @@ export function AboutIllustration() {
       const circleX = CX + R * Math.cos(theta);
       const circleY = CY - R * sin;
       const sineX = OX + theta * PPU;
-      const sineY = OY - R * sin; // === circleY, because CY === OY
+      const sineY = OY - R * sin;
 
       const round = (value: number) => value.toFixed(2);
 
@@ -141,7 +134,6 @@ export function AboutIllustration() {
       aria-label="Анимация связи единичной окружности и синуса: точка движется по окружности, её высота переносится вправо и вычерчивает график y = sin x. Оси размечены в радианах и в единицах от −1 до 1."
       className="block h-auto w-full"
     >
-      {/* Faint grid on the sine side (vertical lines at the tick values). */}
       <g className="draw stroke-line" strokeWidth={1} fill="none" style={delay(0, 700)}>
         {X_TICKS.map(({ t }) => {
           const x = OX + t * PPU;
@@ -156,7 +148,6 @@ export function AboutIllustration() {
         <path d={`M${OX - 12} ${OY + R}H${(OX + TAU * PPU + 6).toFixed(1)}`} />
       </g>
 
-      {/* Axes: sine plot and unit circle. */}
       <g
         className="draw stroke-line-strong"
         strokeWidth={1.25}
@@ -169,7 +160,6 @@ export function AboutIllustration() {
         <path d={`M${CX - R - 20} ${CY}H${CX + R + 20}`} />
       </g>
 
-      {/* Tick marks. */}
       <g
         className="a-fade stroke-line-strong"
         strokeWidth={1}
@@ -186,7 +176,6 @@ export function AboutIllustration() {
         <path d={`M${CX - 5} ${CY + R}H${CX + 5}`} />
       </g>
 
-      {/* Numeric labels. */}
       <g
         className="a-fade fill-ink-faint"
         style={{
@@ -223,7 +212,6 @@ export function AboutIllustration() {
         </text>
       </g>
 
-      {/* Curve and circle names. */}
       <text
         className="a-fade fill-accent"
         x={(OX + TAU * PPU).toFixed(1)}
@@ -253,7 +241,6 @@ export function AboutIllustration() {
         sin θ
       </text>
 
-      {/* The function itself, drawn once on reveal. */}
       <path
         className="draw stroke-accent"
         d={SINE_PATH}
@@ -276,7 +263,6 @@ export function AboutIllustration() {
         style={delay(200, 900)}
       />
 
-      {/* Dynamic layer: rotating radius, projection, drop and tracing point. */}
       <g className="a-fade" style={delay(1100, 700)}>
         <path
           ref={trailRef}

@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.exceptions import NotFoundError
-from app.db.session import get_session  # noqa: F401 — re-exported for routers
 from app.domains.tasks.models import Task, TaskLevel
 from app.domains.tasks.schemas import TaskRead
 
@@ -65,7 +64,7 @@ async def get_task(session: AsyncSession, task_id: int) -> Task:
 
 
 async def get_related_tasks(session: AsyncSession, task: Task, *, limit: int = 3) -> list[TaskRead]:
-    """Score candidates by shared topics + same subject + same level."""
+    pass
     candidates = (await session.scalars(_base_query().where(Task.id != task.id).limit(500))).all()
 
     task_topics = {topic.id for topic in task.topics}

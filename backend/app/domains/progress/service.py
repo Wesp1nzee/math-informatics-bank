@@ -17,7 +17,7 @@ async def record_attempt(
     task_id: int,
     is_correct: bool,
 ) -> UserProgress:
-    """Upsert the aggregate row for a (user, task) pair after an attempt."""
+    pass
     row = await session.scalar(
         select(UserProgress).where(UserProgress.user_id == user_id, UserProgress.task_id == task_id)
     )
@@ -54,11 +54,7 @@ async def record_article_exercise_attempt(
     is_correct: bool,
     checked_at: datetime | None = None,
 ) -> ArticleExerciseProgress:
-    """Upsert the aggregate row for a (user, article, exercise) triple.
-
-    One row is kept per exercise; every explicit check is an attempt. The
-    frontend submits only on user action (never per keystroke or slider move).
-    """
+    pass
     checked_at = checked_at or utcnow()
     row = await session.scalar(
         select(ArticleExerciseProgress).where(

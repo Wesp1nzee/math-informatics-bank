@@ -23,8 +23,6 @@ from app.domains.tasks.schemas import (
     QuoteBlock,
 )
 
-# --- legacy (v1) blocks --------------------------------------------------------
-
 ArticleBlock = Annotated[
     ParagraphBlock | HeadingBlock | ListBlock | FormulaBlock | QuoteBlock,
     Field(discriminator="type"),
@@ -32,7 +30,6 @@ ArticleBlock = Annotated[
 
 article_blocks_adapter: TypeAdapter[list[ArticleBlock]] = TypeAdapter(list[ArticleBlock])
 
-# --- interactive content (v2) limits ------------------------------------------
 
 MAX_CONTENT_BYTES = 512 * 1024
 MAX_BLOCKS = 500
@@ -114,9 +111,6 @@ def _validate_expression(expr: str, parameter_ids: set[str]) -> str:
     return expr
 
 
-# --- inline rich-text nodes ----------------------------------------------------
-
-
 class TextNode(BaseModel):
     type: Literal["text"]
     text: str = Field(min_length=1, max_length=MAX_TEXT_LENGTH)
@@ -164,9 +158,6 @@ InlineNode = Annotated[
 
 for _recursive_model in (StrongNode, EmNode, LinkNode):
     _recursive_model.model_rebuild()
-
-
-# --- blocks --------------------------------------------------------------------
 
 
 class BlockBase(BaseModel):
@@ -451,7 +442,7 @@ ArticleBlockV2 = Annotated[
 
 
 class ArticleContent(BaseModel):
-    """Stored content document (contract v2): ``{version: 2, blocks: [...]}``."""
+    pass
 
     version: Literal[2]
     blocks: list[ArticleBlockV2] = Field(max_length=MAX_BLOCKS)
@@ -465,9 +456,6 @@ class ArticleContent(BaseModel):
         if len(serialized.encode("utf-8")) > MAX_CONTENT_BYTES:
             raise ValueError(f"content exceeds {MAX_CONTENT_BYTES} bytes")
         return self
-
-
-# --- public projection (server-only fields removed) ---------------------------
 
 
 class PublicSingleChoiceBlockData(BaseModel):
@@ -527,11 +515,7 @@ _BLOCK_MODELS: dict[str, type[BaseModel]] = {
 
 
 def public_content_from_raw(raw: Any) -> PublicArticleContent | None:
-    """Build the public content projection, skipping unknown/invalid blocks.
-
-    Correct answers and checking rules (``correct_option_id``,
-    ``correct_value``, ``tolerance``) are never copied into the public payload.
-    """
+    pass
     if not isinstance(raw, dict) or raw.get("version") != 2:
         return None
     raw_blocks = raw.get("blocks")
@@ -583,11 +567,8 @@ def public_content_from_raw(raw: Any) -> PublicArticleContent | None:
         return None
 
 
-# --- public API schemas --------------------------------------------------------
-
-
 class ArticleRead(BaseModel):
-    """Wire format consumed by ``features/articles/types.ts``."""
+    pass
 
     slug: str
     title: str
@@ -602,7 +583,7 @@ class ArticleRead(BaseModel):
     is_demo: bool = Field(default=False, serialization_alias="isDemo")
 
     @classmethod
-    def from_article(cls, article) -> ArticleRead:  # noqa: ANN001 — avoids circular import
+    def from_article(cls, article) -> ArticleRead:
         return cls(
             slug=article.slug,
             title=article.title,
@@ -619,15 +600,12 @@ class ArticleRead(BaseModel):
 
 
 class ArticleListItem(ORMModel):
-    """Compact list item without heavy blocks (optional optimization for /articles)."""
+    pass
 
     slug: str
     title: str
     description: str
     exam: str
-
-
-# --- editor (admin) schemas ----------------------------------------------------
 
 
 class ArticleCreate(BaseModel):
@@ -690,7 +668,7 @@ class ArticleEditorRead(BaseModel):
     updated_at: datetime = Field(serialization_alias="updatedAt")
 
     @classmethod
-    def from_article(cls, article) -> ArticleEditorRead:  # noqa: ANN001
+    def from_article(cls, article) -> ArticleEditorRead:
         return cls(
             id=article.id,
             slug=article.slug,
@@ -708,9 +686,6 @@ class ArticleEditorRead(BaseModel):
             created_at=article.created_at,
             updated_at=article.updated_at,
         )
-
-
-# --- article exercises --------------------------------------------------------
 
 
 class ArticleExerciseCheckRequest(BaseModel):

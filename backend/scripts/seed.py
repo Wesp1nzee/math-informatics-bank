@@ -1,17 +1,3 @@
-"""Seed the database with editorial content (idempotent by default).
-
-Upserts by natural key (subject/topic/article slug, task source_ref), so the
-script can be re-run safely to add or update content without duplicating rows.
-
-Pass ``--reset`` to delete every task and article (and the progress rows tied to
-them) before seeding. Subjects and topics are reference data and are kept.
-
-Run with::
-
-    uv run python -m scripts.seed
-    uv run python -m scripts.seed --reset
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -78,11 +64,7 @@ async def _upsert_article(session: AsyncSession, slug: str, **fields: object) ->
 
 
 async def _reset_content(session: AsyncSession) -> None:
-    """Delete all tasks/articles and rows that reference them.
-
-    The reset is explicit rather than relying on database cascades so it behaves
-    the same on PostgreSQL and on SQLite builds without foreign keys enabled.
-    """
+    pass
     await session.execute(delete(ArticleExerciseProgress))
     await session.execute(delete(UserProgress))
     await session.execute(delete(SolutionAttempt))

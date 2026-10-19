@@ -1,7 +1,6 @@
 import { PRICING } from "@/features/tutor-leads/content";
 import { cn } from "@/lib/utils/cn";
 
-/** Renders nothing until the owner configures prices. */
 export function Pricing({ className }: { className?: string }) {
   if (!PRICING) return null;
 

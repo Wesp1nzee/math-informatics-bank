@@ -1,5 +1,3 @@
-"""User domain: accounts, authentication and role-based access control."""
-
 from app.domains.users.models import User, UserRole
 from app.domains.users.router import router
 

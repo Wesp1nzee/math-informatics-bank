@@ -4,10 +4,10 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
+import { BrandLogo } from "@/components/layout/brand-logo";
 import { buttonVariants } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
-import { brand } from "@/lib/constants/site";
 import { mainNav } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils/cn";
 
@@ -35,10 +35,7 @@ export function MobileNav() {
           </Dialog.Description>
 
           <div className="flex h-16 items-center justify-between">
-            <Link href="/" className="text-lg font-semibold tracking-[-0.01em]">
-              {brand.text}
-              <span className="text-accent">{brand.accent}</span>
-            </Link>
+            <BrandLogo className="h-10" />
             <Dialog.Close asChild>
               <button
                 type="button"

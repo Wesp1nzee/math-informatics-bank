@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 import fs from "node:fs";
 import path from "node:path";
 
@@ -36,7 +35,6 @@ function loadEnv() {
         value = value.slice(1, -1);
       }
 
-      // Process environment wins over env files; earlier files win over later ones.
       if (values[key] === undefined) values[key] = value;
     }
   }
@@ -63,7 +61,6 @@ const env = loadEnv();
 const errors = [];
 const warnings = [];
 
-// --- public site URL -------------------------------------------------------
 const siteUrlValue = (env.NEXT_PUBLIC_SITE_URL ?? "").trim();
 if (!siteUrlValue) {
   if (LOCAL_MODE) {
@@ -99,10 +96,6 @@ if (!siteUrlValue) {
   }
 }
 
-// --- API origins -----------------------------------------------------------
-// The browser-facing URL must be public HTTPS in production. The server-side
-// API_BASE_URL may legitimately be an internal address, so only validate that it
-// is an absolute URL.
 function validateApiOrigin(key, { publicOrigin }) {
   const value = (env[key] ?? "").trim();
   if (!value) return;
@@ -131,7 +124,6 @@ function validateApiOrigin(key, { publicOrigin }) {
 validateApiOrigin("NEXT_PUBLIC_API_BASE_URL", { publicOrigin: true });
 validateApiOrigin("API_BASE_URL", { publicOrigin: false });
 
-// --- lead channels ---------------------------------------------------------
 const configuredChannels = LEAD_CHANNELS.filter(
   (key) => (env[key] ?? "").trim().length > 0,
 );
@@ -167,4 +159,8 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(LOCAL_MODE ? "Local environment check passed." : "Production environment check passed.");
+console.log(
+  LOCAL_MODE
+    ? "Local environment check passed."
+    : "Production environment check passed.",
+);

@@ -3,11 +3,6 @@ import type { ReactNode } from "react";
 import { Math } from "@/components/ui/math";
 import { isExternalHref, isRecord, safeHref } from "@/features/articles/runtime";
 
-/**
- * Renders structured inline nodes as React elements. Article-authored HTML is
- * never injected: every branch below produces a React element and text is
- * escaped by React automatically.
- */
 export function InlineNodes({
   nodes,
 }: {

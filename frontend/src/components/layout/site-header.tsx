@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { BrandLogo } from "@/components/layout/brand-logo";
 import { Container } from "@/components/layout/container";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { mainNav } from "@/lib/constants/navigation";
-import { brand } from "@/lib/constants/site";
 import { cn } from "@/lib/utils/cn";
 
 export function SiteHeader() {
@@ -34,10 +34,7 @@ export function SiteHeader() {
           aria-label="Основная навигация"
           className="desk:gap-12 flex h-16 items-center gap-8"
         >
-          <Link href="/" className="text-lg font-semibold tracking-[-0.01em]">
-            {brand.text}
-            <span className="text-accent hidden sm:inline">{brand.accent}</span>
-          </Link>
+          <BrandLogo priority className="h-11 sm:h-12" />
 
           <ul className="text-ink-soft hidden list-none gap-8 p-0 text-[15px] md:flex">
             {mainNav.map((item) => (

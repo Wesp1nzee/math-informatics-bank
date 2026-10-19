@@ -1,5 +1,3 @@
-/** Runtime guards and helpers shared by the article renderer and the TOC. */
-
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -12,7 +10,6 @@ export function asString(value: unknown, fallback = ""): string {
   return typeof value === "string" ? value : fallback;
 }
 
-/** Allow only internal paths and absolute HTTPS links (defence in depth). */
 export function safeHref(value: unknown): string | undefined {
   if (typeof value !== "string") return undefined;
   if (value.startsWith("/") && !value.startsWith("//")) return value;
@@ -26,7 +23,6 @@ export function isExternalHref(href: string): boolean {
   return href.startsWith("https://");
 }
 
-/** Flatten structured inline nodes to plain text (used for TOC and labels). */
 export function inlineNodesToText(nodes: unknown): string {
   if (!Array.isArray(nodes)) return "";
 

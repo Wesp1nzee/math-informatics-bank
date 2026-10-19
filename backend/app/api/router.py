@@ -1,5 +1,3 @@
-"""Root API router: /api/health + /api/v1/..."""
-
 from __future__ import annotations
 
 from fastapi import APIRouter
@@ -17,8 +15,6 @@ async def health() -> dict[str, str | bool]:
     return {"status": "ok" if db_ok else "degraded", "database": db_ok}
 
 
-# Probe-friendly alias: hosting platforms and orchestrators often call
-# ``GET /health`` directly, without the ``/api`` prefix.
 root_router = APIRouter()
 root_router.add_api_route(
     "/health",

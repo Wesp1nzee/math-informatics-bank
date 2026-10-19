@@ -4,10 +4,6 @@ import { FAQ_ITEMS } from "@/features/tutor-leads/content";
 import type { FaqItem } from "@/features/tutor-leads/types";
 import { cn } from "@/lib/utils/cn";
 
-/**
- * Native `details`/`summary` disclosure: keyboard accessible and functional
- * without JavaScript. The same items are mirrored into FAQPage JSON-LD.
- */
 export function Faq({
   items = FAQ_ITEMS,
   className,

@@ -1,5 +1,3 @@
-"""Article exercise checking and progress tests (backend-authoritative)."""
-
 from __future__ import annotations
 
 import json
@@ -190,8 +188,6 @@ async def test_progress_is_persisted_for_authenticated_user(client) -> None:
     assert second.json()["attempts"] == 2
     assert second.json()["solved"] is True
 
-    # Repeating a correct attempt counts as another attempt but does not
-    # create a second progress row.
     third = await _check(client, "interactive", "ex-choice", "a")
     assert third.json()["attempts"] == 3
     assert third.json()["solved"] is True

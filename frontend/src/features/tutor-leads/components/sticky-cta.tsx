@@ -9,18 +9,11 @@ import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
 
-/** Sticky CTA is only useful where a "warm" moment exists. */
 function isRelevantPath(pathname: string): boolean {
   if (pathname === "/") return true;
   return pathname.startsWith("/zadachi/") || pathname.startsWith("/articles/");
 }
 
-/**
- * Mobile-only sticky request bar. It appears after the visitor scrolls past the
- * first screen and hides as soon as a lead form enters the viewport, so it never
- * covers the form itself. Layout properties reserve space at the end of the
- * document and respect the safe area on notched devices.
- */
 export function StickyCta() {
   const pathname = usePathname();
   const relevant = isRelevantPath(pathname);

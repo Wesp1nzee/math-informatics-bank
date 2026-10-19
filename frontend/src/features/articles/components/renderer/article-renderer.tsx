@@ -20,9 +20,9 @@ export function ArticleRenderer({
   midSlot,
 }: {
   content: ArticleContent | null | undefined;
-  /** Slug passed to exercise blocks for backend checks. */
+
   articleSlug?: string;
-  /** Conversion block inserted around the middle of the article. */
+
   midSlot?: ReactNode;
 }) {
   if (!content || content.version !== 2 || !Array.isArray(content.blocks)) {

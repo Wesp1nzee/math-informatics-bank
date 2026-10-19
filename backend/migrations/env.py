@@ -1,9 +1,3 @@
-"""Alembic environment: reads DATABASE_URL from application settings.
-
-Uses the async SQLAlchemy engine, since the app is async-first
-(asyncpg in production, aiosqlite in tests).
-"""
-
 from __future__ import annotations
 
 import asyncio
@@ -16,17 +10,27 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from app.core.config import get_settings
 from app.db.base import Base
+from app.domains.articles import models as _articles
+from app.domains.leads import models as _leads
+from app.domains.progress import models as _progress
+from app.domains.sessions import models as _sessions
+from app.domains.solutions import models as _solutions
+from app.domains.subjects import models as _subjects
+from app.domains.tasks import models as _tasks
+from app.domains.topics import models as _topics
+from app.domains.users import models as _users
 
-# Import every model module so Base.metadata is fully populated for autogenerate.
-from app.domains.articles import models as _articles  # noqa: F401
-from app.domains.leads import models as _leads  # noqa: F401
-from app.domains.progress import models as _progress  # noqa: F401
-from app.domains.sessions import models as _sessions  # noqa: F401
-from app.domains.solutions import models as _solutions  # noqa: F401
-from app.domains.subjects import models as _subjects  # noqa: F401
-from app.domains.tasks import models as _tasks  # noqa: F401
-from app.domains.topics import models as _topics  # noqa: F401
-from app.domains.users import models as _users  # noqa: F401
+_MODEL_MODULES = (
+    _articles,
+    _leads,
+    _progress,
+    _sessions,
+    _solutions,
+    _subjects,
+    _tasks,
+    _topics,
+    _users,
+)
 
 config = context.config
 

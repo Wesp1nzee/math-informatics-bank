@@ -1,9 +1,3 @@
-"""Versioned router (v1): aggregates every domain router.
-
-Each domain owns its routes under ``app/domains/<domain>/router.py`` and is
-mounted here, so adding a new domain is a one-line change.
-"""
-
 from __future__ import annotations
 
 from fastapi import APIRouter

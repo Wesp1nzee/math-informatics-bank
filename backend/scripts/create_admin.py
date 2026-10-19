@@ -1,13 +1,3 @@
-"""Create or promote an admin user from the command line.
-
-Usage:
-  uv run python -m scripts.create_admin <email> [display_name]
-
-Reads the password from stdin (via getpass) — never from argv, the environment
-or a committed file. This is the only way to create an administrator: there is
-no public registration endpoint for admins.
-"""
-
 from __future__ import annotations
 
 import asyncio

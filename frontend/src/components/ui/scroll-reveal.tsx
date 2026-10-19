@@ -5,16 +5,6 @@ import { useEffect } from "react";
 
 const OFFSET = 40;
 
-/**
- * Progressive enhancement for `.reveal` sections.
- *
- * Normal scrolling is handled by a single IntersectionObserver; an
- * rAF-throttled scroll/resize flush covers elements that an instant jump (or a
- * layout shift) skipped over — those never cross an intersection threshold on
- * their own. Browsers with CSS scroll-driven animations animate the reveal in
- * CSS as well; this component only marks `data-reveal-in` and never runs
- * per-frame geometry reads.
- */
 export function ScrollReveal() {
   const pathname = usePathname();
 
@@ -80,10 +70,7 @@ export function ScrollReveal() {
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
 
-    // Sections rendered by async server components can appear after this effect.
-    const timers = [250, 800, 1800].map((delay) =>
-      window.setTimeout(rescan, delay),
-    );
+    const timers = [250, 800, 1800].map((delay) => window.setTimeout(rescan, delay));
 
     flush();
 

@@ -1,16 +1,4 @@
-"""article interactive content
 
-Revision ID: a3b1e58fe050
-Revises: 32b21a07d4ef
-Create Date: 2026-10-18 00:00:00.000000
-
-Adds the v2 interactive content document (JSONB on PostgreSQL) alongside the
-legacy v1 ``blocks`` column, plus a mirrored ``content_version`` column.
-
-Both columns are nullable and there is no backfill: existing articles keep
-their v1 content in ``blocks`` untouched, and the pair
-``(content, content_version)`` is either both present or both absent.
-"""
 
 from __future__ import annotations
 
@@ -20,7 +8,7 @@ import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
-# revision identifiers, used by Alembic.
+
 revision: str = "a3b1e58fe050"
 down_revision: str | None = "32b21a07d4ef"
 branch_labels: str | Sequence[str] | None = None

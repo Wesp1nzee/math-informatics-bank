@@ -1,14 +1,3 @@
-/**
- * Thin analytics facade.
- *
- * The only provider is Yandex Metrika and it is loaded solely when
- * `NEXT_PUBLIC_YM_ID` is set (see `yandex-metrika.tsx`). Without the variable
- * `track` is a no-op and never throws, so instrumentation can stay in the
- * components unconditionally.
- *
- * Personal data must never reach analytics: keys that could carry a name,
- * contact or free-form message are dropped, and long values are truncated.
- */
 export type AnalyticsParams = Record<string, string | number | boolean | undefined>;
 
 export const ANALYTICS_EVENTS = {
@@ -22,8 +11,7 @@ export const ANALYTICS_EVENTS = {
   leadFormError: "lead_form_error",
 } as const;
 
-export type AnalyticsEvent =
-  (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS];
+export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS];
 
 declare global {
   interface Window {

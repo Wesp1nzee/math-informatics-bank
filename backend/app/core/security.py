@@ -1,13 +1,9 @@
-"""Security primitives: password hashing (scrypt) and opaque session tokens."""
-
 from __future__ import annotations
 
 import base64
 import hashlib
 import hmac
 import secrets
-
-# --- passwords -----------------------------------------------------------------
 
 _SCRYPT_N = 2**14
 _SCRYPT_R = 8
@@ -17,7 +13,7 @@ _SALT_LEN = 16
 
 
 def hash_password(password: str) -> str:
-    """Return ``scrypt$<salt_b64>$<hash_b64>`` for the given plain password."""
+    pass
     salt = secrets.token_bytes(_SALT_LEN)
     digest = hashlib.scrypt(
         password.encode("utf-8"),
@@ -49,34 +45,28 @@ def verify_password(password: str, stored: str) -> bool:
     return hmac.compare_digest(digest, expected)
 
 
-# --- session tokens ------------------------------------------------------------
-
-
 def new_session_token(nbytes: int = 48) -> str:
-    """Opaque, URL-safe token stored in the session cookie (never logged)."""
+    pass
     return secrets.token_urlsafe(nbytes)
 
 
 def hash_session_token(token: str) -> str:
-    """SHA-256 hex of a session token — only the hash is persisted."""
+    pass
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
 def hash_ip(ip: str, *, salt: str = "") -> str:
-    """Pseudonymize an IP address as SHA-256(salt + ip) so the raw value is never stored."""
+    pass
     return hashlib.sha256(f"{salt}:{ip}".encode()).hexdigest()
 
 
-# --- misc ----------------------------------------------------------------------
-
-
 def generate_token(nbytes: int = 32) -> str:
-    """URL-safe random token for links, confirmations, request de-duplication."""
+    pass
     return secrets.token_urlsafe(nbytes)
 
 
 def mask_secret(value: str, visible: int = 4) -> str:
-    """Show the tail of a secret (e.g. token prefix in logs), never the whole value."""
+    pass
     if len(value) <= visible:
         return "***"
     return f"***{value[-visible:]}"

@@ -1,10 +1,5 @@
 import Script from "next/script";
 
-/**
- * Yandex Metrika loader. Rendered from the root layout but produces nothing
- * unless `NEXT_PUBLIC_YM_ID` is configured, so no third-party script is added
- * to the critical path by default.
- */
 export function YandexMetrika() {
   const id = process.env.NEXT_PUBLIC_YM_ID?.trim();
   if (!id) return null;
@@ -22,7 +17,6 @@ ym(${Number(id)}, "init", { clickmap: true, trackLinks: true, accurateTrackBounc
       </Script>
       <noscript>
         <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`https://mc.yandex.ru/watch/${encodeURIComponent(id)}`}
             style={{ position: "absolute", left: "-9999px" }}

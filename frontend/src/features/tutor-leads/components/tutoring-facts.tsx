@@ -1,10 +1,6 @@
 import { TUTORING_FACTS } from "@/features/tutor-leads/content";
 import { cn } from "@/lib/utils/cn";
 
-/**
- * Student-facing benefits rendered as a bento grid. The first card spans the
- * full width to break the rhythm and lead with the strongest benefit.
- */
 export function TutoringFacts({ className }: { className?: string }) {
   return (
     <ul className={cn("grid gap-3 sm:grid-cols-2", className)}>

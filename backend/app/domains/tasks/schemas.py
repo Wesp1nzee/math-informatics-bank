@@ -55,16 +55,13 @@ class TaskAnswer(BaseModel):
     explanation: str = ""
 
 
-# --- task schemas --------------------------------------------------------------
-
-
 class TopicBrief(BaseModel):
     slug: str
     label: str
 
 
 class TaskRead(ORMModel):
-    """Wire format consumed by ``features/tasks/types.ts`` (id serialized as string)."""
+    pass
 
     id: str
     title: str
@@ -81,7 +78,7 @@ class TaskRead(ORMModel):
     is_demo: bool = Field(default=False, serialization_alias="isDemo")
 
     @classmethod
-    def from_task(cls, task) -> TaskRead:  # noqa: ANN001 — Task avoids a circular import
+    def from_task(cls, task) -> TaskRead:
         return cls(
             id=str(task.id),
             title=task.title,
@@ -100,11 +97,11 @@ class TaskRead(ORMModel):
 
 
 class TaskRelatedRead(TaskRead):
-    """Same shape; kept separate so related-task queries can evolve independently."""
+    pass
 
 
 class RelatedTasksResponse(BaseModel):
-    """Envelope for ``GET /tasks/{id}/related`` (frontend expects ``{ items }``)."""
+    pass
 
     items: list[TaskRead]
 

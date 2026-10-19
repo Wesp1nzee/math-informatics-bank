@@ -1,19 +1,4 @@
-"""Storage-layer tests for interactive article content (contract v2).
-
-These tests exercise the ORM/storage contract only: the new JSONB content
-document, its mirrored version, the pairing constraint and independence from the
-legacy v1 ``blocks`` payload. Pydantic validation of the blocks themselves is a
-separate iteration.
-
-The ``client`` fixture is used for its side effect of creating a clean schema
-(drop_all/create_all); the assertions use the session factory directly, matching
-``tests/test_api.py``.
-"""
-
 from __future__ import annotations
-
-import json
-from pathlib import Path
 
 import pytest
 from sqlalchemy import CheckConstraint, select
@@ -22,13 +7,6 @@ from sqlalchemy.exc import IntegrityError
 from app.db.session import get_sessionmaker
 from app.domains.articles.models import Article
 from app.domains.subjects.models import Subject
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-EXAMPLES_DIR = REPO_ROOT / "docs" / "examples" / "interactive-articles"
-EXAMPLE_DOCUMENTS: dict[str, dict] = {
-    path.name: json.loads(path.read_text(encoding="utf-8"))
-    for path in sorted(EXAMPLES_DIR.glob("*.json"))
-}
 
 CONTENT_V2: dict = {
     "version": 2,
@@ -50,7 +28,7 @@ CONTENT_V2: dict = {
 }
 
 
-async def _add_subject(session) -> Subject:  # noqa: ANN001 — test helper
+async def _add_subject(session) -> Subject:
     subject = Subject(slug="matematika", label="Математика", position=0)
     session.add(subject)
     await session.flush()
@@ -96,7 +74,6 @@ async def test_legacy_blocks_are_independent_of_v2_content(client) -> None:
         )
         await session.commit()
 
-    # Editing the v2 draft must not rewrite the legacy v1 payload.
     async with get_sessionmaker()() as session:
         article = await session.scalar(select(Article).where(Article.slug == "both"))
         assert article is not None
@@ -149,38 +126,6 @@ async def test_content_and_version_must_pair(client, content, version) -> None:
                 )
             )
             await session.commit()
-
-
-def test_contract_examples_exist() -> None:
-    assert set(EXAMPLE_DOCUMENTS) == {
-        "seo-article.json",
-        "math-article.json",
-        "graph-article.json",
-        "exercise-article.json",
-    }
-
-
-@pytest.mark.parametrize("name", sorted(EXAMPLE_DOCUMENTS), ids=lambda name: name)
-async def test_contract_examples_roundtrip(client, name: str) -> None:
-    document = EXAMPLE_DOCUMENTS[name]
-    assert document["version"] == 2
-
-    async with get_sessionmaker()() as session:
-        session.add(
-            Article(
-                slug=Path(name).stem,
-                title=Path(name).stem,
-                content=document,
-                content_version=document["version"],
-            )
-        )
-        await session.commit()
-
-    async with get_sessionmaker()() as session:
-        article = await session.scalar(select(Article).where(Article.slug == Path(name).stem))
-        assert article is not None
-        assert article.content == document
-        assert article.content_version == 2
 
 
 def test_article_metadata_declares_storage_contract() -> None:

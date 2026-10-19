@@ -1,5 +1,3 @@
-"""Unit tests for security primitives."""
-
 from __future__ import annotations
 
 from app.core.security import hash_ip

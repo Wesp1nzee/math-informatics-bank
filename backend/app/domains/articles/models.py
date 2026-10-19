@@ -9,19 +9,12 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base, JSONType, TimestampMixin
 from app.domains.subjects.models import Subject
 
-# Content JSON distinguishes "no v2 content" (SQL NULL) from a stored document.
-# SQLAlchemy's default JSON behaviour serialises Python ``None`` as JSON
-# ``null``; ``none_as_null=True`` keeps SQL NULL so the pairing CHECK below is
-# enforced reliably on both PostgreSQL and SQLite.
 ContentJSONType = JSON(none_as_null=True).with_variant(JSONB(none_as_null=True), "postgresql")
 
 
 class Article(TimestampMixin, Base):
     __tablename__ = "articles"
     __table_args__ = (
-        # ``content`` (schema v2) and its mirrored version must either both be
-        # present or both be absent. Legacy articles keep v1 content in
-        # ``blocks`` only, so both columns stay NULL for them.
         CheckConstraint(
             "(content IS NULL AND content_version IS NULL) OR "
             "(content IS NOT NULL AND content_version IS NOT NULL AND content_version >= 1)",
@@ -43,11 +36,6 @@ class Article(TimestampMixin, Base):
 
     blocks: Mapped[list[dict]] = mapped_column(JSONType, default=list)
 
-    # Interactive article content (contract v2): a versioned document
-    # ``{"version": 2, "blocks": [...]}``. ``content_version`` mirrors
-    # ``content["version"]`` in a column so outdated content can be found
-    # without parsing JSONB. ``blocks`` (v1) stays the source of truth for
-    # legacy articles and is never touched by v2 writes.
     content: Mapped[dict | None] = mapped_column(ContentJSONType, nullable=True)
     content_version: Mapped[int | None] = mapped_column(Integer, nullable=True, index=True)
 

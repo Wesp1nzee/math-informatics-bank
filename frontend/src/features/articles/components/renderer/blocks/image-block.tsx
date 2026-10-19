@@ -23,9 +23,6 @@ export function ImageBlock({ block }: { block: Block }) {
 
   return (
     <figure className="m-0 flex flex-col gap-2">
-      {/* The content contract allows arbitrary HTTPS sources; image optimisation
-          domains are not configured for the site, so a plain <img> is used. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
         alt={alt}

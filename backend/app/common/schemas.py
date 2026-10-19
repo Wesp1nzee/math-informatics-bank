@@ -1,5 +1,3 @@
-"""Schemas shared by several domains."""
-
 from __future__ import annotations
 
 from typing import Any
@@ -8,13 +6,13 @@ from pydantic import BaseModel, ConfigDict
 
 
 class ORMModel(BaseModel):
-    """Base for schemas built from ORM objects."""
+    pass
 
     model_config = ConfigDict(from_attributes=True)
 
 
 class Message(BaseModel):
-    """Simple human-readable acknowledgement."""
+    pass
 
     message: str
 
@@ -26,6 +24,6 @@ class ErrorDetail(BaseModel):
 
 
 class ErrorResponse(BaseModel):
-    """Mirror of the error envelope produced by ``app.core.exceptions``."""
+    pass
 
     error: ErrorDetail

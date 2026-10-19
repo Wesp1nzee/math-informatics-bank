@@ -1,5 +1,3 @@
-"""Constraint naming convention so Alembic autogenerate stays deterministic."""
-
 from __future__ import annotations
 
 from typing import Any
@@ -14,6 +12,6 @@ NAMING_CONVENTION: dict[str, str] = {
 
 
 def constraint_name(kind: str, **identifiers: Any) -> str:
-    """Build a conventional constraint name outside of table definitions."""
+    pass
     template = NAMING_CONVENTION[kind]
     return template % identifiers

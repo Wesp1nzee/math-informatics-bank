@@ -1,5 +1,3 @@
-"""Authentication dependencies: session cookie resolution and role guards."""
-
 from __future__ import annotations
 
 from fastapi import Depends, Request
@@ -16,7 +14,7 @@ async def get_optional_user(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> User | None:
-    """Resolve the session cookie to a user, or ``None`` when anonymous/invalid."""
+    pass
     raw_token = request.cookies.get(get_settings().session_cookie_name)
     if not raw_token:
         return None

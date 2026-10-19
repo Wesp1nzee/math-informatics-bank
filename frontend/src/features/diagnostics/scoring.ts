@@ -5,10 +5,6 @@ import type {
   TopicResult,
 } from "@/features/diagnostics/types";
 
-/**
- * Deterministic selection: first one task per topic, then fill the rest round
- * robin. The order is stable so the same bank always yields the same set.
- */
 export function selectDiagnosticItems(
   items: readonly DiagnosticItem[],
   size = 10,
@@ -65,10 +61,7 @@ export function buildDiagnosticReport(
   const topics = [...topicMap.values()];
   const weakTopics = topics
     .filter((topic) => topic.correct < topic.total)
-    .sort(
-      (a, b) =>
-        a.correct / a.total - b.correct / b.total || b.total - a.total,
-    )
+    .sort((a, b) => a.correct / a.total - b.correct / b.total || b.total - a.total)
     .map((topic) => topic.topic);
 
   return { total: items.length, correct, topics, weakTopics };

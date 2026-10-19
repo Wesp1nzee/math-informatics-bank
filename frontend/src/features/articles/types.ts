@@ -1,6 +1,5 @@
 import type { TaskSubject } from "@/features/tasks/types";
 
-/** Legacy (v1) article blocks, still served in `Article.blocks`. */
 export type ArticleBlock =
   | { type: "paragraph"; text: string }
   | { type: "heading"; text: string; id: string }
@@ -8,7 +7,6 @@ export type ArticleBlock =
   | { type: "formula"; tex: string; caption?: string }
   | { type: "quote"; text: string };
 
-/** Inline nodes of the structured rich text (contract v2). */
 export type InlineNode =
   | { type: "text"; text: string }
   | { type: "strong"; children: InlineNode[] }
@@ -68,14 +66,12 @@ export type ChoiceOption = {
   label: InlineNode[];
 };
 
-/** Public projection: the backend strips the correct answer and explanation. */
 export type SingleChoiceBlockData = {
   prompt: InlineNode[];
   options: ChoiceOption[];
   points?: number;
 };
 
-/** Public projection: the backend strips the correct value, tolerance and explanation. */
 export type NumericInputBlockData = {
   prompt: InlineNode[];
   unit?: string;
@@ -148,9 +144,9 @@ export type Article = {
   readingMinutes: number;
   published: string;
   updated?: string;
-  /** Legacy (v1) blocks. */
+
   blocks: ArticleBlock[];
-  /** Structured interactive content (contract v2), `null` for legacy articles. */
+
   content?: ArticleContent | null;
   isDemo: boolean;
 };

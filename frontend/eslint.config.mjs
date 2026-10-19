@@ -7,6 +7,16 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   prettier,
+  {
+    files: [
+      "src/features/articles/components/renderer/blocks/image-block.tsx",
+      "src/features/tutor-leads/components/tutor-profile.tsx",
+      "src/lib/analytics/yandex-metrika.tsx",
+    ],
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
   globalIgnores([
     ".next/**",
     "out/**",

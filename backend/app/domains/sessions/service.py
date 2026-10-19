@@ -1,5 +1,3 @@
-"""Session lifecycle: issue, resolve and revoke opaque cookie tokens."""
-
 from __future__ import annotations
 
 import uuid
@@ -17,11 +15,7 @@ from app.domains.users.models import User
 
 
 def _as_utc(value: datetime) -> datetime:
-    """Normalize datetimes to naive UTC for comparison.
-
-    Both PostgreSQL (``TIMESTAMP WITHOUT TIME ZONE``) and SQLite return naive
-    values, while ``utcnow()`` intentionally returns naive UTC as well.
-    """
+    pass
     if value.tzinfo is None:
         return value
     return value.astimezone(UTC).replace(tzinfo=None)
@@ -34,7 +28,7 @@ async def create_session(
     user_agent: str | None = None,
     ip: str | None = None,
 ) -> str:
-    """Create a session and return the raw token to put in the cookie."""
+    pass
     settings = get_settings()
     raw_token = new_session_token()
     row = UserSession(
@@ -50,7 +44,7 @@ async def create_session(
 
 
 async def resolve_session(session: AsyncSession, raw_token: str) -> User | None:
-    """Return the session's user, or ``None`` when missing/expired/disabled."""
+    pass
     row = await session.scalar(
         select(UserSession).where(UserSession.token_hash == hash_session_token(raw_token))
     )
@@ -65,7 +59,7 @@ async def resolve_session(session: AsyncSession, raw_token: str) -> User | None:
 
 
 async def revoke_session(session: AsyncSession, raw_token: str) -> None:
-    """Delete a single session by its raw token (logout)."""
+    pass
     await session.execute(
         delete(UserSession).where(UserSession.token_hash == hash_session_token(raw_token))
     )

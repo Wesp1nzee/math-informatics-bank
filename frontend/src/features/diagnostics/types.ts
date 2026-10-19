@@ -10,7 +10,7 @@ export type DiagnosticItem = {
   options: readonly DiagnosticOption[];
   correct: string;
   explanation: string;
-  /** Demo items come from the local mini-set, not the real bank. */
+
   isDemo: boolean;
 };
 
@@ -26,6 +26,6 @@ export type DiagnosticReport = {
   total: number;
   correct: number;
   topics: TopicResult[];
-  /** Topics with at least one mistake, weakest first. */
+
   weakTopics: string[];
 };

@@ -15,8 +15,6 @@ class AnswerCheckResponse(BaseModel):
     is_correct: bool = Field(serialization_alias="isCorrect")
     checked_at: datetime = Field(serialization_alias="checkedAt")
 
-    # Reveal the explanation only when the answer is correct — the site shows
-    # full solutions after a successful attempt or via the task page anyway.
     explanation: str | None = None
 
 

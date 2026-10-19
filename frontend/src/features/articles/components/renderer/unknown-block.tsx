@@ -1,4 +1,3 @@
-/** Controlled fallback for unknown or malformed blocks. */
 export function UnknownBlock({ label }: { label: string }) {
   return (
     <div

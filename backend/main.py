@@ -1,9 +1,3 @@
-"""Local development entrypoint: ``uv run python main.py``.
-
-Delegates to uvicorn with autoreload. In production the Docker image runs
-``uvicorn app.main:app`` directly after applying migrations.
-"""
-
 from __future__ import annotations
 
 import uvicorn

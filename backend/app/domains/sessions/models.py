@@ -11,7 +11,7 @@ from app.domains.users.models import User
 
 
 class UserSession(TimestampMixin, Base):
-    """A server-side session. The cookie holds the raw token; only its hash is stored."""
+    pass
 
     __tablename__ = "user_sessions"
 

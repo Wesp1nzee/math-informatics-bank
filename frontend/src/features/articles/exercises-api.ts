@@ -9,7 +9,6 @@ export type ExerciseCheckResult = {
   solved: boolean | null;
 };
 
-/** Backend-authoritative check for a published article exercise. */
 export async function checkArticleExercise(
   slug: string,
   exerciseId: string,

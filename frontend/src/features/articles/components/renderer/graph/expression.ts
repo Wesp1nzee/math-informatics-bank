@@ -1,11 +1,3 @@
-/**
- * Safe evaluator for the declarative graph grammar.
- *
- * Only the operators/functions allowed by the article contract are parsed. There
- * is no `eval`, `new Function`, property access or arbitrary code: unknown
- * identifiers and characters are rejected before evaluation.
- */
-
 export class ExpressionError extends Error {
   constructor(message: string) {
     super(message);
@@ -175,7 +167,6 @@ class Parser {
           right: this.parseUnary(),
         };
       } else if (this.startsPrimary(token)) {
-        // Implicit multiplication: 2x, 2(x+1), (x+1)(x-1).
         node = {
           kind: "binary",
           op: "*",
@@ -264,12 +255,6 @@ class Parser {
 
 type Evaluator = (x: number, parameters: Record<string, number>) => number;
 
-/**
- * Compile the parsed AST into a tree of closures once. This removes the
- * recursive switch and `hasOwnProperty` lookup from the hot sampling loop:
- * every node becomes a plain function call, and missing parameters simply
- * produce `NaN` (the plot layer filters non-finite values).
- */
 function compileNode(node: Node): Evaluator {
   switch (node.kind) {
     case "number": {

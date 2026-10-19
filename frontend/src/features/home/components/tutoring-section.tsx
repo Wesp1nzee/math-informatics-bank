@@ -3,7 +3,6 @@ import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
 import { Button, ButtonArrow } from "@/components/ui/button";
-import { TutorLeadPanel } from "@/features/tutor-leads/components/tutor-lead-panel";
 import { TutoringFacts } from "@/features/tutor-leads/components/tutoring-facts";
 import { AI_POSITIONING, TUTORING_INTRO } from "@/features/tutor-leads/content";
 
@@ -21,9 +20,7 @@ export function TutoringSection() {
           <p className="body-large mt-6">{TUTORING_INTRO}</p>
           <p className="text-ink mt-4 font-medium">{AI_POSITIONING}</p>
 
-          <TutoringFacts className="mt-10" />
-
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2">
             <Button asChild variant="secondary" size="sm">
               <Link href="/podgotovka#request">
                 Обсудить занятия <ButtonArrow />
@@ -42,8 +39,7 @@ export function TutoringSection() {
           className="reveal desk:col-span-5 desk:col-start-8 desk:mt-0 col-span-12 mt-12"
           style={step(1)}
         >
-          <h2 className="heading-3 mb-6">Оставить заявку</h2>
-          <TutorLeadPanel />
+          <TutoringFacts />
         </div>
       </div>
     </Section>

@@ -10,7 +10,7 @@ from app.db.base import Base, TimestampMixin, UUIDType
 
 
 class UserProgress(TimestampMixin, Base):
-    """One row per (user, task): attempt counters and solved flag."""
+    pass
 
     __tablename__ = "user_progress"
     __table_args__ = (UniqueConstraint("user_id", "task_id", name="uq_user_progress_user_task"),)
@@ -26,12 +26,7 @@ class UserProgress(TimestampMixin, Base):
 
 
 class ArticleExerciseProgress(TimestampMixin, Base):
-    """One row per (user, article, exercise): attempt counters and solved flag.
-
-    Article exercises are identified by the stable block id inside the published
-    article content. This table lives in the existing ``progress`` domain so the
-    project keeps a single progress subsystem alongside ``user_progress``.
-    """
+    pass
 
     __tablename__ = "article_exercise_progress"
     __table_args__ = (

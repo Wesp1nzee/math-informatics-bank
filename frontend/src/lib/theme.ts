@@ -1,16 +1,3 @@
-/**
- * Theme preference: "light" or "dark".
- *
- * The choice is persisted in `localStorage` and reflected as a `data-theme`
- * attribute on <html>, which the stylesheet reads (see globals.css). On the
- * first visit (nothing stored yet) the OS preference is resolved and used as
- * the default, without persisting it until the user picks a button.
- *
- * `themeInitScript` must run before first paint to avoid a flash of the wrong
- * theme; it is injected with `strategy="beforeInteractive"` from the root
- * layout.
- */
-
 export type ThemePreference = "light" | "dark";
 
 export const THEME_STORAGE_KEY = "theme";
@@ -34,9 +21,7 @@ export function readStoredTheme(): ThemePreference | null {
   try {
     const value = window.localStorage.getItem(THEME_STORAGE_KEY);
     if (isTheme(value)) return value;
-  } catch {
-    // localStorage can be unavailable (private mode, blocked storage).
-  }
+  } catch {}
   return null;
 }
 
@@ -47,9 +32,7 @@ export function applyThemePreference(preference: ThemePreference): void {
 export function setThemePreference(preference: ThemePreference): void {
   try {
     window.localStorage.setItem(THEME_STORAGE_KEY, preference);
-  } catch {
-    // Ignore storage failures; the attribute below still updates.
-  }
+  } catch {}
   applyThemePreference(preference);
   emit();
 }
@@ -71,11 +54,6 @@ export function subscribeTheme(listener: () => void): () => void {
   };
 }
 
-/**
- * Snapshot for `useSyncExternalStore`. Reads the attribute (kept in sync with
- * storage by the init script and `setThemePreference`) so the value is stable
- * between emits.
- */
 export function getThemePreference(): ThemePreference {
   if (typeof document === "undefined") return "light";
   const value = document.documentElement.dataset.theme;

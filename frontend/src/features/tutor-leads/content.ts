@@ -10,18 +10,10 @@ import type {
 export const TUTORING_INTRO =
   "Если задач из открытого доступа недостаточно, можно заниматься лично: найдём, где именно теряются баллы, и выстроим работу вокруг этого.";
 
-/** Where every conversion CTA on the site leads. */
 export const REQUEST_PATH = "/podgotovka#request";
 
-/** Honest positioning line used in the hero and the tutoring section. */
-export const AI_POSITIONING =
-  "Нейросеть даёт решение. Я нахожу, почему ошиблись вы.";
+export const AI_POSITIONING = "Нейросеть даёт решение. Я нахожу, почему ошиблись вы.";
 
-/**
- * Short, placement-specific copy for the conversion CTAs. The wording talks
- * about diagnosing mistakes, not about "buying lessons": each block sits at a
- * moment where the visitor is already thinking about their own solution.
- */
 export type CtaPlacement =
   | "after-solution"
   | "after-wrong-answers"
@@ -76,10 +68,6 @@ export const CTA_CONTENT: Record<CtaPlacement, CtaCopy> = {
   },
 };
 
-/**
- * Benefits for the student, shown as a bento grid (not a key/value table).
- * Everything here is process, not invented numbers, prices or results.
- */
 export const TUTORING_FACTS: readonly { title: string; text: string }[] = [
   {
     title: "Разбор причин ошибок",
@@ -107,22 +95,13 @@ export const TUTORING_FACTS: readonly { title: string; text: string }[] = [
   },
 ];
 
-/**
- * Pricing is configured by the owner. `null` means "not announced yet": the UI
- * then shows only the neutral line below and never an invented number.
- */
 export const PRICING: PricingInfo | null = null;
 
 export const PRICING_FALLBACK_NOTE =
   "Стоимость обсуждаем после диагностики — она зависит от цели и количества занятий.";
 
-/**
- * Reviews are shown only with explicit consent (`consentGiven: true`). The list
- * is empty by default: no real reviews means no review block.
- */
 export const REVIEWS: readonly Review[] = [];
 
-/** FAQ shown on the tutoring page and mirrored into FAQPage JSON-LD. */
 export const FAQ_ITEMS: readonly FaqItem[] = [
   {
     question: "В каком формате проходят занятия?",

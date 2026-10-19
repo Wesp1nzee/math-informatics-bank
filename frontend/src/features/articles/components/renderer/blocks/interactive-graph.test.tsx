@@ -77,7 +77,6 @@ describe("InteractiveGraph", () => {
 
     fireEvent.change(slider, { target: { value: "2" } });
 
-    // The slider (target) is immediate; the plotted curve (displayed) lags.
     expect(slider).toHaveValue("2");
     expect(curvePath().getAttribute("d")).toBe(before);
 

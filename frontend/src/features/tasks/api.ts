@@ -71,8 +71,6 @@ export async function getTasks(
     };
   }
 
-  // Build-time / offline fallback only. In development the API origin defaults
-  // to localhost, so published tasks are always served by FastAPI.
   return listLocalTasks(filters, page);
 }
 

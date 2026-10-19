@@ -27,7 +27,7 @@ def _base_query():
     return select(Article).where(Article.is_published.is_(True))
 
 
-def _dump_blocks(blocks) -> list[dict]:  # noqa: ANN001 — Pydantic models
+def _dump_blocks(blocks) -> list[dict]:
     return [block.model_dump(mode="json") for block in blocks]
 
 
@@ -40,7 +40,7 @@ async def _resolve_subject(session: AsyncSession, slug: str | None) -> Subject |
 async def list_articles(
     session: AsyncSession, *, subject_slug: str | None = None
 ) -> list[ArticleRead]:
-    """Legacy public list: all published articles (kept for compatibility)."""
+    pass
     query = _base_query().order_by(Article.published_on.desc().nullslast(), Article.id.desc())
     if subject_slug is not None:
         query = query.where(Article.subject.has(slug=subject_slug))
@@ -183,10 +183,7 @@ async def unpublish_article(session: AsyncSession, article_id: int) -> Article:
     return article
 
 
-# --- article exercises --------------------------------------------------------
-
-
-def _find_exercise(content: ArticleContent, exercise_id: str):  # noqa: ANN202
+def _find_exercise(content: ArticleContent, exercise_id: str):
     for block in content.blocks:
         if block.id == exercise_id:
             return block
@@ -210,12 +207,7 @@ async def check_article_exercise(
     answer: str,
     user_id: uuid.UUID | None,
 ) -> ArticleExerciseCheckResponse:
-    """Check a published article exercise against server-side data.
-
-    Correct answers come from the stored v2 content (never from the client); the
-    public article payload continues to strip them. Progress is persisted only
-    for authenticated users and reuses the existing ``progress`` domain.
-    """
+    pass
     if article.content is None:
         raise NotFoundError("В статье нет упражнений.")
     try:

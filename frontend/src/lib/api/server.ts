@@ -6,10 +6,6 @@ import { ApiError, toApiError } from "./errors";
 const configuredServerBaseUrl =
   process.env.API_BASE_URL?.trim().replace(/\/+$/, "") ?? "";
 
-/**
- * In local development the backend runs on :8000 by default, so `pnpm dev`
- * needs no extra configuration. Production must provide `API_BASE_URL`.
- */
 const serverBaseUrl =
   configuredServerBaseUrl || (isDevelopment() ? DEFAULT_DEV_API_ORIGIN : "");
 

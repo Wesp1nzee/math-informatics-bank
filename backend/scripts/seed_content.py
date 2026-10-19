@@ -1,21 +1,6 @@
-# ruff: noqa: E501
-"""Editorial seed content: long interactive articles and quality tasks.
-
-The article documents follow ``docs/interactive-articles-contract.md`` (schema
-version 2) and use every block type supported by the renderer: rich text,
-formulas, an interactive graph, choice and numeric exercises, step-by-step
-solutions, hints, callouts, images and dividers.
-
-Content lives in Python so the seed script stays readable and LaTeX escaping is
-explicit. Block ids of exercises and headings are stable: exercise ids key the
-per-user progress table, and heading ids are used by the table of contents.
-"""
-
 from __future__ import annotations
 
 from typing import Any
-
-# --- inline nodes -------------------------------------------------------------
 
 
 def t(value: str) -> dict[str, Any]:
@@ -46,11 +31,8 @@ def br() -> dict[str, Any]:
     return {"type": "br"}
 
 
-# --- block builder ------------------------------------------------------------
-
-
 class ArticleBuilder:
-    """Small helper that keeps block ids unique inside one document."""
+    pass
 
     def __init__(self, prefix: str) -> None:
         self.prefix = prefix
@@ -220,9 +202,6 @@ class ArticleBuilder:
 
     def build(self) -> dict[str, Any]:
         return {"version": 2, "blocks": self.blocks}
-
-
-# --- article 1: derivative ----------------------------------------------------
 
 
 def build_derivative_article() -> dict[str, Any]:
@@ -574,9 +553,6 @@ def build_derivative_article() -> dict[str, Any]:
     return a.build()
 
 
-# --- article 2: logarithms ----------------------------------------------------
-
-
 def build_logarithm_article() -> dict[str, Any]:
     a = ArticleBuilder("log")
 
@@ -897,9 +873,6 @@ def build_logarithm_article() -> dict[str, Any]:
     return a.build()
 
 
-# --- article 3: number systems ------------------------------------------------
-
-
 def build_number_systems_article() -> dict[str, Any]:
     a = ArticleBuilder("num")
 
@@ -1198,8 +1171,6 @@ def build_number_systems_article() -> dict[str, Any]:
     return a.build()
 
 
-# --- public content -----------------------------------------------------------
-
 ARTICLES: list[dict[str, Any]] = [
     {
         "slug": "proizvodnaya-smysl-grafik-kasatelnaya",
@@ -1238,9 +1209,6 @@ ARTICLES: list[dict[str, Any]] = [
         "content": build_number_systems_article(),
     },
 ]
-
-
-# --- tasks --------------------------------------------------------------------
 
 
 def _task(

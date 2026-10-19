@@ -1,8 +1,9 @@
 import Link from "next/link";
 
+import { BrandLogo } from "@/components/layout/brand-logo";
 import { Container } from "@/components/layout/container";
 import { footerNav } from "@/lib/constants/navigation";
-import { brand, mailHref, siteConfig, telegramHref } from "@/lib/constants/site";
+import { mailHref, siteConfig, telegramHref } from "@/lib/constants/site";
 
 const COPYRIGHT_YEAR = new Date().getFullYear();
 
@@ -16,11 +17,7 @@ export function SiteFooter() {
       <Container>
         <div className="grid grid-cols-12 gap-x-4 gap-y-10 md:gap-x-6">
           <div className="desk:col-span-5 col-span-12">
-            <b className="block text-xl font-semibold">
-              {brand.text}
-              <span className="text-accent">{brand.accent}</span>
-            </b>
-            <span className="text-ink-soft">Математика × Информатика</span>
+            <BrandLogo className="h-14" />
           </div>
 
           <nav

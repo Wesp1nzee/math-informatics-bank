@@ -2,7 +2,6 @@ import { selectPublishedReviews } from "@/features/tutor-leads/reviews";
 import { REVIEWS } from "@/features/tutor-leads/content";
 import { cn } from "@/lib/utils/cn";
 
-/** Renders nothing when there are no consented reviews. */
 export function Reviews({ className }: { className?: string }) {
   const reviews = selectPublishedReviews(REVIEWS);
   if (reviews.length === 0) return null;
@@ -21,7 +20,9 @@ export function Reviews({ className }: { className?: string }) {
           {review.before || review.after ? (
             <p className="text-ink-soft flex flex-wrap gap-x-4 gap-y-1 text-sm">
               {review.before ? <span>Было: {review.before}</span> : null}
-              {review.after ? <span className="text-success">Стало: {review.after}</span> : null}
+              {review.after ? (
+                <span className="text-success">Стало: {review.after}</span>
+              ) : null}
             </p>
           ) : null}
 

@@ -1,10 +1,3 @@
-"""Domain exceptions and a single JSON error envelope for the whole API.
-
-Response shape (consumed by frontend ``lib/api/errors.ts``)::
-
-    {"error": {"code": "...", "message": "...", "details": {...}|null}}
-"""
-
 from __future__ import annotations
 
 from typing import Any
@@ -20,7 +13,7 @@ ERROR_ENVELOPE = "error"
 
 
 class AppError(Exception):
-    """Base class for all expected (non-500) application errors."""
+    pass
 
     status_code: int = status.HTTP_400_BAD_REQUEST
     code: str = "app_error"
@@ -121,7 +114,7 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(Exception)
     async def handle_unexpected(_: Request, exc: Exception) -> JSONResponse:
-        # Starlette logs the traceback; the client gets a generic envelope.
+
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content=error_payload("internal_error", "Внутренняя ошибка сервера."),

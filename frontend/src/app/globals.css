@@ -42,18 +42,6 @@
   --breakpoint-desk: 75rem;
 }
 
-/*
- * Theme selection (see src/lib/theme.ts). `data-theme="light"` / "dark" on
- * <html> selects the scheme; the JS bootstrap always sets it (defaulting to the
- * OS preference). Without JS the attribute is absent and the media query below
- * keeps the dark theme working. Every utility compiles to `var(--color-*)`, so
- * nothing else has to change.
- *
- * A media query cannot be merged with a selector, so the dark token set is
- * written twice (forced dark + OS fallback). Keep the two blocks in sync.
- * Contrast was checked for text, links, KaTeX, the derivative graph and
- * `.option` states.
- */
 :root[data-theme="dark"] {
   color-scheme: dark;
 
@@ -217,7 +205,6 @@
     letter-spacing: -0.01em;
   }
 
-  /* Grain is pure CSS (inline SVG noise), very low opacity, no image assets. */
   .grain {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
     background-size: 160px 160px;
@@ -252,11 +239,6 @@
     transform: none;
   }
 
-  /*
-   * CSS scroll-driven reveal where supported; the JS fallback in
-   * `scroll-reveal.tsx` still marks `data-reveal-in` for tests and for
-   * browsers without scroll-driven animations.
-   */
   @supports (animation-timeline: view()) {
     .reveal {
       opacity: 1;
@@ -272,15 +254,11 @@
     }
   }
 
-  /* The slider is the graph's pointer/keyboard surface; a blue focus ring on
-     the full-size invisible input would paint a box around the plot. */
   .viz input[type="range"]:focus,
   .viz input[type="range"]:focus-visible {
     outline: none;
   }
 
-  /* Keep the slider's horizontal drag on touch devices; otherwise a vertical
-     page pan can cancel the gesture midway. */
   .article-graph .graph-range {
     touch-action: none;
   }
@@ -323,7 +301,6 @@
     animation-delay: calc(var(--i, 0) * 70ms);
   }
 
-  /* LCP-safe entrance: transform only, the heading is visible from the start. */
   .rise-lcp {
     animation: rise-lcp 700ms var(--ease-soft) both;
     animation-delay: calc(var(--i, 0) * 70ms);
@@ -717,11 +694,6 @@
     animation-delay: var(--d, 0ms);
   }
 
-  /*
-   * Theme toggle. The selected option is driven by the `data-theme` attribute
-   * (set before hydration), not by React class state, so the highlight is
-   * correct on the very first paint.
-   */
   .theme-option {
     color: var(--color-ink-faint);
     transition:
@@ -738,6 +710,20 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  }
+
+  .brand-logo {
+    transition: filter 200ms ease;
+  }
+
+  [data-theme="dark"] .brand-logo {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .brand-logo {
+      filter: invert(1) hue-rotate(180deg);
+    }
   }
 }
 
@@ -772,7 +758,6 @@
   }
 }
 
-/* Scroll-driven variant: opacity only, so sections never move under the pointer. */
 @keyframes reveal-fade {
   from {
     opacity: 0.001;

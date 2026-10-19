@@ -5,12 +5,6 @@ import type { ReactNode } from "react";
 
 import { isExternalHref, isRecord, safeHref } from "@/features/articles/runtime";
 
-/**
- * Client-side renderer for exercise explanations returned after a correct
- * answer. KaTeX is loaded lazily (only when an explanation actually contains a
- * formula), so the main article bundle never includes the math engine. KaTeX's
- * output is the only HTML injected with `dangerouslySetInnerHTML`.
- */
 const ClientMath = dynamic<{ tex: string; display?: boolean; className?: string }>(
   () => import("@/components/ui/math").then((module) => module.Math),
   { ssr: false, loading: () => <span aria-hidden="true">…</span> },

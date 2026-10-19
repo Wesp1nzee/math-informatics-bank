@@ -30,10 +30,6 @@ from app.domains.users.models import User
 
 router = APIRouter(prefix="/articles", tags=["articles"])
 
-# Public routes ---------------------------------------------------------------
-# NOTE: ``/page`` is a reserved single-segment path; slugs equal to it are
-# rejected by ``ArticleCreate``/``ArticleUpdate``.
-
 
 @router.get("", response_model=list[ArticleRead], summary="Список статей")
 async def articles_list(
@@ -58,9 +54,6 @@ async def articles_page(
         session, subject_slug=subject, limit=params.limit, offset=params.offset
     )
     return build_page(items, total, params)
-
-
-# Editor routes (admin only) --------------------------------------------------
 
 
 @router.post(
@@ -135,11 +128,6 @@ async def unpublish_article_endpoint(
     return ArticleEditorRead.from_article(article)
 
 
-# Public exercise check -------------------------------------------------------
-# Anonymous checks are allowed; progress is persisted only for authenticated
-# users (optional session cookie).
-
-
 @router.post(
     "/{slug}/exercises/{exercise_id}/check",
     response_model=ArticleExerciseCheckResponse,
@@ -160,9 +148,6 @@ async def check_article_exercise_endpoint(
         answer=payload.answer,
         user_id=user.id if user is not None else None,
     )
-
-
-# Public detail ---------------------------------------------------------------
 
 
 @router.get("/{slug}", response_model=ArticleRead, summary="Статья по slug")

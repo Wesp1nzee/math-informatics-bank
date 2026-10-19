@@ -1,11 +1,3 @@
-"""Best-effort Telegram notification for new tutor leads.
-
-The teacher is notified via the Telegram Bot API only when both
-``TELEGRAM_BOT_TOKEN`` and ``TELEGRAM_ADMIN_CHAT_ID`` are configured. The
-notification is fire-and-forget from the lead's perspective: it never raises,
-so a notification failure can never turn a stored lead into a 500.
-"""
-
 from __future__ import annotations
 
 import logging
@@ -35,7 +27,7 @@ def _lead_text(lead: TutorLead) -> str:
 
 
 async def notify_lead(lead: TutorLead) -> None:
-    """Send a Telegram message about a new lead. Never raises."""
+    pass
     settings = get_settings()
     token = settings.telegram_bot_token
     chat_id = settings.telegram_admin_chat_id
@@ -48,14 +40,12 @@ async def notify_lead(lead: TutorLead) -> None:
             response = await client.post(url, json={"chat_id": chat_id, "text": _lead_text(lead)})
             response.raise_for_status()
     except httpx.HTTPStatusError as exc:
-        # Never log the exception text or traceback: httpx embeds the request URL,
-        # which contains the bot token. Only the status code is safe.
         logger.warning(
             "Telegram lead notification failed: HTTP %s (lead %s)",
             exc.response.status_code,
             lead.id,
         )
-    except Exception as exc:  # noqa: BLE001 — notification must never break the request
+    except Exception as exc:
         logger.warning(
             "Telegram lead notification failed: %s (lead %s)",
             type(exc).__name__,

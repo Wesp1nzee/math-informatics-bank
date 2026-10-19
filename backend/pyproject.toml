@@ -40,8 +40,11 @@ extend-exclude = ["migrations/versions"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC"]
 ignore = [
-    "B008", # FastAPI dependencies in defaults — framework idiom
+    "B008",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/seed_content.py" = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]

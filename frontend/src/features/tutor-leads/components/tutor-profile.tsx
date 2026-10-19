@@ -3,11 +3,6 @@ import { PlayCircle } from "lucide-react";
 import { hasTutorProfile, siteConfig } from "@/lib/constants/site";
 import { cn } from "@/lib/utils/cn";
 
-/**
- * Factual teacher block. It only appears when both a name and a short bio are
- * configured — no invented experience, photo or biography. Photo and intro
- * video are optional and rendered only when provided.
- */
 export function TutorProfile({ className }: { className?: string }) {
   if (!hasTutorProfile) return null;
 
@@ -21,8 +16,6 @@ export function TutorProfile({ className }: { className?: string }) {
     <div className={cn("grid grid-cols-12 items-start gap-4 md:gap-6", className)}>
       {photo ? (
         <div className="border-line bg-canvas desk:col-span-4 col-span-12 overflow-hidden rounded-xl border">
-          {/* Arbitrary owner-provided URL: a plain img avoids remote-domain config. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={photo}
             alt={`${name} — преподаватель`}

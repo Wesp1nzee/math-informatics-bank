@@ -109,7 +109,6 @@ export function CodeDemo() {
       return;
     }
 
-    /** Resolves in small steps so pause/skip apply immediately. */
     const pauseable = async (ms: number) => {
       let waited = 0;
       while (waited < ms) {
@@ -119,7 +118,6 @@ export function CodeDemo() {
       }
     };
 
-    /** Returns true when the run was cancelled or skipped. */
     const bail = () => {
       if (!alive()) return true;
       if (skipRef.current) {

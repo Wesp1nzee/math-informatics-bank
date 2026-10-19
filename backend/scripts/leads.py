@@ -1,10 +1,3 @@
-"""Minimal CLI for tutor leads: list and change status (no CMS required).
-
-Usage:
-  uv run python -m scripts.leads list [new|contacted|closed]
-  uv run python -m scripts.leads set <lead_id> <new|contacted|closed>
-"""
-
 from __future__ import annotations
 
 import asyncio

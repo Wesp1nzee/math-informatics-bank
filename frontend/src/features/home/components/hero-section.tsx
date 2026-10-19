@@ -14,9 +14,7 @@ export async function HeroSection() {
   try {
     const [featuredTask] = await getFeaturedTasks(1);
     if (featuredTask) taskHref = getTaskPath(featuredTask.id);
-  } catch {
-    // The catalogue is the safe fallback when no published task can be loaded.
-  }
+  } catch {}
 
   return (
     <section
@@ -35,8 +33,8 @@ export async function HeroSection() {
               <br />с <span className="serif-accent">понимания.</span>
             </h1>
             <p className="body-large rise mt-9 mb-6" style={step(2)}>
-              Готовлю к ОГЭ и ЕГЭ по математике и информатике. Разбираю причины
-              ошибок — чтобы вы понимали не только ответ, но и способ решения.
+              Готовлю к ОГЭ и ЕГЭ по математике и информатике. Разбираю причины ошибок —
+              чтобы вы понимали не только ответ, но и способ решения.
             </p>
             <p className="text-ink-soft rise mt-0 mb-10 font-medium" style={step(2)}>
               {AI_POSITIONING}

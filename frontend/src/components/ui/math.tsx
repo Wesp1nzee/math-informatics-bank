@@ -8,13 +8,6 @@ type MathProps = {
   className?: string;
 };
 
-/**
- * Server-friendly KaTeX renderer. Invalid LaTeX never throws on the page: the
- * raw TeX is shown in a `<code>` fallback instead.
- *
- * `dangerouslySetInnerHTML` is used only for KaTeX's own output, never for
- * article-authored HTML.
- */
 export function Math({ tex, display = false, className }: MathProps) {
   if (typeof tex !== "string" || tex.trim() === "") return null;
 

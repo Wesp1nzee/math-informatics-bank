@@ -1,14 +1,4 @@
-"""article exercise progress
 
-Revision ID: b6032912fafc
-Revises: a3b1e58fe050
-Create Date: 2026-10-19 00:00:00.000000
-
-Adds per-user progress for interactive article exercises. The table lives in the
-existing ``progress`` domain and is keyed by (user, article, exercise block id).
-It is purely additive: existing tables and data are untouched, and no backfill
-is required.
-"""
 
 from __future__ import annotations
 
@@ -19,7 +9,7 @@ from alembic import op
 
 import app.db.base
 
-# revision identifiers, used by Alembic.
+
 revision: str = "b6032912fafc"
 down_revision: str | None = "a3b1e58fe050"
 branch_labels: str | Sequence[str] | None = None

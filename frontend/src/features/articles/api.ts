@@ -15,9 +15,6 @@ export async function getArticles(): Promise<ArticleListResult> {
     return { items, isDemo: items.some((article) => article.isDemo) };
   }
 
-  // Build-time / offline fallback only. In development the API origin defaults
-  // to localhost, so normally this branch is never taken and articles always
-  // come from the backend.
   return { items: [...demoArticles], isDemo: true };
 }
 

@@ -1,4 +1,3 @@
-
 function normalizeSiteUrl(raw: string | undefined): string {
   const value = raw?.trim();
   if (!value) return "http://localhost:3000";
@@ -31,12 +30,7 @@ export const siteConfig = {
 
 export const hasTutorContacts = tutorTelegram.length > 0 || tutorEmail.length > 0;
 
-/** True when there is enough real data to render a teacher block. */
 export const hasTutorProfile = tutorName.length > 0 && tutorAbout.length > 0;
-
-export const brand: { text: string; accent: string } = tutorName
-  ? { text: tutorName, accent: "." }
-  : { text: "Математика", accent: "· Информатика" };
 
 export function telegramHref(value: string): string | null {
   const handle = value.trim();

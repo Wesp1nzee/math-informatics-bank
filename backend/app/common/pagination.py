@@ -1,10 +1,3 @@
-"""Reusable pagination: query params + response envelope.
-
-Response shape matches the frontend contract in ``features/tasks/api.ts``::
-
-    {"items": [...], "total": n, "page": p, "page_size": s, "page_count": c}
-"""
-
 from __future__ import annotations
 
 import math
@@ -18,7 +11,7 @@ MAX_PAGE_SIZE = 100
 
 
 class PaginationParams:
-    """FastAPI dependency: ``?page=1&page_size=10`` with sane bounds."""
+    pass
 
     def __init__(
         self,
@@ -43,7 +36,7 @@ class PaginationParams:
 
 
 class Page[T](BaseModel):
-    """Pydantic response model for paginated endpoints."""
+    pass
 
     items: list[T]
     total: int

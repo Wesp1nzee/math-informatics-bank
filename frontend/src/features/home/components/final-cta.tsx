@@ -8,10 +8,6 @@ import { AI_POSITIONING, CTA_CONTENT } from "@/features/tutor-leads/content";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
-/**
- * Final conversion block. It offers a trial lesson (with the request form) and
- * keeps the task bank as a secondary, non-competing link.
- */
 export function FinalCta() {
   const copy = CTA_CONTENT["home-final"];
 

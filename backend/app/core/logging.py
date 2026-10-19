@@ -1,5 +1,3 @@
-"""Logging setup: readable console output in dev, one-JSON-line format in prod."""
-
 from __future__ import annotations
 
 import json
@@ -40,7 +38,6 @@ def setup_logging(settings: Settings) -> None:
     root.addHandler(handler)
     root.setLevel(settings.log_level.upper())
 
-    # Noise control.
     logging.getLogger("sqlalchemy.engine").setLevel(
         logging.INFO if settings.database_echo else logging.WARNING
     )
@@ -48,5 +45,5 @@ def setup_logging(settings: Settings) -> None:
 
 
 def bind_logger(name: str, **fields: Any) -> logging.LoggerAdapter[logging.Logger]:
-    """Logger adapter that attaches structured fields to every record."""
+    pass
     return logging.LoggerAdapter(logging.getLogger(name), extra={"extra_fields": fields})

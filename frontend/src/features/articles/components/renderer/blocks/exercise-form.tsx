@@ -19,7 +19,7 @@ export type ExerciseFormProps = {
   name: string;
   inputId?: string;
   unit?: string;
-  /** Server-rendered prompt (and options for choice exercises). */
+
   children: ReactNode;
 };
 

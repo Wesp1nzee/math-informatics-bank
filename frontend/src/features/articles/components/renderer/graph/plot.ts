@@ -30,7 +30,6 @@ export function mapY(y: number, viewport: GraphViewport, layout: PlotLayout): nu
   );
 }
 
-/** Roughly 1–2 samples per horizontal pixel, clamped to a sane budget. */
 export function samplesForLayout(layout: PlotLayout): number {
   const plotWidth = Math.max(0, layout.width - 2 * layout.padding);
   return Math.max(
@@ -39,7 +38,6 @@ export function samplesForLayout(layout: PlotLayout): number {
   );
 }
 
-/** A "nice" 1-2-5 × 10^n step for a range. */
 export function niceStep(span: number, targetTicks = 6): number {
   if (!Number.isFinite(span) || span <= 0) return 1;
   const rough = span / Math.max(1, targetTicks);
@@ -66,7 +64,6 @@ export function niceTicks(min: number, max: number, targetTicks = 6): number[] {
   return ticks;
 }
 
-/** Formats a tick label without trailing zeroes. */
 export function formatTick(value: number, step: number): string {
   if (!Number.isFinite(value)) return "";
   if (value === 0) return "0";
@@ -82,13 +79,6 @@ export function formatTick(value: number, step: number): string {
   return value.toFixed(decimals).replace(/\.?0+$/, "");
 }
 
-/**
- * Sample an expression into an SVG path. Non-finite values start a new
- * segment. A segment is also broken when consecutive values sit on opposite
- * sides of the visible area (e.g. `tan` or `1/x` around an asymptote) or when
- * the pixel jump is larger than the plot height — otherwise the renderer
- * would draw a phantom near-vertical line through the whole plot.
- */
 export function buildPath(
   expression: CompiledExpression,
   parameters: Record<string, number>,

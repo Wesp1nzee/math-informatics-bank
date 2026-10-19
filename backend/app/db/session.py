@@ -1,9 +1,3 @@
-"""Async SQLAlchemy engine/session management.
-
-The engine is created lazily and cached so that importing ``app.main`` never
-touches the database — tests can override ``get_session`` instead.
-"""
-
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
@@ -37,7 +31,7 @@ def get_sessionmaker() -> async_sessionmaker[AsyncSession]:
 
 
 async def get_session() -> AsyncIterator[AsyncSession]:
-    """FastAPI dependency: one session per request, commit on success."""
+    pass
     session_factory = get_sessionmaker()
     async with session_factory() as session:
         try:
@@ -50,7 +44,7 @@ async def get_session() -> AsyncIterator[AsyncSession]:
 
 @asynccontextmanager
 async def session_scope() -> AsyncIterator[AsyncSession]:
-    """Context manager for scripts and background tasks."""
+    pass
     session_factory = get_sessionmaker()
     async with session_factory() as session:
         try:
@@ -62,13 +56,13 @@ async def session_scope() -> AsyncIterator[AsyncSession]:
 
 
 async def ping_database() -> bool:
-    """Cheap health check used by /api/health."""
+    pass
     engine: Engine = get_engine()
     try:
         async with engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
         return True
-    except Exception:  # noqa: BLE001 — health check must never raise
+    except Exception:
         return False
 
 

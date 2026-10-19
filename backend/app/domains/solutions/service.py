@@ -1,5 +1,3 @@
-"""Answer checking: normalization rules live here, storage in solution_attempts."""
-
 from __future__ import annotations
 
 import re
@@ -16,12 +14,7 @@ _DECIMAL_SEP = re.compile(r",(?=\d)")
 
 
 def normalize_answer(value: str) -> str:
-    """Normalize a numeric/text answer for comparison.
-
-    - strips surrounding whitespace, trailing zeros (``3.00`` → ``3``),
-    - unifies decimal comma to dot (``3,5`` → ``3.5``),
-    - lowercases text answers and collapses inner whitespace.
-    """
+    pass
     cleaned = value.strip()
     if not cleaned:
         return ""
@@ -48,7 +41,7 @@ async def check_answer(
     *,
     user_id: uuid.UUID | None = None,
 ) -> AnswerCheckResponse:
-    """Validate the answer, persist an attempt, update progress for known users."""
+    pass
     expected = str((task.answer or {}).get("value", ""))
     kind = str((task.answer or {}).get("kind", "number"))
     is_correct = answers_match(answer, expected, kind=kind)
@@ -65,7 +58,7 @@ async def check_answer(
     )
 
     if user_id is not None:
-        from app.domains.progress.service import record_attempt  # local import: avoid cycle
+        from app.domains.progress.service import record_attempt
 
         await record_attempt(session, user_id=user_id, task_id=task.id, is_correct=is_correct)
 

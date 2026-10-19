@@ -31,12 +31,6 @@ const FORMULA_LINES = [
 
 const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
-/**
- * Hero visualisation. The formulas are rendered on the server (KaTeX) and
- * passed as nodes into the interactive client graph, so the heavy math library
- * never reaches the client bundle. The graph is a real range input overlaid on
- * the SVG: draggable with the pointer and operable with arrow keys.
- */
 export function DerivativeViz() {
   return (
     <DerivativeGraph

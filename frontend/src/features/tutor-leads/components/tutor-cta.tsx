@@ -15,16 +15,11 @@ import { cn } from "@/lib/utils/cn";
 
 type TutorCtaProps = {
   placement: CtaPlacement;
-  /** Tighter layout for dense spots such as the home quiz. */
+
   size?: "default" | "compact";
   className?: string;
 };
 
-/**
- * Placement-specific conversion block. It always points at the request form on
- * `/podgotovka` and is deliberately inline (never a modal) so it never
- * interrupts reading or keyboard flow.
- */
 export function TutorCta({ placement, size = "default", className }: TutorCtaProps) {
   const copy = CTA_CONTENT[placement];
   const compact = size === "compact";
