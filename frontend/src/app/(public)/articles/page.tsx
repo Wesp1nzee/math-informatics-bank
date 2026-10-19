@@ -15,7 +15,7 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function ArticlesPage() {
-  const { items } = await getArticles();
+  const { items, isDemo } = await getArticles();
 
   return (
     <>
@@ -35,13 +35,14 @@ export default async function ArticlesPage() {
           ))}
         </ul>
 
-        <div className="mt-10">
-          <DemoNotice>
-            Статьи подготовлены в рамках миграции и помечены как черновики: они содержат
-            проверенные объяснения, но финальный редакционный текст будет добавлен
-            отдельно.
-          </DemoNotice>
-        </div>
+        {isDemo ? (
+          <div className="mt-10">
+            <DemoNotice>
+              Показан встроенный демонстрационный набор статей. Подключите API, чтобы
+              читать материалы из базы.
+            </DemoNotice>
+          </div>
+        ) : null}
       </Section>
     </>
   );

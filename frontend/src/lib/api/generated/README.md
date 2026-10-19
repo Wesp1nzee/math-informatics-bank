@@ -20,5 +20,6 @@ Rules:
   (`src/features/<feature>/types.ts`).
 - The API functions in `server.ts` / `client.ts` map generated DTOs onto those
   domain types, so components never depend on raw HTTP shapes.
-- Until the backend exists, `src/features/*/api.ts` serves local fixtures and
-  switches to the real endpoints automatically once `API_BASE_URL` is set.
+- `src/features/*/api.ts` always reads tasks and articles from the backend in
+  normal operation (`http://localhost:8000` by default in `next dev`). Local
+  fixtures are only a fallback for builds without a configured API origin.

@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import re
 import uuid
-from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.db.base import utcnow
 from app.domains.solutions.models import AttemptOutcome, SolutionAttempt
 from app.domains.solutions.schemas import AnswerCheckResponse
 from app.domains.tasks.models import Task
@@ -53,7 +53,7 @@ async def check_answer(
     kind = str((task.answer or {}).get("kind", "number"))
     is_correct = answers_match(answer, expected, kind=kind)
 
-    checked_at = datetime.now(UTC)
+    checked_at = utcnow()
     session.add(
         SolutionAttempt(
             task_id=task.id,

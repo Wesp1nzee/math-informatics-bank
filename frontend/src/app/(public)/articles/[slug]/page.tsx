@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { ArticleBody } from "@/features/articles/components/article-body";
 import { ArticleMeta } from "@/features/articles/components/article-meta";
 import { ArticleToc } from "@/features/articles/components/article-toc";
+import { ArticleRenderer } from "@/features/articles/components/renderer/article-renderer";
 import { RelatedArticles } from "@/features/articles/components/related-articles";
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import {
@@ -59,6 +60,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const related = await getRelatedArticles(article, 2);
   const toc = getArticleToc(article);
+  const midSlot = <TutorCta placement="article-mid" className="my-2" />;
 
   return (
     <>
@@ -102,10 +104,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 : "col-span-12"
             }
           >
-            <ArticleBody
-              blocks={article.blocks}
-              midSlot={<TutorCta placement="article-mid" className="my-2" />}
-            />
+            {article.content ? (
+              <ArticleRenderer
+                content={article.content}
+                articleSlug={article.slug}
+                midSlot={midSlot}
+              />
+            ) : (
+              <ArticleBody blocks={article.blocks} midSlot={midSlot} />
+            )}
             <TutorCta placement="article-end" className="mt-8" />
           </div>
         </div>

@@ -59,6 +59,11 @@ async def test_health(client: httpx.AsyncClient) -> None:
     assert response.status_code == 200
     assert response.json() == {"status": "ok", "database": True}
 
+    # Probe alias without the /api prefix must work too.
+    alias = await client.get("/health")
+    assert alias.status_code == 200
+    assert alias.json() == {"status": "ok", "database": True}
+
 
 async def test_tasks_flow_and_related_envelope(client: httpx.AsyncClient) -> None:
     task_id = await _seed()

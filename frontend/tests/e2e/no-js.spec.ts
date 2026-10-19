@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { openDerivativeTask } from "./helpers";
+
 test.use({ javaScriptEnabled: false });
 
 test.describe("no-JavaScript fallback", () => {
@@ -31,7 +33,7 @@ test.describe("no-JavaScript fallback", () => {
   });
 
   test("the solution is readable", async ({ page }) => {
-    await page.goto("/zadachi/1042");
+    await openDerivativeTask(page);
 
     await expect(page.getByRole("heading", { name: "Решение" })).toBeVisible();
 

@@ -12,9 +12,12 @@ export type ArticleListResult = {
 export async function getArticles(): Promise<ArticleListResult> {
   if (isServerApiConfigured()) {
     const items = await serverRequest<Article[]>("/articles");
-    return { items, isDemo: false };
+    return { items, isDemo: items.some((article) => article.isDemo) };
   }
 
+  // Build-time / offline fallback only. In development the API origin defaults
+  // to localhost, so normally this branch is never taken and articles always
+  // come from the backend.
   return { items: [...demoArticles], isDemo: true };
 }
 

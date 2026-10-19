@@ -66,7 +66,11 @@ class Base(DeclarativeBase):
 
 
 def utcnow() -> datetime:
-    return datetime.now(UTC)
+    # Columns are declared as plain ``DateTime`` (no time zone) in the initial
+    # migration, so asyncpg expects naive datetimes on PostgreSQL. Keep the
+    # value in UTC but drop tzinfo to stay compatible with both PostgreSQL and
+    # SQLite (tests).
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class TimestampMixin:

@@ -38,8 +38,8 @@ test.describe("SEO basics", () => {
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.status()).toBe(200);
     const body = await sitemap.text();
-    expect(body).toContain("/zadachi/1042</loc>");
-    expect(body).toContain("/articles/kak-chitat-chuzhoy-kod</loc>");
+    expect(body).toMatch(/\/zadachi\/\d+<\/loc>/);
+    expect(body).toContain("/articles/proizvodnaya-smysl-grafik-kasatelnaya</loc>");
     expect(body).not.toContain("/zadachi/does-not-exist");
   });
 
@@ -59,7 +59,17 @@ test.describe("SEO basics", () => {
     page,
     request,
   }) => {
-    for (const path of ["/zadachi/1042", "/articles/kak-chitat-chuzhoy-kod"]) {
+    await page.goto("/zadachi");
+    const taskHref = await page
+      .locator('a[href^="/zadachi/"]')
+      .first()
+      .getAttribute("href");
+    expect(taskHref).toMatch(/^\/zadachi\/\d+$/);
+
+    for (const path of [
+      taskHref as string,
+      "/articles/proizvodnaya-smysl-grafik-kasatelnaya",
+    ]) {
       await page.goto(path);
 
       const og = page.locator('meta[property="og:image"]');

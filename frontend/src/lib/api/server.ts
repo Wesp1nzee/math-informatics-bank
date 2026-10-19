@@ -1,9 +1,17 @@
 import "server-only";
 
-import { apiConfig, apiUrl } from "./config";
+import { apiConfig, apiUrl, DEFAULT_DEV_API_ORIGIN, isDevelopment } from "./config";
 import { ApiError, toApiError } from "./errors";
 
-const serverBaseUrl = process.env.API_BASE_URL?.trim() ?? "";
+const configuredServerBaseUrl =
+  process.env.API_BASE_URL?.trim().replace(/\/+$/, "") ?? "";
+
+/**
+ * In local development the backend runs on :8000 by default, so `pnpm dev`
+ * needs no extra configuration. Production must provide `API_BASE_URL`.
+ */
+const serverBaseUrl =
+  configuredServerBaseUrl || (isDevelopment() ? DEFAULT_DEV_API_ORIGIN : "");
 
 export function isServerApiConfigured(): boolean {
   return serverBaseUrl.length > 0;

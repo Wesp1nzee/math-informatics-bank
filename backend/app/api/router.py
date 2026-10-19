@@ -15,3 +15,16 @@ api_router.include_router(v1_router, prefix="/v1")
 async def health() -> dict[str, str | bool]:
     db_ok = await ping_database()
     return {"status": "ok" if db_ok else "degraded", "database": db_ok}
+
+
+# Probe-friendly alias: hosting platforms and orchestrators often call
+# ``GET /health`` directly, without the ``/api`` prefix.
+root_router = APIRouter()
+root_router.add_api_route(
+    "/health",
+    health,
+    methods=["GET"],
+    tags=["system"],
+    summary="Health check",
+    include_in_schema=False,
+)

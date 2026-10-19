@@ -13,3 +13,7 @@ build/
 .coverage
 htmlcov/
 .pytest_backend.db
+site_bank.db
+*.db-journal
+*.db-wal
+*.db-shm

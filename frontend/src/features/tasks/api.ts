@@ -71,6 +71,8 @@ export async function getTasks(
     };
   }
 
+  // Build-time / offline fallback only. In development the API origin defaults
+  // to localhost, so published tasks are always served by FastAPI.
   return listLocalTasks(filters, page);
 }
 
@@ -79,7 +81,9 @@ export async function getTaskById(id: string): Promise<Task | null> {
     try {
       return await serverRequest<Task>(`/tasks/${encodeURIComponent(id)}`);
     } catch (error) {
-      if (isApiError(error) && error.status === 404) return null;
+      if (isApiError(error) && (error.status === 404 || error.status === 422)) {
+        return null;
+      }
       throw error;
     }
   }

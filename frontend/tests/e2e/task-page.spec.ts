@@ -1,8 +1,10 @@
 import { expect, test } from "@playwright/test";
 
+import { openDerivativeTask } from "./helpers";
+
 test.describe("task page", () => {
   test("checks the answer and reveals the solution", async ({ page }) => {
-    await page.goto("/zadachi/1042");
+    await openDerivativeTask(page);
 
     await expect(
       page.getByRole("heading", { level: 1, name: /Производная/ }),
@@ -14,11 +16,11 @@ test.describe("task page", () => {
 
     await expect(page.getByText("Верно.")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Решение" })).toBeVisible();
-    await expect(page.getByText("Считаем")).toBeVisible();
+    await expect(page.getByText("Подставляем x = 2")).toBeVisible();
   });
 
   test("rejects a wrong answer without revealing it", async ({ page }) => {
-    await page.goto("/zadachi/1042");
+    await openDerivativeTask(page);
 
     await page.getByLabel("Ваш ответ").fill("12");
     await page.getByRole("button", { name: "Проверить" }).click();
@@ -28,8 +30,9 @@ test.describe("task page", () => {
   });
 
   test("shows related tasks that link to real pages", async ({ page }) => {
-    await page.goto("/zadachi/1042");
+    await openDerivativeTask(page);
 
+    const currentPath = new URL(page.url()).pathname;
     const related = page.locator('section[aria-labelledby="related-tasks-title"]');
     await expect(related).toBeVisible();
 
@@ -39,7 +42,7 @@ test.describe("task page", () => {
 
     const href = await links.first().getAttribute("href");
     expect(href).toMatch(/^\/zadachi\/\d+$/);
-    expect(href).not.toBe("/zadachi/1042");
+    expect(href).not.toBe(currentPath);
   });
 
   test("every catalogue card resolves to a 200 page", async ({ page, request }) => {

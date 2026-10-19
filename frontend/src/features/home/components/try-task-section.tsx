@@ -3,7 +3,6 @@ import type { CSSProperties } from "react";
 import { Section } from "@/components/layout/section";
 import { Math } from "@/components/ui/math";
 import { TaskQuiz, type QuizStep } from "@/features/home/components/task-quiz";
-import { getTaskPath } from "@/features/tasks/api";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
@@ -65,7 +64,7 @@ export function TryTaskSection() {
             hints={HINTS}
             successNote="Сначала находим производную, затем подставляем x = 2."
             steps={STEPS}
-            moreHref={getTaskPath("1042")}
+            moreHref="/zadachi"
           />
         </div>
       </div>

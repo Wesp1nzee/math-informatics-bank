@@ -59,7 +59,7 @@ test.describe("home page", () => {
     await expect(page.getByText("Верно.")).toBeVisible();
     await expect(
       page.getByRole("link", { name: /Разобрать подробнее/ }),
-    ).toHaveAttribute("href", "/zadachi/1042");
+    ).toHaveAttribute("href", "/zadachi");
   });
 
   test("every revealed section becomes visible after scrolling", async ({ page }) => {

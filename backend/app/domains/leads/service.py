@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import UTC, datetime, timedelta
+from datetime import timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.core.exceptions import NotFoundError, RateLimitedError
 from app.core.security import hash_ip
+from app.db.base import utcnow
 from app.domains.leads.models import LeadStatus, TutorLead
 from app.domains.leads.notify import notify_lead
 from app.domains.leads.schemas import TutorLeadCreate, TutorLeadCreated
@@ -28,7 +29,7 @@ async def create_lead(
     if payload.website:
         return TutorLeadCreated(ok=True, id=0)
 
-    window_start = datetime.now(UTC) - timedelta(hours=1)
+    window_start = utcnow() - timedelta(hours=1)
     recent = await session.scalar(
         select(func.count())
         .select_from(TutorLead)

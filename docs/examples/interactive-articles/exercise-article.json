@@ -1,0 +1,99 @@
+{
+  "version": 2,
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "rich_text",
+      "data": {
+        "kind": "paragraph",
+        "children": [
+          { "type": "text", "text": "Закрепим правило дифференцирования степенной функции. Ответьте на вопросы ниже." }
+        ]
+      }
+    },
+    {
+      "id": "ex-choice",
+      "type": "single_choice",
+      "data": {
+        "prompt": [
+          { "type": "text", "text": "Чему равна производная функции " },
+          { "type": "math", "tex": "f(x)=x^2" },
+          { "type": "text", "text": "?" }
+        ],
+        "options": [
+          { "id": "o1", "label": [ { "type": "math", "tex": "2x" } ] },
+          { "id": "o2", "label": [ { "type": "math", "tex": "x" } ] },
+          { "id": "o3", "label": [ { "type": "math", "tex": "x^2" } ] }
+        ],
+        "correct_option_id": "o1",
+        "explanation": [
+          { "type": "text", "text": "По правилу степени " },
+          { "type": "math", "tex": "(x^n)' = n x^{n-1}" },
+          { "type": "text", "text": " при " },
+          { "type": "math", "tex": "n=2" },
+          { "type": "text", "text": " получаем " },
+          { "type": "math", "tex": "2x" },
+          { "type": "text", "text": "." }
+        ],
+        "points": 1
+      }
+    },
+    {
+      "id": "hint-1",
+      "type": "hint",
+      "data": {
+        "title": "Подсказка",
+        "body": [
+          { "type": "text", "text": "Степень уходит вниз и становится коэффициентом." }
+        ]
+      }
+    },
+    {
+      "id": "ex-num",
+      "type": "numeric_input",
+      "data": {
+        "prompt": [
+          { "type": "text", "text": "Найдите " },
+          { "type": "math", "tex": "f'(3)" },
+          { "type": "text", "text": " для " },
+          { "type": "math", "tex": "f(x)=x^2" },
+          { "type": "text", "text": "." }
+        ],
+        "correct_value": 6,
+        "tolerance": 0,
+        "unit": "",
+        "explanation": [
+          { "type": "text", "text": "Так как " },
+          { "type": "math", "tex": "f'(x)=2x" },
+          { "type": "text", "text": ", то " },
+          { "type": "math", "tex": "f'(3)=2\\cdot 3=6" },
+          { "type": "text", "text": "." }
+        ],
+        "points": 1
+      }
+    },
+    {
+      "id": "sol-1",
+      "type": "step_solution",
+      "data": {
+        "steps": [
+          {
+            "id": "s1",
+            "note": [ { "type": "text", "text": "Применяем правило степени." } ],
+            "math": { "tex": "(x^n)' = n x^{n-1}", "display": true }
+          },
+          {
+            "id": "s2",
+            "note": [ { "type": "text", "text": "Подставляем n = 2." } ],
+            "math": { "tex": "f'(x) = 2x", "display": true }
+          },
+          {
+            "id": "s3",
+            "note": [ { "type": "text", "text": "Вычисляем значение в точке x = 3." } ],
+            "math": { "tex": "f'(3) = 2\\cdot 3 = 6", "display": true }
+          }
+        ]
+      }
+    }
+  ]
+}

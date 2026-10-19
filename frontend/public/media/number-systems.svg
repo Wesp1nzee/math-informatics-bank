@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="title desc">
+  <title id="title">Перевод 13 из десятичной системы в двоичную</title>
+  <desc id="desc">Последовательное деление 13 на 2 даёт остатки 1, 0, 1, 1. Если читать их снизу вверх, получается 1101.</desc>
+
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="60" y="52" fill="#111111" font-size="21" font-weight="600">13₁₀ → 1101₂</text>
+    <text x="60" y="80" fill="#686865" font-size="15">Делим на 2 и читаем остатки снизу вверх</text>
+
+    <!-- division rows -->
+    <g font-size="18">
+      <rect x="60" y="110" width="180" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="150" y="143" text-anchor="middle" fill="#111111" font-size="22">13 ÷ 2 = 6</text>
+      <text x="280" y="143" fill="#3157d5" font-size="20" font-weight="600">остаток 1</text>
+
+      <rect x="60" y="178" width="180" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="150" y="211" text-anchor="middle" fill="#111111" font-size="22">6 ÷ 2 = 3</text>
+      <text x="280" y="211" fill="#3157d5" font-size="20" font-weight="600">остаток 0</text>
+
+      <rect x="60" y="246" width="180" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="150" y="279" text-anchor="middle" fill="#111111" font-size="22">3 ÷ 2 = 1</text>
+      <text x="280" y="279" fill="#3157d5" font-size="20" font-weight="600">остаток 1</text>
+
+      <rect x="60" y="314" width="180" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="150" y="347" text-anchor="middle" fill="#111111" font-size="22">1 ÷ 2 = 0</text>
+      <text x="280" y="347" fill="#3157d5" font-size="20" font-weight="600">остаток 1</text>
+    </g>
+
+    <!-- reading direction -->
+    <line x1="600" y1="340" x2="600" y2="136" stroke="#208a5a" stroke-width="2"/>
+    <path d="M 600 126 L 592 142 L 608 142 Z" fill="#208a5a"/>
+    <text x="618" y="240" fill="#208a5a" font-size="15" font-weight="600">читаем</text>
+    <text x="618" y="262" fill="#208a5a" font-size="15" font-weight="600">снизу вверх</text>
+
+    <!-- result -->
+    <rect x="380" y="190" width="180" height="80" rx="12" fill="#e9edff"/>
+    <text x="470" y="224" text-anchor="middle" fill="#2547b8" font-size="15">результат</text>
+    <text x="470" y="254" text-anchor="middle" fill="#2547b8" font-size="30" font-weight="700">1101₂</text>
+
+    <text x="60" y="418" fill="#686865" font-size="14">Проверка: 1101₂ = 8 + 4 + 0 + 1 = 13₁₀</text>
+  </g>
+</svg>

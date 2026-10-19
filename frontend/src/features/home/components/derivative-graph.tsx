@@ -2,8 +2,6 @@
 
 import { useState, type CSSProperties, type ReactNode } from "react";
 
-import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
-
 function f(x: number): number {
   return x ** 3 - 4 * x ** 2 + 7 * x;
 }
@@ -41,7 +39,6 @@ function formatValue(value: number): string {
 
 export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
   const [x, setX] = useState(2);
-  const [interacted, setInteracted] = useState(false);
 
   const slope = df(x);
   const pointX = mapX(x);
@@ -54,7 +51,6 @@ export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
 
   function update(next: number) {
     setX(clamp(next, MIN_X, MAX_X));
-    if (!interacted) setInteracted(true);
   }
 
   return (
@@ -161,18 +157,9 @@ export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
           onChange={(event) => update(Number(event.target.value))}
           aria-label="Положение точки на графике"
           aria-valuetext={`x = ${x.toFixed(1)}, производная f′(x) = ${formatValue(slope)}`}
-          className="absolute inset-0 z-10 h-full w-full cursor-ew-resize opacity-0"
+          className="absolute inset-0 z-10 h-full w-full cursor-ew-resize opacity-0 outline-none focus:outline-none focus-visible:outline-none"
         />
       </div>
-
-      <figcaption className="viz-note">
-        Потяните точку (или используйте стрелки): наклон касательной равен значению
-        производной в этой точке.
-      </figcaption>
-
-      {interacted ? (
-        <TutorCta placement="hero-viz" size="compact" className="mt-4" />
-      ) : null}
     </figure>
   );
 }

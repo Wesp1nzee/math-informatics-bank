@@ -272,10 +272,17 @@
     }
   }
 
-  .graph-wrap:focus-within {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 6px;
-    border-radius: var(--radius-lg);
+  /* The slider is the graph's pointer/keyboard surface; a blue focus ring on
+     the full-size invisible input would paint a box around the plot. */
+  .viz input[type="range"]:focus,
+  .viz input[type="range"]:focus-visible {
+    outline: none;
+  }
+
+  /* Keep the slider's horizontal drag on touch devices; otherwise a vertical
+     page pan can cancel the gesture midway. */
+  .article-graph .graph-range {
+    touch-action: none;
   }
 
   .no-js-only {

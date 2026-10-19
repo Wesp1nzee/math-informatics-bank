@@ -4,11 +4,20 @@ import type { CSSProperties } from "react";
 import { Container } from "@/components/layout/container";
 import { Button, ButtonArrow } from "@/components/ui/button";
 import { DerivativeViz } from "@/features/home/components/derivative-viz";
+import { getFeaturedTasks, getTaskPath } from "@/features/tasks/api";
 import { AI_POSITIONING, REQUEST_PATH } from "@/features/tutor-leads/content";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
-export function HeroSection() {
+export async function HeroSection() {
+  let taskHref = "/zadachi";
+  try {
+    const [featuredTask] = await getFeaturedTasks(1);
+    if (featuredTask) taskHref = getTaskPath(featuredTask.id);
+  } catch {
+    // The catalogue is the safe fallback when no published task can be loaded.
+  }
+
   return (
     <section
       id="top"
@@ -39,7 +48,7 @@ export function HeroSection() {
                 </Link>
               </Button>
               <Button asChild variant="secondary">
-                <Link href="/zadachi/1042">Попробовать задачу</Link>
+                <Link href={taskHref}>Попробовать задачу</Link>
               </Button>
             </div>
           </div>

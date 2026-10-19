@@ -17,11 +17,28 @@ the Next.js frontend expects in `frontend/src/features/*/api.ts`.
 uv sync
 cp .env.example .env        # adjust JWT_SECRET / DATABASE_URL as needed
 uv run alembic upgrade head # create the schema
-uv run python -m scripts.seed   # optional demo content
+uv run python -m scripts.seed   # editorial content: 3 articles + 12 tasks
 uv run python main.py       # uvicorn --reload on http://localhost:8000
 ```
 
 Interactive docs: `http://localhost:8000/docs`, health: `GET /api/health`.
+
+## Local run without Docker (SQLite)
+
+If Docker/PostgreSQL is unavailable, run the API on SQLite:
+
+```bash
+cp .env.example .env
+# .env
+DATABASE_URL=sqlite+aiosqlite:///./site_bank.db
+
+uv run alembic upgrade head
+uv run python -m scripts.seed
+uv run python main.py
+```
+
+SQLite is intended for local development only; production should use
+PostgreSQL.
 
 ## PostgreSQL via Docker Compose
 
@@ -33,6 +50,49 @@ docker compose up --build
 The API container applies migrations on start
 (`alembic upgrade head && uvicorn app.main:app`).
 
+If `docker compose` hangs or reports that the daemon is unavailable, Docker
+itself is not running — use the SQLite option above or restart Docker Desktop /
+the Docker daemon.
+
+## Standalone containers (no Compose)
+
+Both containers use `--restart unless-stopped`, so they start automatically
+when Docker Desktop starts.
+
+```bash
+# 1. Build the API image
+docker build -t site-bank-backend:local .
+
+# 2. PostgreSQL
+docker network create site-bank 2>/dev/null || true
+docker run -d --name site-bank-db \
+  --restart unless-stopped --network site-bank \
+  -e POSTGRES_DB=site_bank \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -v site-bank-pgdata:/var/lib/postgresql/data \
+  postgres:17-alpine
+
+# 3. API (migrations run automatically on start)
+docker run -d --name site-bank-api \
+  --restart unless-stopped --network site-bank \
+  -p 8000:8000 \
+  -e ENV=dev \
+  -e DEBUG=false \
+  -e DATABASE_URL='postgresql+asyncpg://postgres:postgres@site-bank-db:5432/site_bank' \
+  -e CORS_ORIGINS='["http://localhost:3000","http://127.0.0.1:3000","http://localhost:3210","http://127.0.0.1:3210"]' \
+  site-bank-backend:local
+
+# 4. Editorial content (idempotent; --reset replaces tasks and articles)
+docker exec site-bank-api python -m scripts.seed
+```
+
+Check: `curl http://localhost:8000/api/health` → `{"status":"ok","database":true}`.
+
+Make sure **Settings → General → Start Docker Desktop when you sign in** is
+enabled in Docker Desktop, otherwise the `restart` policy has nothing to attach
+to at login.
+
 ## Commands
 
 | Command | Purpose |
@@ -40,7 +100,8 @@ The API container applies migrations on start
 | `uv run python main.py` | Dev server with autoreload |
 | `uv run alembic upgrade head` | Apply migrations |
 | `uv run alembic revision --autogenerate -m "..."` | New migration from models |
-| `uv run python -m scripts.seed` | Seed demo content (idempotent) |
+| `uv run python -m scripts.seed` | Seed editorial content (idempotent) |
+| `uv run python -m scripts.seed --reset` | Delete all tasks/articles, then seed |
 | `uv run pytest` | Test suite (SQLite, no PostgreSQL needed) |
 | `uv run ruff check .` | Lint |
 | `uv run ruff format .` | Format |

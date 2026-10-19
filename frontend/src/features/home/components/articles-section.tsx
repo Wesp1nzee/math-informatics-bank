@@ -47,7 +47,8 @@ export async function ArticlesSection() {
           </div>
           <div className="flex items-center justify-between gap-4">
             <span className="text-ink-soft text-sm">
-              {SUBJECT_LABEL[lead.subject]} · {lead.exam}
+              {lead.subject ? `${SUBJECT_LABEL[lead.subject]} · ` : ""}
+              {lead.exam}
             </span>
             <span className="inline-flex items-center gap-2 font-medium">
               Читать
@@ -70,7 +71,8 @@ export async function ArticlesSection() {
               className="group border-line desk:py-8 flex flex-1 flex-col border-t py-6 first:border-t-0 first:pt-0"
             >
               <span className="text-ink-soft text-sm">
-                {SUBJECT_LABEL[article.subject]} · {article.exam}
+                {article.subject ? `${SUBJECT_LABEL[article.subject]} · ` : ""}
+                {article.exam}
               </span>
               <h3 className="heading-3 group-hover:text-accent my-3 transition-colors duration-150">
                 {article.title}

@@ -1,9 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("animations", () => {
-  test("hero graph is draggable with the keyboard and reveals a CTA", async ({
-    page,
-  }) => {
+  test("hero graph is draggable with the keyboard", async ({ page }) => {
     await page.goto("/");
 
     const slider = page.getByRole("slider", {
@@ -12,7 +10,8 @@ test.describe("animations", () => {
     await slider.focus();
     await page.keyboard.press("ArrowRight");
 
-    await expect(page.getByText("Так я объясняю каждую тему")).toBeVisible();
+    await expect(slider).toHaveValue("2.05");
+    await expect(slider).toHaveAttribute("aria-valuetext", /f′\(x\) = 3\.2/);
   });
 
   test("code demo can be paused and skipped", async ({ page }) => {
@@ -45,6 +44,6 @@ test.describe("animations", () => {
     });
     await slider.focus();
     await page.keyboard.press("ArrowRight");
-    await expect(page.getByText("Так я объясняю каждую тему")).toBeVisible();
+    await expect(slider).toHaveValue("2.05");
   });
 });

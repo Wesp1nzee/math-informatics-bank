@@ -17,8 +17,14 @@ from app.domains.users.models import User
 
 
 def _as_utc(value: datetime) -> datetime:
-    """Normalize DB datetimes (SQLite returns naive) for safe comparison."""
-    return value.replace(tzinfo=UTC) if value.tzinfo is None else value
+    """Normalize datetimes to naive UTC for comparison.
+
+    Both PostgreSQL (``TIMESTAMP WITHOUT TIME ZONE``) and SQLite return naive
+    values, while ``utcnow()`` intentionally returns naive UTC as well.
+    """
+    if value.tzinfo is None:
+        return value
+    return value.astimezone(UTC).replace(tzinfo=None)
 
 
 async def create_session(

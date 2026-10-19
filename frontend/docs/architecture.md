@@ -152,12 +152,15 @@ if (isServerApiConfigured()) {
   const response = await serverRequest<TaskListDto>("/tasks", { searchParams: { … } });
   return { items: response.items, … };
 }
-return listLocalTasks(filters, page); // локальные фикстуры
+return listLocalTasks(filters, page); // только fallback для сборки без API
 ```
 
-Пока `API_BASE_URL` пустой, работает локальный демонстрационный набор. Как
-только переменная задана, тот же код уходит в FastAPI — страницы и компоненты
-не меняются.
+Источник контента — FastAPI. В `next dev` `API_BASE_URL` и
+`NEXT_PUBLIC_API_BASE_URL` по умолчанию указывают на `http://localhost:8000`,
+поэтому страницы сразу читают задачи и статьи из бэкенда. В production оба
+origin задаются явно при сборке и запуске. Локальные фикстуры используются
+только если API вообще не настроен (например, сборка без env); при
+настроенном, но недоступном API показывается состояние ошибки, а не демо-набор.
 
 ### Задел на Python/FastAPI
 

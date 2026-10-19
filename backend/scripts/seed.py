@@ -1,26 +1,34 @@
-"""Seed the database with demo content (idempotent).
+"""Seed the database with editorial content (idempotent by default).
 
 Upserts by natural key (subject/topic/article slug, task source_ref), so the
 script can be re-run safely to add or update content without duplicating rows.
 
+Pass ``--reset`` to delete every task and article (and the progress rows tied to
+them) before seeding. Subjects and topics are reference data and are kept.
+
 Run with::
 
     uv run python -m scripts.seed
+    uv run python -m scripts.seed --reset
 """
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import session_scope
 from app.domains.articles.models import Article
+from app.domains.progress.models import ArticleExerciseProgress, UserProgress
+from app.domains.solutions.models import SolutionAttempt
 from app.domains.subjects.models import Subject
-from app.domains.tasks.models import Task, TaskLevel
+from app.domains.tasks.models import Task, TaskLevel, task_topics
 from app.domains.topics.models import Topic
+from scripts.seed_content import ARTICLES, TASKS
 
 
 async def _get_or_create_subject(
@@ -69,8 +77,25 @@ async def _upsert_article(session: AsyncSession, slug: str, **fields: object) ->
     return article
 
 
-async def seed() -> None:
+async def _reset_content(session: AsyncSession) -> None:
+    """Delete all tasks/articles and rows that reference them.
+
+    The reset is explicit rather than relying on database cascades so it behaves
+    the same on PostgreSQL and on SQLite builds without foreign keys enabled.
+    """
+    await session.execute(delete(ArticleExerciseProgress))
+    await session.execute(delete(UserProgress))
+    await session.execute(delete(SolutionAttempt))
+    await session.execute(delete(task_topics))
+    await session.execute(delete(Task))
+    await session.execute(delete(Article))
+
+
+async def seed(*, reset: bool = False) -> None:
     async with session_scope() as session:
+        if reset:
+            await _reset_content(session)
+
         matematika = await _get_or_create_subject(session, "matematika", "Математика", 0)
         informatika = await _get_or_create_subject(session, "informatika", "Информатика", 1)
 
@@ -82,107 +107,66 @@ async def seed() -> None:
             session, "sistemy-schisleniya", "Системы счисления", informatika.id, 0
         )
 
+        subjects = {"matematika": matematika, "informatika": informatika}
+        topics = {
+            "proizvodnaya": proizvodnaya,
+            "logarifmy": logarifmy,
+            "sistemy-schisleniya": sistemy,
+        }
+
         published = date.today()
 
-        await _upsert_task(
-            session,
-            "seed:proizvodnaya",
-            title="Производная степенной функции",
-            subject_id=matematika.id,
-            exam_label="ЕГЭ · Профиль",
-            level=TaskLevel.EASY,
-            minutes=3,
-            summary="Найдите значение производной в точке.",
-            statement=[{"type": "paragraph", "text": "Дана функция f(x) = x^2. Найдите f'(3)."}],
-            answer={"value": "6", "kind": "number", "explanation": "f'(x) = 2x, f'(3) = 6."},
-            steps=[{"note": "Правило степени", "tex": "(x^n)' = n x^{n-1}"}],
-            featured=True,
-            topics=[proizvodnaya],
-        )
+        for article in ARTICLES:
+            await _upsert_article(
+                session,
+                article["slug"],
+                title=article["title"],
+                description=article["description"],
+                subject_id=subjects[article["subject"]].id,
+                exam=article["exam"],
+                reading_minutes=article["reading_minutes"],
+                published_on=published,
+                updated_on=published,
+                blocks=[],
+                content=article["content"],
+                content_version=article["content"]["version"],
+                is_published=True,
+            )
 
-        await _upsert_task(
-            session,
-            "seed:logarifmy",
-            title="Логарифмическое уравнение",
-            subject_id=matematika.id,
-            exam_label="ЕГЭ · Профиль",
-            level=TaskLevel.MEDIUM,
-            minutes=5,
-            summary="Решите простейшее логарифмическое уравнение.",
-            statement=[{"type": "paragraph", "text": "Решите уравнение log2(x) = 3."}],
-            answer={"value": "8", "kind": "number", "explanation": "x = 2^3 = 8."},
-            steps=[
-                {
-                    "note": "Определение логарифма",
-                    "tex": "\\log_2 x = 3 \\Rightarrow x = 2^3",
-                }
-            ],
-            featured=True,
-            topics=[logarifmy],
-        )
+        for task in TASKS:
+            await _upsert_task(
+                session,
+                task["source_ref"],
+                title=task["title"],
+                subject_id=subjects[task["subject"]].id,
+                exam_label=task["exam_label"],
+                level=TaskLevel(task["level"]),
+                minutes=task["minutes"],
+                summary=task["summary"],
+                statement=task["statement"],
+                answer=task["answer"],
+                steps=task["steps"],
+                featured=task["featured"],
+                is_published=True,
+                topics=[topics[task["topic"]]],
+            )
 
-        await _upsert_task(
-            session,
-            "seed:sistemy",
-            title="Перевод в двоичную систему",
-            subject_id=informatika.id,
-            exam_label="ЕГЭ · Информатика",
-            level=TaskLevel.EASY,
-            minutes=3,
-            summary="Переведите число из десятичной системы в двоичную.",
-            statement=[
-                {"type": "paragraph", "text": "Запишите число 13 в двоичной системе счисления."}
-            ],
-            answer={"value": "1101", "kind": "text", "explanation": "13 = 8 + 4 + 1."},
-            steps=[{"note": "Деление на 2", "tex": "13_{10} = 1101_2"}],
-            featured=True,
-            topics=[sistemy],
-        )
+    print(
+        "Seeded content: "
+        f"{len(ARTICLES)} interactive articles, {len(TASKS)} tasks."
+        + (" Existing tasks and articles were deleted first." if reset else "")
+    )
 
-        await _upsert_article(
-            session,
-            "proizvodnaya-razbor",
-            title="Производная: базовый разбор",
-            description="Что такое производная и как её найти на экзамене.",
-            subject_id=matematika.id,
-            exam="ЕГЭ",
-            reading_minutes=5,
-            published_on=published,
-            blocks=[
-                {
-                    "type": "paragraph",
-                    "text": "Производная описывает скорость изменения функции.",
-                },
-                {"type": "heading", "text": "Правила дифференцирования", "id": "rules"},
-                {
-                    "type": "list",
-                    "ordered": False,
-                    "items": ["(x^n)' = n x^{n-1}", "(sin x)' = cos x"],
-                },
-            ],
-        )
 
-        await _upsert_article(
-            session,
-            "sistemy-schisleniya-razbor",
-            title="Системы счисления для ЕГЭ",
-            description="Как быстро переводить числа между системами счисления.",
-            subject_id=informatika.id,
-            exam="ЕГЭ",
-            reading_minutes=4,
-            published_on=published,
-            blocks=[
-                {
-                    "type": "paragraph",
-                    "text": (
-                        "В информатике чаще всего нужны двоичная и шестнадцатеричная системы."
-                    ),
-                },
-            ],
-        )
-
-    print("Seeded demo content (idempotent: 2 subjects, 3 topics, 3 tasks, 2 articles).")
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Seed demo/editorial content.")
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Delete all tasks and articles (and their progress rows) before seeding.",
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    asyncio.run(seed())
+    asyncio.run(seed(reset=_parse_args().reset))

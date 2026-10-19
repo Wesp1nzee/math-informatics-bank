@@ -5,8 +5,12 @@ import { formatDate, pluralize } from "@/lib/utils/format";
 export function ArticleMeta({ article }: { article: Article }) {
   return (
     <p className="text-ink-soft flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
-      <span>{SUBJECT_LABEL[article.subject]}</span>
-      <span aria-hidden="true">·</span>
+      {article.subject ? (
+        <>
+          <span>{SUBJECT_LABEL[article.subject]}</span>
+          <span aria-hidden="true">·</span>
+        </>
+      ) : null}
       <span>{article.exam}</span>
       <span aria-hidden="true">·</span>
       <span>

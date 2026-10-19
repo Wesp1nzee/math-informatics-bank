@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="title desc">
+  <title id="title">Логарифм как показатель степени</title>
+  <desc id="desc">Степени двойки 1, 2, 4, 8, 16, 32 соответствуют показателям 0, 1, 2, 3, 4, 5. Логарифм по основанию два возвращает показатель степени.</desc>
+
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="60" y="52" fill="#111111" font-size="21" font-weight="600">Логарифм — это показатель степени</text>
+    <text x="60" y="80" fill="#686865" font-size="15">Сколько раз нужно умножить основание на себя, чтобы получить число?</text>
+
+    <!-- top row: powers -->
+    <text x="60" y="146" fill="#686865" font-size="14">2ⁿ</text>
+    <g>
+      <rect x="100" y="112" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="150" y="145" text-anchor="middle" fill="#111111" font-size="20">1</text>
+      <rect x="216" y="112" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="266" y="145" text-anchor="middle" fill="#111111" font-size="20">2</text>
+      <rect x="332" y="112" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="382" y="145" text-anchor="middle" fill="#111111" font-size="20">4</text>
+      <rect x="448" y="112" width="100" height="52" rx="9" fill="#e9edff" stroke="#3157d5" stroke-width="2"/>
+      <text x="498" y="145" text-anchor="middle" fill="#2547b8" font-size="20" font-weight="600">8</text>
+      <rect x="564" y="112" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="614" y="145" text-anchor="middle" fill="#111111" font-size="20">16</text>
+      <rect x="680" y="112" width="60" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="710" y="145" text-anchor="middle" fill="#111111" font-size="20">32</text>
+    </g>
+
+    <!-- arrows -->
+    <g stroke="#8b8b84" stroke-width="1.5" marker-end="url(#arrow)">
+      <line x1="150" y1="176" x2="150" y2="246"/>
+      <line x1="266" y1="176" x2="266" y2="246"/>
+      <line x1="382" y1="176" x2="382" y2="246"/>
+      <line x1="498" y1="176" x2="498" y2="246" stroke="#3157d5" stroke-width="2"/>
+      <line x1="614" y1="176" x2="614" y2="246"/>
+      <line x1="710" y1="176" x2="710" y2="246"/>
+    </g>
+
+    <!-- bottom row: exponents -->
+    <text x="60" y="284" fill="#686865" font-size="14">n</text>
+    <g>
+      <rect x="100" y="250" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="150" y="283" text-anchor="middle" fill="#111111" font-size="20">0</text>
+      <rect x="216" y="250" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="266" y="283" text-anchor="middle" fill="#111111" font-size="20">1</text>
+      <rect x="332" y="250" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="382" y="283" text-anchor="middle" fill="#111111" font-size="20">2</text>
+      <rect x="448" y="250" width="100" height="52" rx="9" fill="#e9edff" stroke="#3157d5" stroke-width="2"/>
+      <text x="498" y="283" text-anchor="middle" fill="#2547b8" font-size="20" font-weight="600">3</text>
+      <rect x="564" y="250" width="100" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="614" y="283" text-anchor="middle" fill="#111111" font-size="20">4</text>
+      <rect x="680" y="250" width="60" height="52" rx="9" fill="#f0f0ed" stroke="#deded9"/>
+      <text x="710" y="283" text-anchor="middle" fill="#111111" font-size="20">5</text>
+    </g>
+
+    <text x="60" y="352" fill="#3157d5" font-size="17" font-weight="600">log₂ 8 = 3</text>
+    <text x="190" y="352" fill="#686865" font-size="15">потому что 2³ = 8</text>
+    <text x="60" y="390" fill="#686865" font-size="14">Логарифм возвращает показатель степени, а не само число.</text>
+    <text x="60" y="416" fill="#686865" font-size="14">Поэтому график логарифма растёт медленно: аргумент умножается, а значение прибавляется.</text>
+  </g>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b8b84"/>
+    </marker>
+  </defs>
+</svg>

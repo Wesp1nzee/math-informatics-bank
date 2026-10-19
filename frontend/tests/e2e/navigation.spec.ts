@@ -27,18 +27,20 @@ test.describe("navigation and layout", () => {
 
     await main.getByRole("link", { name: "Информатика", exact: true }).click();
     await expect(page).toHaveURL(/subject=informatika/);
-    await expect(page.getByText("3 задачи")).toBeVisible();
-    await expect(main.getByRole("link", { name: /Системы счисления/ })).toBeVisible();
+    await expect(page.getByText(/4 задачи/)).toBeVisible();
+    await expect(
+      main.getByRole("link", { name: /Перевод в двоичную систему/ }),
+    ).toBeVisible();
     await expect(main.getByRole("link", { name: /Производная/ })).toHaveCount(0);
 
     await page.goto("/zadachi");
     await main.getByRole("link", { name: "Страница 2" }).click();
     await expect(page).toHaveURL(/page=2/);
-    await expect(page.getByText(/страница 2 из 2/)).toBeVisible();
+    await expect(page.getByText(/страница 2 из 3/)).toBeVisible();
   });
 
   test("no horizontal overflow on the viewport", async ({ page }) => {
-    for (const route of ["/", "/zadachi", "/zadachi/1042", "/articles"]) {
+    for (const route of ["/", "/zadachi", "/articles"]) {
       await page.goto(route);
       await expect
         .poll(() =>

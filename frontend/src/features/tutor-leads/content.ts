@@ -28,8 +28,7 @@ export type CtaPlacement =
   | "article-mid"
   | "article-end"
   | "quiz-success"
-  | "home-final"
-  | "hero-viz";
+  | "home-final";
 
 export type CtaCopy = {
   eyebrow: string;
@@ -73,12 +72,6 @@ export const CTA_CONTENT: Record<CtaPlacement, CtaCopy> = {
     eyebrow: "Пробное занятие",
     title: "Начнём с вашей ошибки",
     text: "Оставьте контакт — проведу диагностику и покажу, где вы теряете баллы.",
-    action: "Записаться на пробное",
-  },
-  "hero-viz": {
-    eyebrow: "Индивидуальные занятия",
-    title: "Так я объясняю каждую тему",
-    text: "На занятиях идём от идеи к записи и разбираем, почему возникает ошибка — как здесь, на графике.",
     action: "Записаться на пробное",
   },
 };

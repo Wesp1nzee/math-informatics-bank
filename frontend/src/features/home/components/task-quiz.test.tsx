@@ -21,7 +21,7 @@ function renderQuiz() {
       hints={{ "0": "Проверьте степень." }}
       successNote="Сначала производная, потом подстановка."
       steps={[{ note: "Производная", content: <span>f′(x)=3x²−8x+7</span> }]}
-      moreHref="/zadachi/1042"
+      moreHref="/zadachi"
     />,
   );
 }
@@ -59,7 +59,7 @@ describe("TaskQuiz", () => {
     expect(await screen.findByText("f′(x)=3x²−8x+7")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Разобрать подробнее/ })).toHaveAttribute(
       "href",
-      "/zadachi/1042",
+      "/zadachi",
     );
   });
 

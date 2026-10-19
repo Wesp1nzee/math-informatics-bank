@@ -1,0 +1,82 @@
+{
+  "version": 2,
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "rich_text",
+      "data": {
+        "kind": "paragraph",
+        "children": [
+          { "type": "text", "text": "Производная в точке — это скорость изменения функции. Формально она определяется через предел отношения приращений:" }
+        ]
+      }
+    },
+    {
+      "id": "math-def",
+      "type": "math",
+      "data": {
+        "tex": "f'(x_0)=\\lim_{\\Delta x\\to 0}\\frac{f(x_0+\\Delta x)-f(x_0)}{\\Delta x}",
+        "display": true,
+        "caption": "Определение производной"
+      }
+    },
+    {
+      "id": "p-geometry",
+      "type": "rich_text",
+      "data": {
+        "kind": "paragraph",
+        "children": [
+          { "type": "text", "text": "Геометрически это угловой коэффициент касательной. Для степенной функции " },
+          { "type": "math", "tex": "x^n" },
+          { "type": "text", "text": " правило дифференцирования даёт " },
+          { "type": "math", "tex": "n x^{n-1}" },
+          { "type": "text", "text": "." }
+        ]
+      }
+    },
+    {
+      "id": "h-table",
+      "type": "rich_text",
+      "data": {
+        "kind": "heading",
+        "level": 2,
+        "children": [ { "type": "text", "text": "Таблица как следствие" } ]
+      }
+    },
+    {
+      "id": "p-derive",
+      "type": "rich_text",
+      "data": {
+        "kind": "paragraph",
+        "children": [
+          { "type": "text", "text": "Правило «производная " },
+          { "type": "math", "tex": "x^n" },
+          { "type": "text", "text": " равна " },
+          { "type": "math", "tex": "nx^{n-1}" },
+          { "type": "text", "text": "» — не отдельный факт, а результат раскрытия предела. Для " },
+          { "type": "math", "tex": "f(x)=x^3" },
+          { "type": "text", "text": " это видно напрямую:" }
+        ]
+      }
+    },
+    {
+      "id": "math-expand",
+      "type": "math",
+      "data": {
+        "tex": "\\frac{(x+\\Delta x)^3-x^3}{\\Delta x}=3x^2+3x\\,\\Delta x+(\\Delta x)^2\\ \\xrightarrow[\\Delta x\\to 0]{}\\ 3x^2",
+        "display": true
+      }
+    },
+    {
+      "id": "callout-memory",
+      "type": "callout",
+      "data": {
+        "kind": "warning",
+        "title": "Частая ошибка",
+        "body": [
+          { "type": "text", "text": "Не заучивайте таблицу как список. Полезно хотя бы раз вывести каждую строку самому — тогда её можно восстановить в голове." }
+        ]
+      }
+    }
+  ]
+}
