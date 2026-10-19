@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const SITE = "https://osnova-lab.ru";
+const SITE = "https://example.com";
 
 async function loadSeoModules() {
   vi.stubEnv("NEXT_PUBLIC_SITE_URL", SITE);
@@ -87,7 +87,7 @@ describe("SEO absolute URLs", () => {
     const data = seo.robots();
 
     expect(data.sitemap).toBe(`${SITE}/sitemap.xml`);
-    expect(data.host).toBe("osnova-lab.ru");
+    expect(data.host).toBe("example.com");
 
     const serialized = JSON.stringify(data);
     expect(serialized).not.toContain("localhost");
