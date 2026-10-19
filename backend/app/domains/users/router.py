@@ -4,6 +4,12 @@ from fastapi import APIRouter, Depends, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
+from app.core.exceptions import NotFoundError, RateLimitedError, UnauthorizedError
+from app.core.login_rate_limit import (
+    is_login_blocked,
+    record_login_failure,
+    reset_login_failures,
+)
 from app.core.request import get_client_ip
 from app.db.session import get_session
 from app.domains.sessions.service import (
@@ -32,6 +38,8 @@ async def register(
     response: Response,
     session: AsyncSession = Depends(get_session),
 ) -> User:
+    if not get_settings().registration_enabled:
+        raise NotFoundError("Регистрация недоступна.")
     user = await create_user(session, payload)
     raw_token = await create_session(
         session,
@@ -50,7 +58,17 @@ async def login(
     response: Response,
     session: AsyncSession = Depends(get_session),
 ) -> User:
-    user = await authenticate(session, payload.email, payload.password)
+    ip = get_client_ip(request)
+    if is_login_blocked(ip, payload.email):
+        raise RateLimitedError("Слишком много неудачных попыток. Попробуйте позже.")
+
+    try:
+        user = await authenticate(session, payload.email, payload.password)
+    except UnauthorizedError:
+        record_login_failure(ip, payload.email)
+        raise
+
+    reset_login_failures(ip, payload.email)
     raw_token = await create_session(
         session,
         user,

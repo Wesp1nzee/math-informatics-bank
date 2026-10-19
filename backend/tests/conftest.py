@@ -6,6 +6,7 @@ from collections.abc import AsyncIterator
 os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///./.pytest_backend.db")
 os.environ.setdefault("LEAD_RATE_LIMIT_PER_HOUR", "100")
 os.environ.setdefault("LEAD_RATE_LIMIT_PER_IP_PER_HOUR", "1000")
+os.environ.setdefault("REGISTRATION_ENABLED", "true")
 
 
 os.environ["TELEGRAM_BOT_TOKEN"] = ""

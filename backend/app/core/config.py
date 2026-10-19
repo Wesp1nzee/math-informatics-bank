@@ -48,6 +48,7 @@ class Settings(BaseSettings):
 
     lead_rate_limit_per_hour: int = 5
     lead_rate_limit_per_ip_per_hour: int = 10
+    registration_enabled: bool = False
 
     telegram_bot_token: str | None = None
     telegram_admin_chat_id: str | None = None
