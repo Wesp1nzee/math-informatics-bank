@@ -39,6 +39,7 @@ function buildCsp(): string {
 }
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   poweredByHeader: false,
   cacheComponents: false,
   turbopack: {

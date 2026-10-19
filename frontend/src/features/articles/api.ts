@@ -11,8 +11,15 @@ export type ArticleListResult = {
 
 export async function getArticles(): Promise<ArticleListResult> {
   if (isServerApiConfigured()) {
-    const items = await serverRequest<Article[]>("/articles");
-    return { items, isDemo: items.some((article) => article.isDemo) };
+    try {
+      const items = await serverRequest<Article[]>("/articles");
+      return { items, isDemo: items.some((article) => article.isDemo) };
+    } catch (error) {
+      // Network failures must not break `next build` when the API is not reachable.
+      if (!isApiError(error) || (error.kind !== "network" && error.kind !== "timeout")) {
+        throw error;
+      }
+    }
   }
 
   return { items: [...demoArticles], isDemo: true };
@@ -59,8 +66,16 @@ export async function getArticleSlugs(): Promise<string[]> {
   if (!isServerApiConfigured()) {
     return demoArticles.map((article) => article.slug);
   }
-  const items = await serverRequest<Article[]>("/articles");
-  return items.map((article) => article.slug);
+  try {
+    const items = await serverRequest<Article[]>("/articles");
+    return items.map((article) => article.slug);
+  } catch (error) {
+    // With no API at build time, skip prerendering; pages render on demand at runtime.
+    if (isApiError(error) && (error.kind === "network" || error.kind === "timeout")) {
+      return [];
+    }
+    throw error;
+  }
 }
 
 export function getArticlePath(slug: string): string {

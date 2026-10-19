@@ -52,23 +52,29 @@ export async function getTasks(
   page = 1,
 ): Promise<TaskListResult> {
   if (isServerApiConfigured()) {
-    const response = await serverRequest<TaskListDto>("/tasks", {
-      searchParams: {
-        subject: filters.subject,
-        level: filters.level,
-        page,
-        page_size: TASK_PAGE_SIZE,
-      },
-    });
+    try {
+      const response = await serverRequest<TaskListDto>("/tasks", {
+        searchParams: {
+          subject: filters.subject,
+          level: filters.level,
+          page,
+          page_size: TASK_PAGE_SIZE,
+        },
+      });
 
-    return {
-      items: response.items,
-      total: response.total,
-      page: response.page,
-      pageSize: response.page_size,
-      pageCount: Math.max(1, Math.ceil(response.total / response.page_size)),
-      isDemo: false,
-    };
+      return {
+        items: response.items,
+        total: response.total,
+        page: response.page,
+        pageSize: response.page_size,
+        pageCount: Math.max(1, Math.ceil(response.total / response.page_size)),
+        isDemo: false,
+      };
+    } catch (error) {
+      if (!isApiError(error) || (error.kind !== "network" && error.kind !== "timeout")) {
+        throw error;
+      }
+    }
   }
 
   return listLocalTasks(filters, page);
@@ -91,10 +97,16 @@ export async function getTaskById(id: string): Promise<Task | null> {
 
 export async function getFeaturedTasks(limit = 3): Promise<Task[]> {
   if (isServerApiConfigured()) {
-    const response = await serverRequest<TaskListDto>("/tasks", {
-      searchParams: { featured: true, page_size: limit },
-    });
-    return response.items;
+    try {
+      const response = await serverRequest<TaskListDto>("/tasks", {
+        searchParams: { featured: true, page_size: limit },
+      });
+      return response.items;
+    } catch (error) {
+      if (!isApiError(error) || (error.kind !== "network" && error.kind !== "timeout")) {
+        throw error;
+      }
+    }
   }
 
   return demoTasks.filter((task) => task.featured).slice(0, limit);
@@ -110,11 +122,17 @@ export async function getTasksBySubject(
 
 export async function getRelatedTasks(task: Task, limit = 3): Promise<Task[]> {
   if (isServerApiConfigured()) {
-    const response = await serverRequest<TaskListDto>(
-      `/tasks/${encodeURIComponent(task.id)}/related`,
-      { searchParams: { limit } },
-    );
-    return response.items;
+    try {
+      const response = await serverRequest<TaskListDto>(
+        `/tasks/${encodeURIComponent(task.id)}/related`,
+        { searchParams: { limit } },
+      );
+      return response.items;
+    } catch (error) {
+      if (!isApiError(error) || (error.kind !== "network" && error.kind !== "timeout")) {
+        throw error;
+      }
+    }
   }
 
   const scored = demoTasks
@@ -147,14 +165,21 @@ export async function getTaskIds(): Promise<string[]> {
   const pageSize = 100;
   let page = 1;
   let total = 0;
-  do {
-    const response = await serverRequest<TaskListDto>("/tasks", {
-      searchParams: { page, page_size: pageSize },
-    });
-    ids.push(...response.items.map((task) => task.id));
-    total = response.total;
-    page += 1;
-  } while (ids.length < total);
+  try {
+    do {
+      const response = await serverRequest<TaskListDto>("/tasks", {
+        searchParams: { page, page_size: pageSize },
+      });
+      ids.push(...response.items.map((task) => task.id));
+      total = response.total;
+      page += 1;
+    } while (ids.length < total);
+  } catch (error) {
+    if (isApiError(error) && (error.kind === "network" || error.kind === "timeout")) {
+      return [];
+    }
+    throw error;
+  }
 
   return ids;
 }

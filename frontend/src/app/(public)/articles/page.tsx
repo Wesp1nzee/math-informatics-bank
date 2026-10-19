@@ -7,6 +7,8 @@ import { ArticleCard } from "@/features/articles/components/article-card";
 import { getArticles } from "@/features/articles/api";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = buildMetadata({
   title: "Статьи и разборы",
   description:

@@ -4,6 +4,8 @@ import { getArticles } from "@/features/articles/api";
 import { getTaskIds } from "@/features/tasks/api";
 import { siteConfig } from "@/lib/constants/site";
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [taskIds, { items: articles }] = await Promise.all([getTaskIds(), getArticles()]);
 
