@@ -58,6 +58,23 @@ docker compose --env-file deploy/.env.production -f compose.prod.yaml \
   run --rm api alembic upgrade head
 ```
 
+Load the editorial content (idempotent):
+
+```bash
+docker compose --env-file deploy/.env.production -f compose.prod.yaml \
+  exec api python -m scripts.seed
+```
+
+Next.js prerenders pages from the API during `web` image build. If the public
+API is not reachable at that moment, the build falls back to demo fixtures so it
+still succeeds. After the stack is healthy and seeded, rebuild `web` once to
+prerender the real content:
+
+```bash
+docker compose --env-file deploy/.env.production -f compose.prod.yaml build web
+docker compose --env-file deploy/.env.production -f compose.prod.yaml up -d web
+```
+
 Watch the logs:
 
 ```bash
