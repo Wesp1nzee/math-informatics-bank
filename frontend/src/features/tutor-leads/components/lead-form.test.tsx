@@ -48,6 +48,20 @@ describe("TutorLeadForm", () => {
     expect(input.exam).toBe("ege");
   });
 
+  it("rejects a contact that is neither Telegram, e-mail nor phone", async () => {
+    const user = userEvent.setup();
+    render(<TutorLeadForm channels={channels} />);
+
+    await user.type(screen.getByLabelText("Как с вами связаться"), "abc");
+    await user.click(screen.getByLabelText(/Согласен на обработку/));
+    await user.click(screen.getByRole("button", { name: "Отправить заявку" }));
+
+    expect(
+      await screen.findByText("Укажите Telegram, телефон или e-mail"),
+    ).toBeInTheDocument();
+    expect(submitTutorLead).not.toHaveBeenCalled();
+  });
+
   it("offers a Telegram quick path with a prefilled message", async () => {
     const user = userEvent.setup();
     const open = vi.spyOn(window, "open").mockReturnValue(null);

@@ -1,19 +1,45 @@
 from __future__ import annotations
 
+import re
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from email_validator import EmailNotValidError, validate_email
+from pydantic import BaseModel, Field, field_validator
 
 from app.common.schemas import ORMModel
 from app.domains.leads.models import LeadExam, LeadStatus, LeadSubject
 
+_TELEGRAM_USERNAME = r"[A-Za-z][A-Za-z0-9_]{4,31}"
+_TELEGRAM_RE = re.compile(
+    rf"^(?:@?{_TELEGRAM_USERNAME}|(?:https?://)?(?:www\.)?t\.me/{_TELEGRAM_USERNAME}/?)$"
+)
+
+
+def _contact_looks_sane(value: str) -> str:
+    cleaned = value.strip()
+
+    if "@" in cleaned and not cleaned.startswith("@"):
+        try:
+            validate_email(cleaned, check_deliverability=False)
+        except EmailNotValidError:
+            pass
+        else:
+            return cleaned
+
+    if _TELEGRAM_RE.fullmatch(cleaned):
+        return cleaned
+
+    digits = re.sub(r"\D", "", cleaned)
+    if 10 <= len(digits) <= 15:
+        return cleaned
+
+    raise ValueError("Укажите Telegram, телефон или e-mail")
+
 
 class TutorLeadCreate(BaseModel):
-    pass
-
     name: str | None = Field(None, max_length=128)
-    contact: str = Field(..., min_length=3, max_length=256, description="Телефон или e-mail")
+    contact: str = Field(..., max_length=256, description="Telegram, телефон или e-mail")
     exam: LeadExam
     subject: LeadSubject | None = None
     message: str | None = Field(None, max_length=4000)
@@ -23,13 +49,8 @@ class TutorLeadCreate(BaseModel):
 
     @field_validator("contact")
     @classmethod
-    def _contact_looks_sane(cls, value: str) -> str:
-        cleaned = value.strip()
-        if "@" in cleaned:
-            EmailStr._validate(cleaned)
-        elif not any(ch.isdigit() for ch in cleaned):
-            raise ValueError("Укажите телефон или e-mail")
-        return cleaned
+    def _validate_contact(cls, value: str) -> str:
+        return _contact_looks_sane(value)
 
 
 class TutorLeadCreated(BaseModel):
