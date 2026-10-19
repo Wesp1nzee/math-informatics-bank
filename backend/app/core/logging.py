@@ -41,9 +41,12 @@ def setup_logging(settings: Settings) -> None:
     logging.getLogger("sqlalchemy.engine").setLevel(
         logging.INFO if settings.database_echo else logging.WARNING
     )
+    # httpx logs the full request URL at INFO, including the Telegram bot token.
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+    # uvicorn installs its own access handler; disabling propagation avoids duplicates.
     logging.getLogger("uvicorn.access").propagate = False
 
 
 def bind_logger(name: str, **fields: Any) -> logging.LoggerAdapter[logging.Logger]:
-    pass
     return logging.LoggerAdapter(logging.getLogger(name), extra={"extra_fields": fields})

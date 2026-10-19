@@ -27,7 +27,6 @@ def _lead_text(lead: TutorLead) -> str:
 
 
 async def notify_lead(lead: TutorLead) -> None:
-    pass
     settings = get_settings()
     token = settings.telegram_bot_token
     chat_id = settings.telegram_admin_chat_id

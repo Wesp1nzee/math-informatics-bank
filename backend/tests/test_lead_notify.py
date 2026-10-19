@@ -7,6 +7,7 @@ import pytest
 from sqlalchemy import select
 
 from app.core.config import Settings
+from app.core.logging import setup_logging
 from app.db.session import get_sessionmaker
 from app.domains.leads import notify as notify_module
 from app.domains.leads import service as leads_service
@@ -33,7 +34,6 @@ def _settings(token: str | None, chat_id: str | None) -> Settings:
 
 
 def test_test_suite_disables_real_telegram() -> None:
-    pass
     from app.core.config import get_settings
 
     settings = get_settings()
@@ -42,8 +42,6 @@ def test_test_suite_disables_real_telegram() -> None:
 
 
 class _FailingClient:
-    pass
-
     def __init__(self, *args, **kwargs) -> None:
         pass
 
@@ -107,16 +105,30 @@ async def test_notify_sends_expected_payload(monkeypatch: pytest.MonkeyPatch) ->
     assert "test@example.com" in payload["text"]
 
 
+def test_setup_logging_mutes_http_client_urls() -> None:
+    root = logging.getLogger()
+    handlers = root.handlers[:]
+    level = root.level
+    try:
+        setup_logging(Settings(log_level="INFO"))
+        assert logging.getLogger("httpx").level == logging.WARNING
+        assert logging.getLogger("httpcore").level == logging.WARNING
+    finally:
+        root.handlers[:] = handlers
+        root.setLevel(level)
+
+
 async def test_notify_failure_does_not_log_token(
     monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
     monkeypatch.setattr(notify_module, "get_settings", lambda: _settings(DUMMY_TOKEN, "42"))
     monkeypatch.setattr(notify_module.httpx, "AsyncClient", _FailingClient)
 
-    with caplog.at_level(logging.WARNING, logger="app.domains.leads.notify"):
+    with caplog.at_level(logging.INFO):
         await notify_lead(_lead())
 
     assert DUMMY_TOKEN not in caplog.text
+    assert all(DUMMY_TOKEN not in record.getMessage() for record in caplog.records)
     assert "notification failed" in caplog.text.lower()
     assert "(lead" in caplog.text.lower()
 

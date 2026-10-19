@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from fastapi import FastAPI, Request, status
@@ -9,12 +10,12 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+logger = logging.getLogger(__name__)
+
 ERROR_ENVELOPE = "error"
 
 
 class AppError(Exception):
-    pass
-
     status_code: int = status.HTTP_400_BAD_REQUEST
     code: str = "app_error"
 
@@ -103,18 +104,15 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(IntegrityError)
     async def handle_integrity_error(_: Request, exc: IntegrityError) -> JSONResponse:
+        logger.exception("Database integrity error")
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT,
-            content=error_payload(
-                "conflict",
-                "Нарушение целостности данных.",
-                details=str(exc.orig) if exc.orig is not None else None,
-            ),
+            content=error_payload("conflict", "Нарушение целостности данных."),
         )
 
     @app.exception_handler(Exception)
-    async def handle_unexpected(_: Request, exc: Exception) -> JSONResponse:
-
+    async def handle_unexpected(request: Request, exc: Exception) -> JSONResponse:
+        logger.exception("Unhandled error on %s %s", request.method, request.url.path)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content=error_payload("internal_error", "Внутренняя ошибка сервера."),
