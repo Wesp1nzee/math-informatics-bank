@@ -3,6 +3,9 @@ from __future__ import annotations
 import os
 from collections.abc import AsyncIterator
 
+import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
+
 os.environ.setdefault("LEAD_RATE_LIMIT_PER_HOUR", "100")
 os.environ.setdefault("LEAD_RATE_LIMIT_PER_IP_PER_HOUR", "1000")
 os.environ.setdefault("REGISTRATION_ENABLED", "true")
@@ -16,9 +19,6 @@ else:
 
 os.environ["TELEGRAM_BOT_TOKEN"] = ""
 os.environ["TELEGRAM_ADMIN_CHAT_ID"] = ""
-
-import pytest_asyncio
-from httpx import ASGITransport, AsyncClient
 
 
 @pytest_asyncio.fixture

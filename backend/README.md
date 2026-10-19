@@ -15,13 +15,14 @@ the Next.js frontend expects in `frontend/src/features/*/api.ts`.
 
 ```bash
 uv sync
-cp .env.example .env        # adjust JWT_SECRET / DATABASE_URL as needed
+cp .env.example .env        # adjust DATABASE_URL and other settings as needed
 uv run alembic upgrade head # create the schema
 uv run python -m scripts.seed   # editorial content: 3 articles + 12 tasks
 uv run python main.py       # uvicorn --reload on http://localhost:8000
 ```
 
-Interactive docs: `http://localhost:8000/docs`, health: `GET /api/health`.
+Interactive docs are available only in dev with `DEBUG=true`
+(`http://localhost:8000/docs`); health: `GET /api/health`.
 
 ## Local run without Docker (SQLite)
 
@@ -41,6 +42,10 @@ SQLite is intended for local development only; production should use
 PostgreSQL.
 
 ## PostgreSQL via Docker Compose
+
+For production deployment (Caddy, TLS, Next.js, backup, CI) see
+[`docs/deployment.md`](../docs/deployment.md). The local compose file is only
+for development.
 
 ```bash
 cp .env.example .env
@@ -102,7 +107,7 @@ to at login.
 | `uv run alembic revision --autogenerate -m "..."` | New migration from models |
 | `uv run python -m scripts.seed` | Seed editorial content (idempotent) |
 | `uv run python -m scripts.seed --reset` | Delete all tasks/articles, then seed |
-| `uv run pytest` | Test suite (SQLite, no PostgreSQL needed) |
+| `uv run pytest` | Test suite (SQLite; set `TEST_DATABASE_URL` to run against PostgreSQL) |
 | `uv run ruff check .` | Lint |
 | `uv run ruff format .` | Format |
 
@@ -112,12 +117,13 @@ to at login.
 | --- | --- |
 | `GET /tasks` | Paginated; `subject`, `level`, `featured`, `page`, `page_size` |
 | `GET /tasks/{id}`, `GET /tasks/{id}/related` | Detail and `{ items: [...] }` |
-| `POST /tasks/{id}/check` | Optional bearer token records progress |
+| `POST /tasks/{id}/check` | Optional session cookie records progress; anonymous checks are not stored |
 | `GET /articles`, `GET /articles/{slug}` | Block-based content |
 | `GET /subjects`, `GET /topics` | Reference data |
 | `POST /tutor-leads` | Public form (rate-limited, honeypot) |
 | `GET /tutor-leads` | Admin only |
-| `POST /auth/register`, `POST /auth/login` | Sets the session cookie, returns the user |
+| `POST /auth/register` | Disabled unless `REGISTRATION_ENABLED=true` |
+| `POST /auth/login` | Sets the session cookie, returns the user (rate-limited) |
 | `POST /auth/logout` | Revokes the session and clears the cookie |
 | `GET /users/me`, `GET /progress` | Current user (session cookie) |
 | `GET /api/health` | Liveness + database check |

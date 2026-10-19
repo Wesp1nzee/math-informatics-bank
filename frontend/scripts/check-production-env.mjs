@@ -10,6 +10,7 @@ const LEAD_CHANNELS = [
   "NEXT_PUBLIC_TUTOR_TELEGRAM",
   "NEXT_PUBLIC_TUTOR_EMAIL",
 ];
+const REQUIRED_IDENTITY = ["NEXT_PUBLIC_TUTOR_NAME", "NEXT_PUBLIC_TUTOR_ABOUT"];
 const LOCAL_MODE = process.argv.includes("--local");
 
 function loadEnv() {
@@ -123,6 +124,16 @@ function validateApiOrigin(key, { publicOrigin }) {
 
 validateApiOrigin("NEXT_PUBLIC_API_BASE_URL", { publicOrigin: true });
 validateApiOrigin("API_BASE_URL", { publicOrigin: false });
+
+if (!LOCAL_MODE) {
+  for (const key of REQUIRED_IDENTITY) {
+    if (!(env[key] ?? "").trim()) {
+      errors.push(
+        `${key} is empty — set the real tutor name and description before publishing.`,
+      );
+    }
+  }
+}
 
 const configuredChannels = LEAD_CHANNELS.filter(
   (key) => (env[key] ?? "").trim().length > 0,

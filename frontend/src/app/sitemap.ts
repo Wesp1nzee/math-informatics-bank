@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 import { getArticles } from "@/features/articles/api";
 import { getTaskIds } from "@/features/tasks/api";
 import { siteConfig } from "@/lib/constants/site";
+import { toValidDate } from "@/lib/utils/date";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const articleRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
     url: `${siteConfig.url}/articles/${article.slug}`,
-    lastModified: new Date(article.updated ?? article.published),
+    lastModified: toValidDate(article.updated ?? article.published),
     changeFrequency: "monthly",
     priority: 0.6,
   }));

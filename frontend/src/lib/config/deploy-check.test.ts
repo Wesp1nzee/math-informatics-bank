@@ -9,7 +9,7 @@ const SCRIPT = path.resolve(process.cwd(), "scripts/check-production-env.mjs");
 const tempDirs: string[] = [];
 
 function makeDir(files: Record<string, string> = {}) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "osnova-env-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "deploy-env-"));
   tempDirs.push(dir);
   for (const [name, content] of Object.entries(files)) {
     fs.writeFileSync(path.join(dir, name), content, "utf8");
@@ -65,7 +65,7 @@ describe("check-production-env", () => {
     expect(local.output).toContain("local host");
 
     const http = run({
-      NEXT_PUBLIC_SITE_URL: "http://osnova-lab.ru",
+      NEXT_PUBLIC_SITE_URL: "http://example.com",
       NEXT_PUBLIC_TUTOR_TELEGRAM: "@test",
     });
     expect(http.status).toBe(1);
@@ -74,31 +74,43 @@ describe("check-production-env", () => {
 
   it("rejects a site URL with a path", () => {
     const result = run({
-      NEXT_PUBLIC_SITE_URL: "https://osnova-lab.ru/app",
+      NEXT_PUBLIC_SITE_URL: "https://example.com/app",
       NEXT_PUBLIC_TUTOR_TELEGRAM: "@test",
     });
     expect(result.status).toBe(1);
     expect(result.output).toContain("bare origin");
   });
 
-  it("accepts osnova-lab.ru with a lead channel", () => {
+  it("accepts example.com with a lead channel", () => {
     const result = run({
-      NEXT_PUBLIC_SITE_URL: "https://osnova-lab.ru",
+      NEXT_PUBLIC_SITE_URL: "https://example.com",
+      NEXT_PUBLIC_TUTOR_NAME: "Tutor",
+      NEXT_PUBLIC_TUTOR_ABOUT: "About the tutor",
       NEXT_PUBLIC_TUTOR_TELEGRAM: "@test",
     });
     expect(result.status).toBe(0);
     expect(result.output).toContain("Production environment check passed");
   });
 
+  it("requires the tutor name and description in production", () => {
+    const result = run({
+      NEXT_PUBLIC_SITE_URL: "https://example.com",
+      NEXT_PUBLIC_TUTOR_TELEGRAM: "@test",
+    });
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("NEXT_PUBLIC_TUTOR_NAME is empty");
+    expect(result.output).toContain("NEXT_PUBLIC_TUTOR_ABOUT is empty");
+  });
+
   it("requires a lead channel in production", () => {
-    const result = run({ NEXT_PUBLIC_SITE_URL: "https://osnova-lab.ru" });
+    const result = run({ NEXT_PUBLIC_SITE_URL: "https://example.com" });
     expect(result.status).toBe(1);
     expect(result.output).toContain("No lead channel");
   });
 
   it("rejects an invalid public API origin", () => {
     const result = run({
-      NEXT_PUBLIC_SITE_URL: "https://osnova-lab.ru",
+      NEXT_PUBLIC_SITE_URL: "https://example.com",
       NEXT_PUBLIC_API_BASE_URL: "not a url",
     });
     expect(result.status).toBe(1);
@@ -109,7 +121,7 @@ describe("check-production-env", () => {
     const dir = makeDir({
       ".env.production.local":
         "NEXT_PUBLIC_SITE_URL=http://localhost:3000\nNEXT_PUBLIC_TUTOR_TELEGRAM=@test\n",
-      ".env.production": "NEXT_PUBLIC_SITE_URL=https://osnova-lab.ru\n",
+      ".env.production": "NEXT_PUBLIC_SITE_URL=https://example.com\n",
     });
     const result = run({}, [], dir);
     expect(result.status).toBe(1);
@@ -123,7 +135,9 @@ describe("check-production-env", () => {
     });
     const result = run(
       {
-        NEXT_PUBLIC_SITE_URL: "https://osnova-lab.ru",
+        NEXT_PUBLIC_SITE_URL: "https://example.com",
+        NEXT_PUBLIC_TUTOR_NAME: "Tutor",
+        NEXT_PUBLIC_TUTOR_ABOUT: "About the tutor",
         NEXT_PUBLIC_TUTOR_TELEGRAM: "@test",
       },
       [],
@@ -141,7 +155,9 @@ describe("check-production-env", () => {
   it("never prints secret values", () => {
     const secret = "super-secret-token-value";
     const result = run({
-      NEXT_PUBLIC_SITE_URL: "https://osnova-lab.ru",
+      NEXT_PUBLIC_SITE_URL: "https://example.com",
+      NEXT_PUBLIC_TUTOR_NAME: "Tutor",
+      NEXT_PUBLIC_TUTOR_ABOUT: "About the tutor",
       NEXT_PUBLIC_TUTOR_TELEGRAM: "@test",
       TELEGRAM_BOT_TOKEN: secret,
     });
