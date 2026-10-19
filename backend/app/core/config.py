@@ -47,6 +47,7 @@ class Settings(BaseSettings):
     s3_region: str | None = None
 
     lead_rate_limit_per_hour: int = 5
+    lead_rate_limit_per_ip_per_hour: int = 10
 
     telegram_bot_token: str | None = None
     telegram_admin_chat_id: str | None = None

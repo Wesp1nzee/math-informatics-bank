@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
+from app.core.request import get_client_ip
 from app.db.session import get_session
 from app.domains.sessions.service import (
     clear_session_cookie,
@@ -17,10 +18,6 @@ from app.domains.users.schemas import UserLogin, UserRead, UserRegister
 from app.domains.users.service import authenticate, create_user
 
 router = APIRouter(tags=["users"])
-
-
-def _client_ip(request: Request) -> str | None:
-    return request.client.host if request.client else None
 
 
 @router.post(
@@ -40,7 +37,7 @@ async def register(
         session,
         user,
         user_agent=request.headers.get("user-agent"),
-        ip=_client_ip(request),
+        ip=get_client_ip(request),
     )
     set_session_cookie(response, raw_token)
     return user
@@ -58,7 +55,7 @@ async def login(
         session,
         user,
         user_agent=request.headers.get("user-agent"),
-        ip=_client_ip(request),
+        ip=get_client_ip(request),
     )
     set_session_cookie(response, raw_token)
     return user

@@ -37,6 +37,16 @@ async def create_lead(
     if (recent or 0) >= settings.lead_rate_limit_per_hour:
         raise RateLimitedError("Слишком много заявок. Попробуйте позже.")
 
+    ip_hash = hash_ip(ip, salt=settings.ip_hash_salt) if ip else None
+    if ip_hash is not None:
+        recent_from_ip = await session.scalar(
+            select(func.count())
+            .select_from(TutorLead)
+            .where(TutorLead.ip_hash == ip_hash, TutorLead.created_at >= window_start)
+        )
+        if (recent_from_ip or 0) >= settings.lead_rate_limit_per_ip_per_hour:
+            raise RateLimitedError("Слишком много заявок. Попробуйте позже.")
+
     lead = TutorLead(
         name=payload.name,
         contact=payload.contact,
@@ -45,7 +55,7 @@ async def create_lead(
         message=payload.message,
         consent=payload.consent,
         status=LeadStatus.NEW,
-        ip_hash=hash_ip(ip, salt=settings.ip_hash_salt) if ip else None,
+        ip_hash=ip_hash,
     )
     session.add(lead)
     await session.flush()

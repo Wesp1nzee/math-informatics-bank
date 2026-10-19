@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -60,6 +60,26 @@ describe("TutorLeadForm", () => {
       await screen.findByText("Укажите Telegram, телефон или e-mail"),
     ).toBeInTheDocument();
     expect(submitTutorLead).not.toHaveBeenCalled();
+  });
+
+  it("submits the honeypot value without showing a validation error", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<TutorLeadForm channels={channels} />);
+
+    const honeypot = container.querySelector<HTMLInputElement>('input[name="website"]');
+    expect(honeypot).not.toBeNull();
+    expect(honeypot).toHaveAttribute("tabindex", "-1");
+    expect(honeypot).toHaveAttribute("autocomplete", "off");
+
+    fireEvent.change(honeypot!, { target: { value: "https://spam.example" } });
+    await user.type(screen.getByLabelText("Как с вами связаться"), "@student");
+    await user.click(screen.getByLabelText(/Согласен на обработку/));
+    await user.click(screen.getByRole("button", { name: "Отправить заявку" }));
+
+    await waitFor(() => expect(submitTutorLead).toHaveBeenCalledTimes(1));
+    const call = submitTutorLead.mock.calls[0] as unknown as [{ website?: string }];
+    expect(call[0].website).toBe("https://spam.example");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("offers a Telegram quick path with a prefilled message", async () => {

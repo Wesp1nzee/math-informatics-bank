@@ -14,7 +14,6 @@ _DECIMAL_SEP = re.compile(r",(?=\d)")
 
 
 def normalize_answer(value: str) -> str:
-    pass
     cleaned = value.strip()
     if not cleaned:
         return ""
@@ -41,23 +40,22 @@ async def check_answer(
     *,
     user_id: uuid.UUID | None = None,
 ) -> AnswerCheckResponse:
-    pass
     expected = str((task.answer or {}).get("value", ""))
     kind = str((task.answer or {}).get("kind", "number"))
     is_correct = answers_match(answer, expected, kind=kind)
 
     checked_at = utcnow()
-    session.add(
-        SolutionAttempt(
-            task_id=task.id,
-            user_id=user_id,
-            answer_value=answer[:512],
-            outcome=AttemptOutcome.CORRECT if is_correct else AttemptOutcome.INCORRECT,
-            checked_at=checked_at,
-        )
-    )
 
     if user_id is not None:
+        session.add(
+            SolutionAttempt(
+                task_id=task.id,
+                user_id=user_id,
+                answer_value=answer[:512],
+                outcome=AttemptOutcome.CORRECT if is_correct else AttemptOutcome.INCORRECT,
+                checked_at=checked_at,
+            )
+        )
         from app.domains.progress.service import record_attempt
 
         await record_attempt(session, user_id=user_id, task_id=task.id, is_correct=is_correct)

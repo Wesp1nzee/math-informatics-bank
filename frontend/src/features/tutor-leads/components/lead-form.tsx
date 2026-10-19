@@ -53,6 +53,7 @@ function toInput(values: TutorLeadFormValues): TutorLeadInput {
     exam: values.exam,
     subject: values.subject,
     message: values.message,
+    website: values.website || undefined,
     consent: true,
   };
 }
@@ -77,6 +78,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       name: "",
       subject: "both",
       message: "",
+      website: "",
       consent: false,
     },
   });
@@ -150,6 +152,18 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       <p className="text-ink-soft text-sm">
         Достаточно контакта и экзамена — остальное можно не заполнять.
       </p>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+      >
+        <input
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          {...register("website")}
+        />
+      </div>
 
       <div>
         <Label htmlFor="lead-contact">Как с вами связаться</Label>

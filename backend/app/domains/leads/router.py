@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.request import get_client_ip
 from app.db.session import get_session
 from app.domains.leads.models import LeadStatus
 from app.domains.leads.schemas import (
@@ -23,7 +24,7 @@ async def submit_lead(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> TutorLeadCreated:
-    ip = request.client.host if request.client else None
+    ip = get_client_ip(request)
     return await create_lead(session, payload, ip=ip)
 
 

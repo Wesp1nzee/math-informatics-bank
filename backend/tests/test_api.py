@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import httpx
+from sqlalchemy import func, select
 
 from app.core.security import hash_password
 from app.db.session import get_sessionmaker
 from app.domains.articles.models import Article
+from app.domains.solutions.models import SolutionAttempt
 from app.domains.subjects.models import Subject
 from app.domains.tasks.models import Task, TaskLevel
 from app.domains.topics.models import Topic
@@ -98,6 +100,17 @@ async def test_check_answer_normalizes(client: httpx.AsyncClient) -> None:
     assert wrong.json()["explanation"] is None
 
 
+async def test_anonymous_answer_checks_are_not_stored(client: httpx.AsyncClient) -> None:
+    task_id = await _seed()
+
+    response = await client.post(f"/api/v1/tasks/{task_id}/check", json={"answer": "6"})
+    assert response.status_code == 200
+
+    async with get_sessionmaker()() as session:
+        attempts = await session.scalar(select(func.count()).select_from(SolutionAttempt))
+        assert attempts == 0
+
+
 async def test_articles(client: httpx.AsyncClient) -> None:
     await _seed()
 
@@ -181,6 +194,10 @@ async def test_register_me_and_progress(client: httpx.AsyncClient) -> None:
     assert progress.json()[0]["taskId"] == task_id
     assert progress.json()[0]["solved"] is True
     assert progress.json()[0]["correctAttempts"] == 1
+
+    async with get_sessionmaker()() as session:
+        attempts = await session.scalar(select(func.count()).select_from(SolutionAttempt))
+        assert attempts == 1
 
 
 async def test_logout_revokes_session(client: httpx.AsyncClient) -> None:

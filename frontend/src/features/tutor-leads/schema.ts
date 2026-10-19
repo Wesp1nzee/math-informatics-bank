@@ -21,6 +21,7 @@ export const tutorLeadSchema = z.object({
   name: z.string().trim().max(80, "Слишком длинное имя").optional(),
   subject: z.enum(["matematika", "informatika", "both"]).optional(),
   message: z.string().trim().max(1000, "Максимум 1000 символов").optional(),
+  website: z.string().max(256, "Слишком длинное значение").optional(),
   consent: z.boolean().refine((value) => value, {
     message: "Нужно согласие на обработку персональных данных",
   }),

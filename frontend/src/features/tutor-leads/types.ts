@@ -7,6 +7,8 @@ export type TutorLeadInput = {
   exam: TutorLeadExam;
   subject?: TutorLeadSubject;
   message?: string;
+  /** Honeypot: hidden from people, filled by bots. */
+  website?: string;
   consent: true;
 };
 
