@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
 import { Button, ButtonArrow } from "@/components/ui/button";
-import { TutoringFacts } from "@/features/tutor-leads/components/tutoring-facts";
+import { FactsBento } from "@/features/tutor-leads/components/facts-bento";
 import { AI_POSITIONING, TUTORING_INTRO } from "@/features/tutor-leads/content";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
@@ -39,7 +39,7 @@ export function TutoringSection() {
           className="reveal desk:col-span-5 desk:col-start-8 desk:mt-0 col-span-12 mt-12"
           style={step(1)}
         >
-          <TutoringFacts />
+          <FactsBento compact />
         </div>
       </div>
     </Section>

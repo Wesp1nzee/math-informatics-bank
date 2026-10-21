@@ -4,12 +4,14 @@ import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
 import { getArticlePath, getArticles } from "@/features/articles/api";
+import { isSeoArticleSlug } from "@/features/seo/pages";
 import { SUBJECT_LABEL } from "@/features/tasks/labels";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
 export async function ArticlesSection() {
-  const { items } = await getArticles();
+  const { items: allItems } = await getArticles();
+  const items = allItems.filter((article) => !isSeoArticleSlug(article.slug));
   const [lead, ...rest] = items;
   if (!lead) return null;
 
@@ -34,11 +36,10 @@ export async function ArticlesSection() {
       <div className="grid grid-cols-12 items-stretch gap-4 md:gap-6">
         <Link
           href={getArticlePath(lead.slug)}
-          aria-label={`Читать: ${lead.title}`}
-          className="group reveal border-line bg-surface hover:border-ink desk:col-span-7 desk:min-h-[480px] col-span-12 flex min-h-[340px] flex-col justify-between rounded-xl border p-6 transition-colors duration-300 md:p-10"
+          className="article-row article-lead group reveal border-line bg-surface hover:border-ink desk:col-span-7 desk:min-h-[480px] col-span-12 flex min-h-[340px] flex-col justify-between rounded-xl border p-6 transition-colors duration-300 md:p-10"
         >
           <div>
-            <span className="text-accent desk:text-[96px] font-serif text-6xl leading-none italic">
+            <span className="article-index text-accent desk:text-[96px] font-serif text-6xl leading-none italic">
               1
             </span>
             <h3 className="my-6 max-w-[11em] text-[clamp(32px,4vw,52px)] leading-[1.05] font-medium tracking-[-0.035em]">
@@ -54,7 +55,7 @@ export async function ArticlesSection() {
               Читать
               <ArrowRight
                 aria-hidden
-                className="size-4 transition-transform duration-150 group-hover:translate-x-1"
+                className="article-arrow size-4 transition-transform duration-150 group-hover:translate-x-1"
               />
             </span>
           </div>
@@ -68,7 +69,7 @@ export async function ArticlesSection() {
             <Link
               key={article.slug}
               href={getArticlePath(article.slug)}
-              className="group border-line desk:py-8 flex flex-1 flex-col border-t py-6 first:border-t-0 first:pt-0"
+              className="article-row group border-line desk:py-8 flex flex-1 flex-col border-t py-6 first:border-t-0 first:pt-0"
             >
               <span className="text-ink-soft text-sm">
                 {article.subject ? `${SUBJECT_LABEL[article.subject]} · ` : ""}
@@ -81,7 +82,7 @@ export async function ArticlesSection() {
                 Читать
                 <ArrowRight
                   aria-hidden
-                  className="size-4 transition-transform duration-150 group-hover:translate-x-1"
+                  className="article-arrow size-4 transition-transform duration-150 group-hover:translate-x-1"
                 />
               </span>
             </Link>

@@ -2,14 +2,16 @@ import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
 import { Badge } from "@/components/ui/badge";
-import { CodeDemo } from "@/features/home/components/code-demo";
+import { BitRain } from "@/features/home/components/bit-rain";
+import { CodeLab } from "@/features/home/components/code-lab";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
 export function CodeSection() {
   return (
-    <Section labelledBy="code-title">
-      <div className="grid grid-cols-12 items-start gap-4 md:gap-6">
+    <Section labelledBy="code-title" className="code-section-relative">
+      <BitRain />
+      <div className="relative z-[1] grid grid-cols-12 items-start gap-4 md:gap-6">
         <div className="reveal desk:col-span-5 col-span-12">
           <span className="eyebrow">Информатика</span>
           <h2 id="code-title" className="heading-2">
@@ -45,7 +47,7 @@ export function CodeSection() {
           className="reveal desk:col-span-6 desk:col-start-7 desk:mt-0 col-span-12 mt-6"
           style={step(1)}
         >
-          <CodeDemo />
+          <CodeLab />
         </div>
       </div>
     </Section>

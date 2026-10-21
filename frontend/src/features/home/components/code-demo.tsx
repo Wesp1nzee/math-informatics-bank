@@ -3,6 +3,8 @@
 import { Pause, Play, SkipForward } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useMotionAllowed } from "@/components/motion/use-motion-allowed";
+
 import { Badge } from "@/components/ui/badge";
 import {
   highlightPython,
@@ -14,6 +16,14 @@ import {
 import { cn } from "@/lib/utils/cn";
 
 type Status = "idle" | "typing" | "running" | "done";
+
+export type CodeStage = {
+  status: Status;
+  n?: number;
+  binary?: string;
+  r?: number;
+  result: number | null;
+};
 
 const STATUS_TONE: Record<Status, "neutral" | "accent" | "success"> = {
   idle: "neutral",
@@ -43,7 +53,8 @@ const VAR_VALUE =
 const CONTROL =
   "border-line-strong text-ink hover:border-ink hover:bg-surface inline-flex min-h-10 items-center gap-2 rounded-md border bg-transparent px-4 text-[15px] font-medium transition-colors";
 
-export function CodeDemo() {
+export function CodeDemo({ onStage }: { onStage?: (stage: CodeStage) => void }) {
+  const motionAllowed = useMotionAllowed();
   const containerRef = useRef<HTMLDivElement>(null);
   const runIdRef = useRef(0);
   const pausedRef = useRef(false);
@@ -104,7 +115,7 @@ export function CodeDemo() {
 
     reset();
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!motionAllowed) {
       showFinal();
       return;
     }
@@ -177,7 +188,7 @@ export function CodeDemo() {
     setActiveLine(null);
     await pauseable(600);
     if (alive()) setInsightVisible(true);
-  }, [reset, showFinal]);
+  }, [motionAllowed, reset, showFinal]);
 
   const playRef = useRef(play);
 
@@ -211,6 +222,10 @@ export function CodeDemo() {
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    onStage?.({ status, n: vars.n, binary: vars.binary, r: vars.r, result });
+  }, [onStage, result, status, vars.binary, vars.n, vars.r]);
 
   const isRunning = status === "typing" || status === "running";
 
@@ -275,7 +290,7 @@ export function CodeDemo() {
             </div>
           </div>
 
-          <div className="log min-h-[120px]" aria-label="Ход выполнения">
+          <div className="log min-h-[120px]" role="log" aria-label="Ход выполнения">
             {log.map((row) => (
               <div key={row.n} className="log-row" data-hit={row.hit ? "" : undefined}>
                 <span>N={row.n}</span>

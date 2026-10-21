@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 import { Container } from "@/components/layout/container";
+import { SpotlightGrid } from "@/components/motion/spotlight-grid";
 import { TaskList } from "@/features/tasks/components/task-list";
 import { getFeaturedTasks } from "@/features/tasks/api";
 import { Button, ButtonArrow } from "@/components/ui/button";
@@ -15,7 +16,7 @@ export async function TasksSection() {
     <section
       id="tasks"
       aria-labelledby="bank-title"
-      className="border-line bg-surface-subtle desk:py-24 border-t py-16 md:py-20"
+      className="border-line bg-surface-subtle sheet-top desk:py-24 border-t py-16 md:py-20"
     >
       <Container>
         <div className="reveal flex flex-wrap items-end justify-between gap-8">
@@ -30,7 +31,9 @@ export async function TasksSection() {
         </div>
 
         <div className="reveal mt-12 md:mt-16" style={step(1)}>
-          <TaskList tasks={tasks} />
+          <SpotlightGrid>
+            <TaskList tasks={tasks} className="home-task-list" />
+          </SpotlightGrid>
         </div>
 
         <div className="reveal mt-10 md:mt-14" style={step(2)}>

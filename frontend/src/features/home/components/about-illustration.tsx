@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 
+import { useMotionAllowed } from "@/components/motion/use-motion-allowed";
+
 const delay = (ms: number, duration?: number) =>
   ({
     "--d": `${ms}ms`,
@@ -69,6 +71,8 @@ const labelHalo = {
 } as CSSProperties;
 
 export function AboutIllustration() {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const allowed = useMotionAllowed();
   const radiusRef = useRef<SVGLineElement>(null);
   const circlePointRef = useRef<SVGCircleElement>(null);
   const projectRef = useRef<SVGLineElement>(null);
@@ -108,13 +112,15 @@ export function AboutIllustration() {
       trailRef.current?.setAttribute("d", sinePathUpTo(theta));
     };
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!allowed) {
       apply(START_THETA);
       return;
     }
 
     let frame = 0;
     let start: number | null = null;
+    let visible = false;
+    const element = svgRef.current;
 
     const tick = (now: number) => {
       if (start === null) start = now;
@@ -123,12 +129,53 @@ export function AboutIllustration() {
       frame = window.requestAnimationFrame(tick);
     };
 
-    frame = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+    const startLoop = () => {
+      if (!frame && visible && document.visibilityState !== "hidden") {
+        frame = window.requestAnimationFrame(tick);
+      }
+    };
+
+    const stopLoop = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = 0;
+      start = null;
+    };
+
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") stopLoop();
+      else startLoop();
+    };
+
+    const observer =
+      element && typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => {
+              visible = entries.some((entry) => entry.isIntersecting);
+              if (visible) startLoop();
+              else stopLoop();
+            },
+            { rootMargin: "120px 0px" },
+          )
+        : null;
+
+    if (observer && element) observer.observe(element);
+    else {
+      visible = true;
+      startLoop();
+    }
+
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      stopLoop();
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [allowed]);
 
   return (
     <svg
+      ref={svgRef}
       viewBox="0 0 480 380"
       role="img"
       aria-label="Анимация связи единичной окружности и синуса: точка движется по окружности, её высота переносится вправо и вычерчивает график y = sin x. Оси размечены в радианах и в единицах от −1 до 1."

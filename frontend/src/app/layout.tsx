@@ -4,6 +4,7 @@ import Script from "next/script";
 import type { ReactNode } from "react";
 
 import { siteConfig } from "@/lib/constants/site";
+import { motionInitScript } from "@/lib/motion";
 import { themeInitScript } from "@/lib/theme";
 import { YandexMetrika } from "@/lib/analytics/yandex-metrika";
 import "./globals.css";
@@ -42,6 +43,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
+        <Script
+          id="motion-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: motionInitScript }}
         />
         {children}
         <YandexMetrika />

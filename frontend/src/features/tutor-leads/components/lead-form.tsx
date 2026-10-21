@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CircleAlert, CircleCheck, Send, SendHorizontal } from "lucide-react";
+import { CircleAlert, Send, SendHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,6 +27,7 @@ import type {
 } from "@/features/tutor-leads/types";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { describeApiError } from "@/lib/api/errors";
+import { cn } from "@/lib/utils/cn";
 
 const DELIVERY_MESSAGE: Record<TutorLeadDelivery, string> = {
   api: "Заявка отправлена. Свяжусь с вами, чтобы договориться о времени.",
@@ -40,7 +41,7 @@ const INPUT_CLASS =
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} role="alert" className="text-danger mt-1.5 text-sm">
+    <p id={id} role="alert" className="text-danger form-error mt-1.5 text-sm">
       {message}
     </p>
   );
@@ -58,7 +59,13 @@ function toInput(values: TutorLeadFormValues): TutorLeadInput {
   };
 }
 
-export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
+export function TutorLeadForm({
+  channels,
+  className,
+}: {
+  channels: ContactChannels;
+  className?: string;
+}) {
   const [delivery, setDelivery] = useState<TutorLeadDelivery | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -123,7 +130,22 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
         data-lead-form=""
         className="border-success/40 bg-success-soft shadow-card flex flex-col items-start gap-3 rounded-xl border p-6 md:p-8"
       >
-        <CircleCheck aria-hidden className="text-success size-6" />
+        <svg
+          aria-hidden="true"
+          className="check-draw text-success size-7"
+          viewBox="0 0 28 28"
+          fill="none"
+        >
+          <circle cx="14" cy="14" r="12" stroke="currentColor" strokeWidth="1.4" opacity="0.4" />
+          <path
+            d="m8.5 14.2 3.6 3.6 7.4-8"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            pathLength={1}
+          />
+        </svg>
         <p className="text-ink text-lg font-medium">
           {delivery === "api" ? "Заявка отправлена" : "Сообщение готово"}
         </p>
@@ -147,7 +169,10 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       onFocusCapture={markStarted}
       noValidate
       data-lead-form=""
-      className="border-line bg-surface shadow-card flex flex-col gap-5 rounded-xl border p-6 md:p-8"
+      className={cn(
+        "lead-form border-line bg-surface shadow-card flex flex-col gap-5 rounded-xl border p-6 md:p-8",
+        className,
+      )}
     >
       <p className="text-ink-soft text-sm">
         Достаточно контакта и экзамена — остальное можно не заполнять.
@@ -267,7 +292,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       ) : null}
 
       <div className="flex flex-wrap items-center gap-3">
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={pending} className="cta-glow">
           <Send aria-hidden className="size-4" />
           {pending ? "Отправляем…" : "Отправить заявку"}
         </Button>

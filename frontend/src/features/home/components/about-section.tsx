@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
 import { AboutIllustration } from "@/features/home/components/about-illustration";
+import { DivergenceScene } from "@/features/home/components/divergence-scene";
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 
@@ -32,6 +33,10 @@ export function AboutSection() {
             Поэтому в каждой задаче мы идём от идеи к записи, а не наоборот.
           </p>
         </div>
+      </div>
+
+      <div className="mt-24 md:mt-32">
+        <DivergenceScene />
       </div>
     </Section>
   );

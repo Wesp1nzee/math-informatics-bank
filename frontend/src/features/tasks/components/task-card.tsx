@@ -11,7 +11,8 @@ export function TaskCard({ task }: { task: Task }) {
   return (
     <Link
       href={getTaskPath(task.id)}
-      className="group border-line bg-surface ease-soft hover:border-ink shadow-card hover:shadow-float flex h-full w-full flex-col gap-3.5 rounded-lg border p-7 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1"
+      data-spotlight-card=""
+      className="task-card group border-line bg-surface ease-soft hover:border-ink shadow-card hover:shadow-float flex h-full w-full flex-col gap-3.5 rounded-lg border p-7 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1"
     >
       <span className="text-ink-faint text-sm tabular-nums">#{task.id}</span>
       <h3 className="text-2xl leading-tight font-medium tracking-[-0.02em]">

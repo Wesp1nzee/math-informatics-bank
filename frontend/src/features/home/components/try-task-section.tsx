@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 
 import { Section } from "@/components/layout/section";
+import { SplitHeading } from "@/components/motion/split-heading";
 import { Math } from "@/components/ui/math";
 import { TaskQuiz, type QuizStep } from "@/features/home/components/task-quiz";
 
@@ -33,9 +34,16 @@ export function TryTaskSection() {
       <div className="grid grid-cols-12 items-start gap-4 md:gap-6">
         <div className="reveal desk:col-span-5 col-span-12">
           <span className="eyebrow">Проверьте себя</span>
-          <h2 id="try-title" className="heading-2">
-            Не смотрите решение. Попробуйте <span className="serif-accent">сами.</span>
-          </h2>
+          <SplitHeading
+            as="h2"
+            id="try-title"
+            className="heading-2"
+            lines={[
+              [{ text: "Не" }, { text: "смотрите" }],
+              [{ text: "решение." }],
+              [{ text: "Попробуйте" }, { text: "сами.", accent: true }],
+            ]}
+          />
           <p className="body-large mt-6">
             Выберите ответ — и сразу увидите, как он получается.
           </p>

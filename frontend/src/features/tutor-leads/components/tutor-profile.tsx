@@ -1,9 +1,16 @@
 import { PlayCircle } from "lucide-react";
+import type { CSSProperties } from "react";
 
 import { hasTutorProfile, siteConfig } from "@/lib/constants/site";
 import { cn } from "@/lib/utils/cn";
 
-export function TutorProfile({ className }: { className?: string }) {
+export function TutorProfile({
+  className,
+  large = false,
+}: {
+  className?: string;
+  large?: boolean;
+}) {
   if (!hasTutorProfile) return null;
 
   const { name, about, photo, video } = siteConfig.tutor;
@@ -11,35 +18,67 @@ export function TutorProfile({ className }: { className?: string }) {
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
+  const initials = name
+    .split(/\s+/)
+    .map((part) => part[0] ?? "")
+    .slice(0, 2)
+    .join("");
 
   return (
     <div className={cn("grid grid-cols-12 items-start gap-4 md:gap-6", className)}>
-      {photo ? (
-        <div className="border-line bg-canvas desk:col-span-4 col-span-12 overflow-hidden rounded-xl border">
-          <img
-            src={photo}
-            alt={`${name} — преподаватель`}
-            width={480}
-            height={600}
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
-        </div>
-      ) : null}
+      <div
+        className={cn(
+          "col-span-12 overflow-hidden rounded-xl border",
+          large
+            ? "desk:col-span-5 border-line bg-canvas"
+            : "desk:col-span-4 border-line bg-canvas",
+        )}
+      >
+        {photo ? (
+          <div className="tutor-photo h-full">
+            <img
+              src={photo}
+              alt={`${name} — преподаватель`}
+              width={480}
+              height={600}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        ) : (
+          <div className="tutor-monogram" aria-hidden="true">
+            <span>{initials}</span>
+          </div>
+        )}
+      </div>
 
       <div
         className={cn(
           "col-span-12",
-          photo ? "desk:col-span-7 desk:col-start-6" : "desk:col-span-8",
+          large
+            ? "desk:col-span-6 desk:col-start-7"
+            : photo
+              ? "desk:col-span-7 desk:col-start-6"
+              : "desk:col-span-8",
         )}
       >
         <span className="eyebrow">Преподаватель</span>
-        <h2 id="tutor-title" className="heading-3 mb-5">
+        <h2
+          id="tutor-title"
+          className={cn(
+            "mb-5 font-medium tracking-[-0.03em]",
+            large ? "text-[clamp(40px,5vw,72px)] leading-[1.04]" : "heading-3",
+          )}
+        >
           {name}
         </h2>
         <div className="flex flex-col gap-3">
-          {paragraphs.map((paragraph) => (
-            <p key={paragraph} className="text-ink-soft text-lg leading-relaxed">
+          {paragraphs.map((paragraph, index) => (
+            <p
+              key={paragraph}
+              className="reveal text-ink-soft text-lg leading-relaxed"
+              style={{ "--i": index } as CSSProperties}
+            >
               {paragraph}
             </p>
           ))}

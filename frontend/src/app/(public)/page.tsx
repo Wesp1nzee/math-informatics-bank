@@ -12,12 +12,17 @@ import {
   TryTaskSection,
   TutoringSection,
 } from "@/features/home";
+import { TopicMarquee } from "@/features/home/components/topic-marquee";
 import { Faq } from "@/features/tutor-leads/components/faq";
 import { TutorProfile } from "@/features/tutor-leads/components/tutor-profile";
 import { FAQ_ITEMS } from "@/features/tutor-leads/content";
 import { hasTutorProfile, siteConfig } from "@/lib/constants/site";
 import { faqPageJsonLd, personJsonLd, webSiteJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
+
+// Content on the home page comes from the live API (featured tasks and articles).
+// Rendering it dynamically prevents baking demo/stale links into the static build.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = buildMetadata({
   title: "Математика и информатика — задачи, разборы и занятия",
@@ -43,6 +48,7 @@ export default function HomePage() {
       ) : null}
 
       <HeroSection />
+      <TopicMarquee />
       <TryTaskSection />
 
       {hasTutorProfile ? (

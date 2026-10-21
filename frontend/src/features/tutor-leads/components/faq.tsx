@@ -1,5 +1,3 @@
-import { ChevronDown } from "lucide-react";
-
 import { FAQ_ITEMS } from "@/features/tutor-leads/content";
 import type { FaqItem } from "@/features/tutor-leads/types";
 import { cn } from "@/lib/utils/cn";
@@ -16,13 +14,13 @@ export function Faq({
   return (
     <div className={cn("border-line border-t", className)}>
       {items.map((item) => (
-        <details key={item.question} className="group border-line border-b">
+        <details key={item.question} className="faq-item group">
           <summary className="text-ink hover:text-accent flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg font-medium transition-colors [&::-webkit-details-marker]:hidden">
             {item.question}
-            <ChevronDown
-              aria-hidden
-              className="text-ink-soft size-5 shrink-0 transition-transform duration-200 group-open:rotate-180"
-            />
+            <span className="faq-icon text-ink-soft" aria-hidden="true">
+              <span />
+              <span />
+            </span>
           </summary>
           <p className="text-ink-soft pb-5 text-[17px] leading-relaxed">
             {item.answer}
