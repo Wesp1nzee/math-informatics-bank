@@ -5,7 +5,11 @@ vi.mock("@/lib/api/server", () => ({
   serverRequest: vi.fn(),
 }));
 
-import { getArticleBySlug, getArticles } from "@/features/articles/api";
+import {
+  getArticleBySlug,
+  getArticles,
+  getPublishedArticles,
+} from "@/features/articles/api";
 import type { Article } from "@/features/articles/types";
 import { ApiError } from "@/lib/api/errors";
 import { isServerApiConfigured, serverRequest } from "@/lib/api/server";
@@ -67,5 +71,18 @@ describe("article API loading", () => {
 
     expect(result?.slug).toBe("proizvodnaya-ne-pro-formuly");
     expect(mockedRequest).not.toHaveBeenCalled();
+  });
+
+  it("never returns demo slugs from the sitemap-safe article list", async () => {
+    mockedConfigured.mockReturnValue(false);
+
+    await expect(getPublishedArticles()).resolves.toEqual([]);
+    expect(mockedRequest).not.toHaveBeenCalled();
+  });
+
+  it("returns no demo articles when the configured API is unreachable", async () => {
+    mockedRequest.mockRejectedValue(new ApiError("network", "down"));
+
+    await expect(getArticles()).resolves.toEqual({ items: [], isDemo: true });
   });
 });

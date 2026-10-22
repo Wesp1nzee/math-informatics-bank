@@ -1,17 +1,25 @@
 import type { MetadataRoute } from "next";
 
-import { getArticles } from "@/features/articles/api";
+import { getPublishedArticles } from "@/features/articles/api";
 import { getTaskIds } from "@/features/tasks/api";
+import {
+  SEO_EXAM_HUBS,
+  SEO_TASK_TYPE_PAGES,
+  isSeoArticleSlug,
+} from "@/features/seo/pages";
 import { siteConfig } from "@/lib/constants/site";
 import { toValidDate } from "@/lib/utils/date";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [taskIds, { items: articles }] = await Promise.all([getTaskIds(), getArticles()]);
+  const [taskIds, articles] = await Promise.all([
+    getTaskIds().catch(() => []),
+    getPublishedArticles().catch(() => []),
+  ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${siteConfig.url}/`, changeFrequency: "weekly", priority: 1 },
+    { url: siteConfig.url, changeFrequency: "weekly", priority: 1 },
     { url: `${siteConfig.url}/zadachi`, changeFrequency: "daily", priority: 0.9 },
     { url: `${siteConfig.url}/matematika`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${siteConfig.url}/informatika`, changeFrequency: "weekly", priority: 0.8 },
@@ -21,18 +29,51 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteConfig.url}/privacy`, changeFrequency: "yearly", priority: 0.2 },
   ];
 
+  const examRoutes: MetadataRoute.Sitemap = SEO_EXAM_HUBS.flatMap((hub) => [
+    {
+      url: `${siteConfig.url}${hub.path}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    {
+      url: `${siteConfig.url}${hub.path}/zadaniya`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+  ]);
+
+  const publishedBySlug = new Map(articles.map((article) => [article.slug, article]));
+
+  const taskTypeRoutes: MetadataRoute.Sitemap = SEO_TASK_TYPE_PAGES.map((page) => {
+    const article = publishedBySlug.get(page.slug);
+    return {
+      url: `${siteConfig.url}${page.path}`,
+      lastModified: toValidDate(article?.updated) ?? toValidDate(article?.published),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    };
+  });
+
   const taskRoutes: MetadataRoute.Sitemap = taskIds.map((id) => ({
     url: `${siteConfig.url}/zadachi/${id}`,
     changeFrequency: "monthly",
     priority: 0.6,
   }));
 
-  const articleRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
-    url: `${siteConfig.url}/articles/${article.slug}`,
-    lastModified: toValidDate(article.updated) ?? toValidDate(article.published),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
+  const articleRoutes: MetadataRoute.Sitemap = articles
+    .filter((article) => !isSeoArticleSlug(article.slug))
+    .map((article) => ({
+      url: `${siteConfig.url}/articles/${article.slug}`,
+      lastModified: toValidDate(article.updated) ?? toValidDate(article.published),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    }));
 
-  return [...staticRoutes, ...taskRoutes, ...articleRoutes];
+  return [
+    ...staticRoutes,
+    ...examRoutes,
+    ...taskTypeRoutes,
+    ...taskRoutes,
+    ...articleRoutes,
+  ];
 }

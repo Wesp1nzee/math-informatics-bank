@@ -38,6 +38,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_credentials=True,
         allow_methods=["GET", "POST"],
         allow_headers=["Content-Type", "Accept"],
+        # Chromium sends this preflight header for loopback/LAN origins; without
+        # the flag Starlette answers 400 "Disallowed CORS private-network".
+        allow_private_network=True,
     )
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
 

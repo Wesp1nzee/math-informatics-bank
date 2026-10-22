@@ -27,11 +27,14 @@ test.describe("trust and offer", () => {
     expect(types).toContain("Service");
   });
 
-  test("unconfigured teacher and reviews blocks stay hidden", async ({ page }) => {
+  test("unconfigured teacher and pricing blocks stay hidden", async ({ page }) => {
     await page.goto("/podgotovka");
 
     await expect(page.locator("#tutor-title")).toHaveCount(0);
-    await expect(page.getByText("Стоимость обсуждаем после диагностики")).toBeVisible();
+    await expect(page.getByText("Стоимость и отзывы")).toHaveCount(0);
+    await expect(page.getByText("Стоимость обсуждаем после диагностики")).toHaveCount(
+      0,
+    );
   });
 
   test("hero offers a trial lesson and a task", async ({ page }) => {

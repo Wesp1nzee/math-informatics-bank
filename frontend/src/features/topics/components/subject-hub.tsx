@@ -7,7 +7,7 @@ import { ArticleCard } from "@/features/articles/components/article-card";
 import { getArticlesBySubject } from "@/features/articles/api";
 import { getTasks } from "@/features/tasks/api";
 import { TaskList } from "@/features/tasks/components/task-list";
-import { SUBJECT_LABEL } from "@/features/tasks/labels";
+import { SUBJECT_LABEL, SUBJECT_PATH } from "@/features/tasks/labels";
 import type { TaskSubject } from "@/features/tasks/types";
 import { SUBJECT_CONTENT } from "@/features/topics/content";
 import { buildQueryHref } from "@/lib/utils/url";
@@ -49,6 +49,40 @@ export async function SubjectHub({ subject }: { subject: TaskSubject }) {
               </li>
             ))}
           </ul>
+        </div>
+      </Section>
+
+      <Section bordered labelledBy="subject-exams-title">
+        <div className="grid grid-cols-12 gap-4 md:gap-6">
+          <div className="desk:col-span-5 col-span-12">
+            <h2 id="subject-exams-title" className="heading-3">
+              Подготовка к экзамену
+            </h2>
+            <p className="text-ink-soft mt-4">
+              Выберите экзамен: там собраны структура, карта заданий, разборы и
+              материалы по темам.
+            </p>
+          </div>
+          <div className="desk:col-span-6 desk:col-start-7 col-span-12 grid gap-3 sm:grid-cols-2">
+            <Link
+              href={`${SUBJECT_PATH[subject]}/oge`}
+              className="group border-line bg-surface hover:border-ink flex min-h-28 flex-col justify-between rounded-lg border p-5 transition-colors"
+            >
+              <span className="text-ink text-lg font-medium">ОГЭ</span>
+              <span className="text-ink-soft text-sm">
+                9 класс: структура, задания и подготовка
+              </span>
+            </Link>
+            <Link
+              href={`${SUBJECT_PATH[subject]}/ege`}
+              className="group border-line bg-surface hover:border-ink flex min-h-28 flex-col justify-between rounded-lg border p-5 transition-colors"
+            >
+              <span className="text-ink text-lg font-medium">ЕГЭ</span>
+              <span className="text-ink-soft text-sm">
+                11 класс: структура, задания и подготовка
+              </span>
+            </Link>
+          </div>
         </div>
       </Section>
 

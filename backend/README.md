@@ -17,7 +17,7 @@ the Next.js frontend expects in `frontend/src/features/*/api.ts`.
 uv sync
 cp .env.example .env        # adjust DATABASE_URL and other settings as needed
 uv run alembic upgrade head # create the schema
-uv run python -m scripts.seed   # editorial content: 3 articles + 12 tasks
+uv run python -m scripts.seed   # editorial content: 17 articles + 12 tasks
 uv run python main.py       # uvicorn --reload on http://localhost:8000
 ```
 

@@ -43,10 +43,18 @@ export async function serverRequest<T>(
   const timeout = setTimeout(() => controller.abort(), apiConfig.timeoutMs);
 
   try {
+    const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
       signal: options.signal ?? controller.signal,
-      ...(options.tags ? { next: { tags: options.tags } } : {}),
+      // Public content is editorial and can change after a seed/deploy. Pages that
+      // are rendered on demand read the live API; static generation during `next build`
+      // still uses the normal cache so SSG routes can be produced.
+      ...(options.tags
+        ? { next: { tags: options.tags } }
+        : isBuildPhase
+          ? {}
+          : { cache: "no-store" as const }),
     });
 
     if (!response.ok) {

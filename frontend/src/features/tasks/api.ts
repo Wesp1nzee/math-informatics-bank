@@ -71,7 +71,10 @@ export async function getTasks(
         isDemo: false,
       };
     } catch (error) {
-      if (!isApiError(error) || (error.kind !== "network" && error.kind !== "timeout")) {
+      if (
+        !isApiError(error) ||
+        (error.kind !== "network" && error.kind !== "timeout")
+      ) {
         throw error;
       }
     }
@@ -103,9 +106,15 @@ export async function getFeaturedTasks(limit = 3): Promise<Task[]> {
       });
       return response.items;
     } catch (error) {
-      if (!isApiError(error) || (error.kind !== "network" && error.kind !== "timeout")) {
+      if (
+        !isApiError(error) ||
+        (error.kind !== "network" && error.kind !== "timeout")
+      ) {
         throw error;
       }
+      // The API is configured but unreachable: do not link to demo task ids that
+      // do not exist in the published database.
+      return [];
     }
   }
 
@@ -120,6 +129,39 @@ export async function getTasksBySubject(
   return result.items.slice(0, limit);
 }
 
+export async function getTasksByTopics(
+  subject: TaskSubject,
+  topics: readonly string[],
+  limit = 3,
+): Promise<Task[]> {
+  if (topics.length === 0) return [];
+
+  if (isServerApiConfigured()) {
+    try {
+      const response = await serverRequest<TaskListDto>("/tasks", {
+        searchParams: { subject, page: 1, page_size: 100 },
+      });
+      return response.items
+        .filter((task) => task.topics.some((topic) => topics.includes(topic)))
+        .slice(0, limit);
+    } catch (error) {
+      if (
+        !isApiError(error) ||
+        (error.kind !== "network" && error.kind !== "timeout")
+      ) {
+        throw error;
+      }
+    }
+  }
+
+  return demoTasks
+    .filter(
+      (task) =>
+        task.subject === subject && task.topics.some((topic) => topics.includes(topic)),
+    )
+    .slice(0, limit);
+}
+
 export async function getRelatedTasks(task: Task, limit = 3): Promise<Task[]> {
   if (isServerApiConfigured()) {
     try {
@@ -129,7 +171,10 @@ export async function getRelatedTasks(task: Task, limit = 3): Promise<Task[]> {
       );
       return response.items;
     } catch (error) {
-      if (!isApiError(error) || (error.kind !== "network" && error.kind !== "timeout")) {
+      if (
+        !isApiError(error) ||
+        (error.kind !== "network" && error.kind !== "timeout")
+      ) {
         throw error;
       }
     }

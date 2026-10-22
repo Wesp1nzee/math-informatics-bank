@@ -5,6 +5,7 @@ import { Section } from "@/components/layout/section";
 import { DemoNotice } from "@/components/ui/demo-notice";
 import { ArticleCard } from "@/features/articles/components/article-card";
 import { getArticles } from "@/features/articles/api";
+import { isSeoArticleSlug } from "@/features/seo/pages";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +18,8 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function ArticlesPage() {
-  const { items, isDemo } = await getArticles();
+  const { items: allItems, isDemo } = await getArticles();
+  const items = allItems.filter((article) => !isSeoArticleSlug(article.slug));
 
   return (
     <>

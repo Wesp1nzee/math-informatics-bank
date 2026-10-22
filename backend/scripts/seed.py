@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import session_scope
 from app.domains.articles.models import Article
+from app.domains.articles.schemas import ArticleContent
 from app.domains.progress.models import ArticleExerciseProgress, UserProgress
 from app.domains.solutions.models import SolutionAttempt
 from app.domains.subjects.models import Subject
@@ -57,8 +58,19 @@ async def _upsert_article(session: AsyncSession, slug: str, **fields: object) ->
         article = Article(slug=slug, **fields)
         session.add(article)
     else:
+        content_changed = any(
+            key in fields and fields[key] != getattr(article, key)
+            for key in ("title", "description", "content", "exam", "subject_id")
+        )
         for key, value in fields.items():
+            if key in ("published_on", "updated_on"):
+                # Seeding is idempotent: do not move publication dates on every run.
+                if getattr(article, key) is None:
+                    setattr(article, key, value)
+                continue
             setattr(article, key, value)
+        if content_changed:
+            article.updated_on = date.today()
     await session.flush()
     return article
 
@@ -99,6 +111,7 @@ async def seed(*, reset: bool = False) -> None:
         published = date.today()
 
         for article in ARTICLES:
+            ArticleContent.model_validate(article["content"])
             await _upsert_article(
                 session,
                 article["slug"],

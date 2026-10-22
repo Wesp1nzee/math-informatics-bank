@@ -6,6 +6,9 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 const content = SUBJECT_CONTENT.matematika;
 
+// Subject hubs list live tasks and articles, so they must not be frozen at build time.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = buildMetadata({
   title: content.metaTitle,
   description: content.metaDescription,

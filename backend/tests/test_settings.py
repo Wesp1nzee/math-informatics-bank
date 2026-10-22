@@ -75,3 +75,26 @@ async def test_trusted_host_middleware_allows_configured_host() -> None:
         response = await client.get("/health")
 
     assert response.status_code == 200
+
+
+async def test_cors_preflight_allows_private_network_requests() -> None:
+    app = create_app(
+        Settings(env="test", cors_origins=["http://127.0.0.1:3210"])
+    )
+
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as client:
+        response = await client.options(
+            "/api/v1/tasks/4/check",
+            headers={
+                "Origin": "http://127.0.0.1:3210",
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "content-type",
+                "Access-Control-Request-Private-Network": "true",
+            },
+        )
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-private-network"] == "true"
+    assert response.headers["access-control-allow-origin"] == "http://127.0.0.1:3210"

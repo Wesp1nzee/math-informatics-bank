@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import { PageHero } from "@/components/layout/page-hero";
 import { Section } from "@/components/layout/section";
@@ -14,24 +14,26 @@ import { RelatedArticles } from "@/features/articles/components/related-articles
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import {
   getArticleBySlug,
-  getArticleSlugs,
   getArticleToc,
   getRelatedArticles,
 } from "@/features/articles/api";
+import { getSeoArticlePath } from "@/features/seo/pages";
 import { articleJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  const slugs = await getArticleSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+// Editorial content can be published after a deploy. Render article pages on
+// demand so new slugs work immediately and unknown slugs return a real 404.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
+  const seoPath = getSeoArticlePath(slug);
+  if (seoPath) permanentRedirect(seoPath);
+
   const article = await getArticleBySlug(slug);
 
   if (!article) {
@@ -55,6 +57,9 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
+  const seoPath = getSeoArticlePath(slug);
+  if (seoPath) permanentRedirect(seoPath);
+
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
 

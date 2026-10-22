@@ -65,10 +65,10 @@ docker compose --env-file deploy/.env.production -f compose.prod.yaml \
   exec api python -m scripts.seed
 ```
 
-Next.js prerenders pages from the API during `web` image build. If the public
-API is not reachable at that moment, the build falls back to demo fixtures so it
-still succeeds. After the stack is healthy and seeded, rebuild `web` once to
-prerender the real content:
+Editorial pages (articles, tasks and the sitemap) are rendered on demand and read
+the API at runtime. The `web` image can therefore be built before the API is
+seeded; run `scripts.seed` after the stack is healthy. A `web` rebuild is needed
+only when frontend code or `NEXT_PUBLIC_*` values change:
 
 ```bash
 docker compose --env-file deploy/.env.production -f compose.prod.yaml build web
