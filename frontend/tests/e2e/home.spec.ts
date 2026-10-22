@@ -1,12 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 const SECTION_HEADINGS = [
-  "Не смотрите решение",
-  "Алгоритм — это тоже способ мышления",
-  "Как думать, а не заучивать",
-  "Задачи по математике",
-  "Хотите системный результат?",
-  "Хорошее обучение",
+  "Попробуйте сами",
+  "Как проходят занятия",
+  "Банк задач",
+  "Разборы",
+  "Вопросы и ответы",
   "Начнём с вашей ошибки",
 ];
 
@@ -27,9 +26,12 @@ test.describe("home page", () => {
     await expect(page.getByRole("contentinfo")).toBeVisible();
   });
 
-  test("renders KaTeX formulas in the initial HTML", async ({ page }) => {
+  test("renders formulas in the initial HTML without KaTeX on the landing page", async ({
+    page,
+  }) => {
     await page.goto("/");
-    await expect(page.locator(".katex").first()).toBeVisible();
+    await expect(page.locator(".formula-plain").first()).toBeVisible();
+    await expect(page.locator(".katex")).toHaveCount(0);
   });
 
   test("has no placeholder links and no console errors", async ({ page }) => {
@@ -103,8 +105,9 @@ test.describe("home page", () => {
   test("code walkthrough auto-plays when scrolled into view", async ({ page }) => {
     await page.goto("/");
 
+    await page.getByRole("tab", { name: "Информатика" }).click();
     await page
-      .locator('section[aria-labelledby="code-title"]')
+      .locator('[role="tabpanel"][data-active="true"]')
       .scrollIntoViewIfNeeded();
 
     await expect

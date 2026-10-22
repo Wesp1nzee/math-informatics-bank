@@ -17,8 +17,9 @@ test.describe("animations", () => {
   test("code demo can be paused and skipped", async ({ page }) => {
     await page.goto("/");
 
+    await page.getByRole("tab", { name: "Информатика" }).click();
     await page
-      .locator('section[aria-labelledby="code-title"]')
+      .locator('[role="tabpanel"][data-active="true"]')
       .scrollIntoViewIfNeeded();
 
     await page.getByRole("button", { name: "Пауза" }).click();

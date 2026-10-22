@@ -12,7 +12,7 @@ test.describe("no-JavaScript fallback", () => {
       page.getByRole("heading", { level: 1, name: /Математика/ }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /Хотите системный результат/ }),
+      page.getByRole("heading", { name: /Попробуйте сами/ }),
     ).toBeVisible();
 
     const state = await page.evaluate(() => {

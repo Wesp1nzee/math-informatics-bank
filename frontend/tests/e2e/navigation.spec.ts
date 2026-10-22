@@ -14,10 +14,10 @@ test.describe("navigation and layout", () => {
 
   test("tutoring CTA reaches the request page", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("link", { name: /Обсудить занятия/ }).click();
+    await page.getByRole("link", { name: /Подробнее о занятиях/ }).click();
     await expect(page).toHaveURL(/\/podgotovka(#request)?$/);
     await expect(
-      page.getByRole("heading", { level: 1, name: /системный результат/ }),
+      page.getByRole("heading", { level: 1, name: /Индивидуальные занятия/ }),
     ).toBeVisible();
   });
 
@@ -27,7 +27,7 @@ test.describe("navigation and layout", () => {
 
     await main.getByRole("link", { name: "Информатика", exact: true }).click();
     await expect(page).toHaveURL(/subject=informatika/);
-    await expect(page.getByText(/4 задачи/)).toBeVisible();
+    await expect(page.getByText(/\d+ задачи/)).toBeVisible();
     await expect(
       main.getByRole("link", { name: /Перевод в двоичную систему/ }),
     ).toBeVisible();

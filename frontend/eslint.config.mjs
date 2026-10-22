@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
     files: [
       "src/features/articles/components/renderer/blocks/image-block.tsx",
       "src/features/tutor-leads/components/tutor-profile.tsx",
+      "src/features/home/components/teaching-section.tsx",
       "src/lib/analytics/yandex-metrika.tsx",
     ],
     rules: {
