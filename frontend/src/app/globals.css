@@ -632,7 +632,6 @@
     background: var(--color-accent);
     vertical-align: text-bottom;
     margin-left: 1px;
-    animation: blink 1s steps(2) infinite;
   }
 
   .log {
@@ -781,12 +780,6 @@
   }
   60% {
     transform: translateX(3px);
-  }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
   }
 }
 
