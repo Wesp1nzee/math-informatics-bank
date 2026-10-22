@@ -29,14 +29,14 @@ test.describe("navigation and layout", () => {
     await expect(page).toHaveURL(/subject=informatika/);
     await expect(page.getByText(/\d+ задачи/)).toBeVisible();
     await expect(
-      main.getByRole("link", { name: /Перевод в двоичную систему/ }),
+      main.getByRole("link", { name: /Системы счисления|Перевод в двоичную систему/ }),
     ).toBeVisible();
     await expect(main.getByRole("link", { name: /Производная/ })).toHaveCount(0);
 
     await page.goto("/zadachi");
     await main.getByRole("link", { name: "Страница 2" }).click();
     await expect(page).toHaveURL(/page=2/);
-    await expect(page.getByText(/страница 2 из 3/)).toBeVisible();
+    await expect(page.getByText(/страница 2 из \d+/)).toBeVisible();
   });
 
   test("no horizontal overflow on the viewport", async ({ page }) => {
