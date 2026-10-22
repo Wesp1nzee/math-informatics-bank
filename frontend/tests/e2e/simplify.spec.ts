@@ -122,7 +122,7 @@ test.describe("no-JS and reduced motion", () => {
     await expect(page.locator("[data-static-code]")).toBeVisible();
 
     await page.goto("/podgotovka");
-    await expect(page.locator("[data-lead-form]")).toBeVisible();
+    await expect(page.locator("[data-lead-form]").first()).toBeVisible();
     await expect(page.getByRole("heading", { name: "Как проходит пробное" })).toBeVisible();
   });
 });

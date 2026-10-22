@@ -20,6 +20,8 @@ declare global {
   interface Window {
     __worldStats?: WorldStats;
     __worldMode?: string;
+    __worldError?: string;
+    __worldSample?: () => { center: number[]; edge: number[] } | null;
   }
 }
 
@@ -125,16 +127,20 @@ export function WorldCanvas() {
       }
 
       try {
-        renderer = new WorldRenderer(el, readPalette(), isDark(), initialDpr());
-      } catch {
+        renderer = new WorldRenderer(el, readPalette(), isDark(), initialDpr(), force);
+      } catch (error) {
         mode = "no-webgl";
         window.__worldMode = mode;
+        window.__worldError = error instanceof Error ? error.message : String(error);
         return;
       }
 
       mode = reducedMotion ? "reduced-motion" : "active";
       window.__worldMode = mode;
       rendererRef.current = renderer;
+      if (force) {
+        window.__worldSample = () => renderer?.sample() ?? null;
+      }
 
       const onResize = () => {
         renderer?.resize(window.innerWidth, window.innerHeight);
@@ -161,6 +167,7 @@ export function WorldCanvas() {
       registerWorld({
         setState: (name) => renderer?.setState(name),
         pulse: (kind) => renderer?.pulse(kind),
+        scan: () => renderer?.scan(),
       });
 
       const statsInterval = window.setInterval(() => {

@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleAlert, Send, SendHorizontal } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ import type {
 } from "@/features/tutor-leads/types";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { describeApiError } from "@/lib/api/errors";
+import { pulseWorld } from "@/features/world/bus";
 
 const DELIVERY_MESSAGE: Record<TutorLeadDelivery, string> = {
   api: "Заявка отправлена. Свяжусь с вами, чтобы договориться о времени.",
@@ -59,6 +60,7 @@ function toInput(values: TutorLeadFormValues): TutorLeadInput {
 }
 
 export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
+  const uid = useId();
   const [delivery, setDelivery] = useState<TutorLeadDelivery | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -96,6 +98,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       const result = await submitTutorLead(toInput(values), channels);
       setDelivery(result);
       track(ANALYTICS_EVENTS.leadFormSubmit, { channel: result });
+      pulseWorld("ok");
       reset();
     } catch (error) {
       setFailure(describeApiError(error));
@@ -143,6 +146,10 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
           {delivery === "api" ? "Заявка отправлена" : "Сообщение готово"}
         </p>
         <p className="text-ink-soft">{DELIVERY_MESSAGE[delivery]}</p>
+        <ul className="text-ink-soft m-0 mt-1 list-none space-y-1.5 p-0">
+          <li>Свяжусь с вами и договоримся о времени.</li>
+          <li>На пробном начнём с диагностики.</li>
+        </ul>
         <Button
           type="button"
           variant="secondary"
@@ -181,23 +188,23 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       </div>
 
       <div>
-        <Label htmlFor="lead-contact">Как с вами связаться</Label>
+        <Label htmlFor={`${uid}-contact`}>Как с вами связаться</Label>
         <Input
-          id="lead-contact"
+          id={`${uid}-contact`}
           className="mt-2"
           autoComplete="email"
           placeholder="Telegram, e‑mail или телефон"
           aria-invalid={errors.contact ? true : undefined}
-          aria-describedby={errors.contact ? "lead-contact-error" : undefined}
+          aria-describedby={errors.contact ? `${uid}-contact-error` : undefined}
           {...register("contact")}
         />
-        <FieldError id="lead-contact-error" message={errors.contact?.message} />
+        <FieldError id={`${uid}-contact-error`} message={errors.contact?.message} />
       </div>
 
       <div>
-        <Label htmlFor="lead-exam">Экзамен</Label>
+        <Label htmlFor={`${uid}-exam`}>Экзамен</Label>
         <select
-          id="lead-exam"
+          id={`${uid}-exam`}
           className={INPUT_CLASS}
           aria-invalid={errors.exam ? true : undefined}
           {...register("exam")}
@@ -208,7 +215,7 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
             </option>
           ))}
         </select>
-        <FieldError id="lead-exam-error" message={errors.exam?.message} />
+        <FieldError id={`${uid}-exam-error`} message={errors.exam?.message} />
       </div>
 
       <details className="group border-line rounded-md border px-4 py-3">
@@ -217,19 +224,19 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
         </summary>
         <div className="mt-4 flex flex-col gap-5">
           <div>
-            <Label htmlFor="lead-name">Имя</Label>
+            <Label htmlFor={`${uid}-name`}>Имя</Label>
             <Input
-              id="lead-name"
+              id={`${uid}-name`}
               className="mt-2"
               autoComplete="name"
               {...register("name")}
             />
-            <FieldError id="lead-name-error" message={errors.name?.message} />
+            <FieldError id={`${uid}-name-error`} message={errors.name?.message} />
           </div>
 
           <div>
-            <Label htmlFor="lead-subject">Предмет</Label>
-            <select id="lead-subject" className={INPUT_CLASS} {...register("subject")}>
+            <Label htmlFor={`${uid}-subject`}>Предмет</Label>
+            <select id={`${uid}-subject`} className={INPUT_CLASS} {...register("subject")}>
               {SUBJECT_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -239,14 +246,14 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
           </div>
 
           <div>
-            <Label htmlFor="lead-message">Комментарий</Label>
+            <Label htmlFor={`${uid}-message`}>Комментарий</Label>
             <Textarea
-              id="lead-message"
+              id={`${uid}-message`}
               className="mt-2"
               placeholder="Класс, цель, что уже не получается"
               {...register("message")}
             />
-            <FieldError id="lead-message-error" message={errors.message?.message} />
+            <FieldError id={`${uid}-message-error`} message={errors.message?.message} />
           </div>
         </div>
       </details>
@@ -254,21 +261,21 @@ export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
       <div>
         <div className="flex items-start gap-3">
           <input
-            id="lead-consent"
+            id={`${uid}-consent`}
             type="checkbox"
             className="accent-accent mt-1 size-5 shrink-0"
             aria-invalid={errors.consent ? true : undefined}
-            aria-describedby={errors.consent ? "lead-consent-error" : undefined}
+            aria-describedby={errors.consent ? `${uid}-consent-error` : undefined}
             {...register("consent")}
           />
-          <Label htmlFor="lead-consent" className="leading-snug font-normal">
+          <Label htmlFor={`${uid}-consent`} className="leading-snug font-normal">
             Согласен на обработку персональных данных для ответа на заявку.{" "}
             <Link href="/privacy" className="underline underline-offset-2">
               Политика обработки данных
             </Link>
           </Label>
         </div>
-        <FieldError id="lead-consent-error" message={errors.consent?.message} />
+        <FieldError id={`${uid}-consent-error`} message={errors.consent?.message} />
       </div>
 
       {failure ? (

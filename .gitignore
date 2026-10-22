@@ -12,3 +12,6 @@ deploy/.env.production
 backups/
 *.log
 .DS_Store
+
+# world screenshot artifacts
+frontend/screenshots/

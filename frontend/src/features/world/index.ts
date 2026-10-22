@@ -1,4 +1,4 @@
-export { pulseWorld, setWorldState, currentWorldState } from "@/features/world/bus";
+export { pulseWorld, scanWorld, setWorldState, currentWorldState } from "@/features/world/bus";
 export {
   buildPathA,
   buildPathB,

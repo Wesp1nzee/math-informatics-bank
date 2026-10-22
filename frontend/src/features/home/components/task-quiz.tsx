@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
+import { pulseWorld } from "@/features/world/bus";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
 import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
@@ -61,6 +62,7 @@ export function TaskQuiz({
     const correct = value === correctValue;
     setAnswer({ value, correct });
     track(ANALYTICS_EVENTS.quizAnswer, { correct });
+    pulseWorld(correct ? "ok" : "err");
 
     if (reducedMotion) {
       setVisibleSteps(steps.length);

@@ -1,6 +1,5 @@
-import { Section } from "@/components/layout/section";
+import { WorldSection } from "@/components/layout/world-section";
 import { TaskQuiz, type QuizStep } from "@/features/home/components/task-quiz";
-import { AI_POSITIONING } from "@/features/tutor-leads/content";
 
 const STEPS: readonly QuizStep[] = [
   {
@@ -25,16 +24,18 @@ const HINTS: Record<string, string> = {
 
 export function ErrorBreakdown() {
   return (
-    <Section labelledBy="error-title" className="bg-surface">
-      <div className="grid grid-cols-12 items-start gap-8">
-        <div className="desk:col-span-5 col-span-12">
-          <h2 id="error-title" className="heading-2">
+    <WorldSection worldState="error-quiz" labelledBy="error-title">
+      <div className="grid grid-cols-1 items-start gap-8 desk:grid-cols-12">
+        <div className="desk:col-span-5 reveal ">
+          <h2 id="error-title" data-split-text className="heading-2 heading-scrim">
             Так выглядит разбор ошибки
           </h2>
-          <p className="text-ink mt-5 text-lg font-medium">{AI_POSITIONING}</p>
+          <p className="text-ink-soft heading-scrim mt-5 max-w-[28em] text-lg leading-relaxed">
+            Показываю, почему решение не сошлось, и как разбирать похожие задачи.
+          </p>
         </div>
 
-        <div className="desk:col-span-6 desk:col-start-7 col-span-12">
+        <div className="desk:col-span-6 desk:col-start-7 reveal ">
           <TaskQuiz
             tag="ЕГЭ · Профиль"
             title="Производная"
@@ -58,6 +59,6 @@ export function ErrorBreakdown() {
           />
         </div>
       </div>
-    </Section>
+    </WorldSection>
   );
 }

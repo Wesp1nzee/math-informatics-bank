@@ -1,14 +1,13 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
 
 import { Container } from "@/components/layout/container";
-import { ContourField } from "@/components/decor/contour-field";
-import { Button, ButtonArrow } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { Magnetic } from "@/components/ui/magnetic";
+import { RequestCta } from "@/components/ui/request-cta";
+import { TiltCard } from "@/components/ui/tilt-card";
 import { DerivativeViz } from "@/features/home/components/derivative-viz";
 import { getFeaturedTasks, getTaskPath } from "@/features/tasks/api";
-import { AI_POSITIONING, REQUEST_PATH } from "@/features/tutor-leads/content";
-
-const step = (index: number) => ({ "--i": index }) as CSSProperties;
+import { TUTORING_INTRO } from "@/features/tutor-leads/content";
 
 export async function HeroSection() {
   let taskHref = "/zadachi";
@@ -21,40 +20,43 @@ export async function HeroSection() {
     <section
       id="top"
       aria-labelledby="hero-title"
-      className="hero-static grain desk:min-h-[85svh] relative isolate flex items-center overflow-clip pt-[104px] pb-14 md:pt-32 md:pb-20"
+      data-world-state="hero"
+      className="relative isolate flex min-h-[90svh] items-center overflow-clip pt-24 pb-16 md:pt-28"
     >
-      <ContourField />
+      <div className="hero-scrim" aria-hidden="true" />
 
       <Container className="relative z-[1]">
-        <div className="grid grid-cols-12 items-center gap-8 md:gap-10">
-          <div className="desk:col-span-6 col-span-12">
-            <span className="eyebrow rise">ОГЭ и ЕГЭ · математика и информатика</span>
-            <h1 id="hero-title" className="display-title">
-              Математика{" "}
-              <br />
-              начинается{" "}
-              <br />
-              <span className="whitespace-nowrap">
-                с <span className="serif-accent">понимания.</span>
-              </span>
+        <div className="grid grid-cols-1 items-center gap-10 desk:grid-cols-12 desk:gap-8">
+          <div className="desk:col-span-6 ">
+            <span className="eyebrow">ОГЭ и ЕГЭ · математика и информатика</span>
+            <h1 id="hero-title" className="hero-title rise-lcp">
+              Математика начинается с <span className="serif-accent">понимания.</span>
             </h1>
-            <p className="text-ink rise mt-7 mb-8 max-w-[34em] text-lg font-medium" style={step(1)}>
-              {AI_POSITIONING}
+            <p className="text-ink-soft mt-6 max-w-[34em] text-lg font-medium leading-relaxed">
+              {TUTORING_INTRO}
             </p>
-            <div className="rise flex flex-col gap-3 sm:flex-row" style={step(2)}>
-              <Button asChild className="w-full sm:w-auto">
-                <Link href={REQUEST_PATH}>
-                  Записаться на пробное <ButtonArrow />
-                </Link>
-              </Button>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Magnetic>
+                <RequestCta placement="hero" className="cta-glow w-full sm:w-auto">
+                  Записаться на пробное
+                </RequestCta>
+              </Magnetic>
               <Button asChild variant="secondary" className="w-full sm:w-auto">
                 <Link href={taskHref}>Попробовать задачу</Link>
               </Button>
             </div>
           </div>
 
-          <div className="desk:col-span-6 col-span-12">
-            <DerivativeViz />
+          <div className="desk:col-span-6 ">
+            <TiltCard className="glass rounded-2xl border border-[var(--color-line)]">
+              <DerivativeViz />
+            </TiltCard>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <span className="depth-chip">Бесплатный банк задач</span>
+              <span className="depth-chip depth-chip-high">
+                Потяните точку — производная пересчитается
+              </span>
+            </div>
           </div>
         </div>
       </Container>

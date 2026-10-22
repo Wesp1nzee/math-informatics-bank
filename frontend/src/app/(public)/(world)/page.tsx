@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import { Section } from "@/components/layout/section";
+import { PinnedEpisode, type PinnedStep } from "@/components/pinned/pinned-episode";
+import { WorldSection } from "@/components/layout/world-section";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
   ArticlesSection,
@@ -11,7 +12,7 @@ import {
   TeachingSection,
 } from "@/features/home";
 import { Faq } from "@/features/tutor-leads/components/faq";
-import { FAQ_ITEMS } from "@/features/tutor-leads/content";
+import { AI_POSITIONING, FAQ_ITEMS } from "@/features/tutor-leads/content";
 import { hasTutorProfile, siteConfig } from "@/lib/constants/site";
 import { faqPageJsonLd, personJsonLd, webSiteJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -27,6 +28,24 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const HOME_FAQ = FAQ_ITEMS.slice(0, 4);
+
+const PINNED_STEPS: readonly PinnedStep[] = [
+  {
+    title: "Нейросеть показывает решение",
+    text: "Готовое решение — это ещё не разбор вашей ошибки.",
+    state: "pinned",
+  },
+  {
+    title: "Ваш ход мысли расходится с ним",
+    text: "Смотрю, где вы свернули не туда.",
+    state: "pinned-draw-b",
+  },
+  {
+    title: "Я нахожу причину и убираю её",
+    text: "Разбираем, чтобы не повторять ошибку.",
+    state: "pinned-healed",
+  },
+];
 
 export default function HomePage() {
   const { tutor } = siteConfig;
@@ -47,27 +66,37 @@ export default function HomePage() {
 
       <HeroSection />
 
-      <Section labelledBy="showcase-title">
+      <WorldSection worldState="quiz" labelledBy="showcase-title">
+        <h2 id="showcase-title" data-split-text className="heading-2 heading-scrim mb-8">
+          Попробуйте сами
+        </h2>
         <div className="reveal">
-          <h2 id="showcase-title" className="heading-2 mb-8">
-            Попробуйте сами
-          </h2>
           <InteractiveShowcase />
         </div>
-      </Section>
+      </WorldSection>
+
+      <PinnedEpisode
+        id="method"
+        titleId="method-title"
+        title="Нейросеть решает. Я нахожу причину ошибки."
+        subtitle={AI_POSITIONING}
+        steps={PINNED_STEPS}
+      />
 
       <TeachingSection />
       <TasksSection />
       <ArticlesSection />
 
-      <Section id="faq" labelledBy="home-faq-title">
+      <WorldSection id="faq" worldState="faq" labelledBy="home-faq-title">
+        <h2 id="home-faq-title" data-split-text className="heading-2 heading-scrim mb-8">
+          Вопросы и ответы
+        </h2>
         <div className="reveal">
-          <h2 id="home-faq-title" className="heading-2 mb-8">
-            Вопросы и ответы
-          </h2>
-          <Faq items={HOME_FAQ} className="max-w-3xl" />
+          <div className="border-line bg-surface rounded-2xl border px-6 py-2 shadow-[var(--shadow-elev-1)]">
+            <Faq items={HOME_FAQ} className="max-w-3xl" />
+          </div>
         </div>
-      </Section>
+      </WorldSection>
 
       <FinalCta />
     </>

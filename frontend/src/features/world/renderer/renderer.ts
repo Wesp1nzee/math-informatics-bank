@@ -42,7 +42,7 @@ uniform vec2 uRidgeC; uniform float uRidgeA; uniform float uRidgeS;
 uniform vec2 uPitC; uniform float uPitA; uniform float uPitS;
 uniform float uMorph;
 uniform float uRelief;
-uniform float uSignal;
+uniform float uSignalAmt;
 uniform float uNoiseAmp;
 uniform mat4 uViewProj;
 
@@ -78,7 +78,7 @@ void main(){
   float gRidge = gauss(p, uRidgeC, uRidgeS);
   float gPit = gauss(p, uPitC, uPitS);
 
-  float h = uPeakA * gPeak + uPlateauA * gPlat + uRidgeA * gRidge + uPitA * uSignal * gPit;
+  float h = uPeakA * gPeak + uPlateauA * gPlat + uRidgeA * gRidge + uPitA * uSignalAmt * gPit;
   h += uNoiseAmp * noise2(p * 2.6);
   h *= uRelief * uMorph;
 
@@ -86,7 +86,7 @@ void main(){
   grad += uPeakA * gPeak * (-(p - uPeakC) / (uPeakS * uPeakS));
   grad += uPlateauA * gPlat * (-(p - uPlateauC) / (uPlateauS * uPlateauS));
   grad += uRidgeA * gRidge * (-(p - uRidgeC) / (uRidgeS * uRidgeS));
-  grad += uPitA * uSignal * gPit * (-(p - uPitC) / (uPitS * uPitS));
+  grad += uPitA * uSignalAmt * gPit * (-(p - uPitC) / (uPitS * uPitS));
   grad *= uRelief * uMorph;
 
   vec3 world = vec3(p.x, h, p.y);
@@ -112,7 +112,7 @@ uniform vec3 uBg;
 uniform vec3 uLine;
 uniform vec3 uLineMajor;
 uniform vec3 uPeak;
-uniform vec3 uSignal;
+uniform vec3 uSignalColor;
 uniform vec3 uFog;
 uniform float uFogAmount;
 uniform float uSignalAmt;
@@ -144,7 +144,7 @@ void main(){
 
   vec3 lineCol = mix(uLine, uLineMajor, majorMask);
   lineCol = mix(lineCol, uPeak, tint * 0.85);
-  lineCol = mix(lineCol, uSignal, pitMask * uSignalAmt);
+  lineCol = mix(lineCol, uSignalColor, pitMask * uSignalAmt);
 
   vec3 col = mix(uBg, lineCol, clamp(lineMask, 0.0, 1.0));
 
@@ -409,13 +409,20 @@ export class WorldRenderer {
 
   private ribbonAWorld: { x: number; y: number; z: number }[] = [];
 
-  constructor(canvas: HTMLCanvasElement, palette: WorldPalette, dark: boolean, dpr: number) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    palette: WorldPalette,
+    dark: boolean,
+    dpr: number,
+    preserveDrawingBuffer = false,
+  ) {
     this.canvas = canvas;
     const gl = canvas.getContext("webgl2", {
       antialias: true,
       alpha: true,
       powerPreference: "high-performance",
       depth: true,
+      preserveDrawingBuffer,
     });
     if (!gl) throw new Error("WebGL2 unavailable");
     this.gl = gl;
@@ -441,6 +448,7 @@ export class WorldRenderer {
 
     const initial = getWorldState("hero") ?? this.defaultState();
     this.current = this.clone(initial);
+    this.current.morph = 0; // entrance: flat plane rises into relief
     this.target = this.clone(initial);
   }
 
@@ -647,7 +655,7 @@ export class WorldRenderer {
   }
 
   renderStaticFrame(): void {
-    this.update(0);
+    this.current = this.clone(this.target);
     this.render();
   }
 
@@ -674,12 +682,26 @@ export class WorldRenderer {
     return { avgFrameMs: avg, dpr: this.dpr, degradations: this.degradations, frames: this.frames, stopped: this.stopped };
   }
 
+  /** Debug pixel readback (requires preserveDrawingBuffer). */
+  sample(): { center: number[]; edge: number[] } | null {
+    const gl = this.gl;
+    const w = gl.drawingBufferWidth;
+    const h = gl.drawingBufferHeight;
+    if (w === 0 || h === 0) return null;
+    const read = (x: number, y: number): number[] => {
+      const px = new Uint8Array(4);
+      gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+      return [px[0], px[1], px[2], px[3]];
+    };
+    return { center: read(w >> 1, h >> 1), edge: read(4, h >> 1) };
+  }
+
   // --- animation update ----------------------------------------------------
 
   private update(dt: number): void {
     const c = this.current;
     const t = this.target;
-    const k = 1 - Math.exp(-dt * 4.2); // smooth damping
+    const k = 1 - Math.exp(-dt * 3.4); // smooth damping
 
     c.cam = this.lerp3(c.cam, t.cam, k);
     c.look = this.lerp3(c.look, t.look, k);
@@ -832,14 +854,14 @@ export class WorldRenderer {
     gl.uniform1f(u.get("uPitS")!, LANDSCAPE.pitSigma);
     gl.uniform1f(u.get("uMorph")!, this.current.morph);
     gl.uniform1f(u.get("uRelief")!, this.current.relief);
-    gl.uniform1f(u.get("uSignal")!, this.current.signal);
+    gl.uniform1f(u.get("uSignalAmt")!, this.current.signal);
     gl.uniform1f(u.get("uNoiseAmp")!, 0.06);
     gl.uniform1f(u.get("uLevels")!, this.current.levels);
     gl.uniform3fv(u.get("uBg")!, this.palette.bg);
     gl.uniform3fv(u.get("uLine")!, this.palette.line);
     gl.uniform3fv(u.get("uLineMajor")!, this.palette.lineMajor);
     gl.uniform3fv(u.get("uPeak")!, this.palette.peak);
-    gl.uniform3fv(u.get("uSignal")!, this.palette.signal);
+    gl.uniform3fv(u.get("uSignalColor")!, this.palette.signal);
     gl.uniform3fv(u.get("uFog")!, this.palette.fog);
     gl.uniform1f(u.get("uFogAmount")!, this.current.fog * 0.12);
     gl.uniform1f(u.get("uSignalAmt")!, this.current.signal);

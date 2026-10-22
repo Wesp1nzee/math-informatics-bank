@@ -19,8 +19,8 @@ export function TutorProfile({ className }: { className?: string }) {
 
   return (
     <div className={className}>
-      <div className="grid grid-cols-12 items-start gap-8">
-        <div className="desk:col-span-4 col-span-12">
+      <div className="grid grid-cols-1 items-start gap-8 desk:grid-cols-12">
+        <div className="desk:col-span-4 ">
           <div className="border-line overflow-hidden rounded-2xl border">
             {photo ? (
               <img
@@ -39,7 +39,7 @@ export function TutorProfile({ className }: { className?: string }) {
           </div>
         </div>
 
-        <div className="desk:col-span-7 desk:col-start-6 col-span-12">
+        <div className="desk:col-span-7 desk:col-start-6 ">
           <h2 id="tutor-title" className="heading-3 mb-4">
             {name}
           </h2>

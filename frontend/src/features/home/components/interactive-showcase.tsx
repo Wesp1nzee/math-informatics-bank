@@ -5,6 +5,7 @@ import { useId, useState, type KeyboardEvent } from "react";
 
 import { CodeDemo } from "@/features/home/components/code-demo";
 import { TaskQuiz, type QuizStep } from "@/features/home/components/task-quiz";
+import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
 
 const STEPS: readonly QuizStep[] = [
@@ -44,6 +45,7 @@ export function InteractiveShowcase() {
     const step = event.key === "ArrowRight" ? 1 : -1;
     const next = TABS[(index + step + TABS.length) % TABS.length];
     setActive(next.id);
+    track(ANALYTICS_EVENTS.tabSwitch, { tab: next.id });
     document.getElementById(`${baseId}-${next.id}-tab`)?.focus();
   }
 
@@ -61,7 +63,10 @@ export function InteractiveShowcase() {
               aria-selected={selected}
               aria-controls={`${baseId}-${tab.id}-panel`}
               tabIndex={selected ? 0 : -1}
-              onClick={() => setActive(tab.id)}
+              onClick={() => {
+                setActive(tab.id);
+                track(ANALYTICS_EVENTS.tabSwitch, { tab: tab.id });
+              }}
               onKeyDown={onKeyDown}
               className={cn("tab-button", selected && "tab-button-active")}
             >

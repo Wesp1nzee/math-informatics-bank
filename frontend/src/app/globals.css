@@ -1352,40 +1352,56 @@ html:not([data-js]) .reveal {
 }
 
 .pinned-rail {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  width: 100%;
   margin-top: 2rem;
 }
 
-.pinned-rail-line {
+.pinned-rail-track {
   position: relative;
-  flex: 1;
   height: 2px;
   background: var(--color-line);
   border-radius: 999px;
-  overflow: hidden;
+  margin: 0 6px;
 }
 
-.pinned-rail-line > span {
+.pinned-rail-fill {
   position: absolute;
   inset: 0;
   transform-origin: left;
   transform: scaleX(0);
   background: var(--color-accent);
+  border-radius: 999px;
   transition: transform 300ms var(--ease-soft);
 }
 
 .pinned-rail-dot {
-  width: 8px;
-  height: 8px;
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
   border-radius: 999px;
+  transform: translate(-50%, -50%);
   background: var(--color-line-strong);
-  transition: background-color 300ms var(--ease-soft);
+  transition:
+    background-color 300ms var(--ease-soft),
+    box-shadow 300ms var(--ease-soft);
+}
+
+.pinned-rail-dot:nth-child(2) {
+  left: 0%;
+}
+
+.pinned-rail-dot:nth-child(3) {
+  left: 50%;
+}
+
+.pinned-rail-dot:nth-child(4) {
+  left: 100%;
 }
 
 .pinned-rail-dot[data-active] {
   background: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-accent) 22%, transparent);
 }
 
 @media (max-width: 1099px), (max-height: 699px), (pointer: coarse) {
@@ -1429,6 +1445,65 @@ html:not([data-js]) .reveal {
 /* Content sections over the world: transparent so the scene shows through. */
 .world-content .world-section {
   background: transparent;
+}
+
+.hero-title {
+  font-size: clamp(44px, 9vw, 132px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.hero-title .serif-accent {
+  text-transform: none;
+  letter-spacing: -0.03em;
+  font-size: 1.02em;
+  color: var(--color-accent);
+}
+
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    100deg,
+    var(--world-bg) 0%,
+    color-mix(in oklch, var(--world-bg) 72%, transparent) 38%,
+    transparent 66%
+  );
+  pointer-events: none;
+}
+
+.depth-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: color-mix(in oklch, var(--color-surface) 86%, transparent);
+  box-shadow: var(--shadow-elev-1);
+  color: var(--color-ink-soft);
+  font-size: 14px;
+  font-weight: 500;
+  transform: translateZ(10px);
+}
+
+.depth-chip-high {
+  transform: translateZ(22px);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-elev-2);
+}
+
+.heading-scrim {
+  display: inline;
+  background: color-mix(in oklch, var(--world-bg) 88%, transparent);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0.12em 0.28em;
+  margin: -0.12em -0.28em;
+  border-radius: 10px;
 }
 
 @media (prefers-reduced-motion: reduce) {

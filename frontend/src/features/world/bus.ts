@@ -10,14 +10,20 @@ import type { PulseKind } from "@/features/world/types";
 type WorldApi = {
   setState: (name: string) => void;
   pulse: (kind: PulseKind) => void;
+  scan: () => void;
 };
 
 let worldApi: WorldApi | null = null;
 let lastState: string | null = null;
+let scanPending = false;
 
 export function registerWorld(api: WorldApi): void {
   worldApi = api;
   if (lastState) api.setState(lastState);
+  if (scanPending) {
+    scanPending = false;
+    api.scan();
+  }
 }
 
 export function unregisterWorld(): void {
@@ -31,6 +37,11 @@ export function setWorldState(name: string): void {
 
 export function pulseWorld(kind: PulseKind): void {
   worldApi?.pulse(kind);
+}
+
+export function scanWorld(): void {
+  if (worldApi) worldApi.scan();
+  else scanPending = true;
 }
 
 export function currentWorldState(): string | null {

@@ -1,22 +1,18 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { Section } from "@/components/layout/section";
+import { PinnedEpisode, type PinnedStep } from "@/components/pinned/pinned-episode";
+import { WorldSection } from "@/components/layout/world-section";
 import { JsonLd } from "@/components/seo/json-ld";
-import { Button, ButtonArrow } from "@/components/ui/button";
 import { ErrorBreakdown } from "@/features/tutor-leads/components/error-breakdown";
 import { Faq } from "@/features/tutor-leads/components/faq";
-import { TrialSteps } from "@/features/tutor-leads/components/trial-steps";
+import { IncludedBento } from "@/features/tutor-leads/components/included-bento";
+import { TutorLeadPanel } from "@/features/tutor-leads/components/tutor-lead-panel";
 import { TutorProfile } from "@/features/tutor-leads/components/tutor-profile";
 import { TutoringHero } from "@/features/tutor-leads/components/tutoring-hero";
-import {
-  FAQ_ITEMS,
-  SHORT_FACTS,
-  TUTORING_INTRO,
-} from "@/features/tutor-leads/content";
+import { FAQ_ITEMS, TUTORING_INTRO } from "@/features/tutor-leads/content";
+import { hasTutorProfile, siteConfig, telegramHref } from "@/lib/constants/site";
 import { faqPageJsonLd, personJsonLd, serviceJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
-import { hasTutorProfile, siteConfig, telegramHref } from "@/lib/constants/site";
 
 export const metadata: Metadata = buildMetadata({
   title: "Репетиторство: индивидуальные занятия по математике и информатике",
@@ -24,6 +20,24 @@ export const metadata: Metadata = buildMetadata({
     "Индивидуальные занятия по математике и информатике для подготовки к ОГЭ и ЕГЭ. Находим пробелы по темам и выстраиваем работу вокруг них.",
   path: "/podgotovka",
 });
+
+const TRIAL_STEPS: readonly PinnedStep[] = [
+  {
+    title: "Диагностика",
+    text: "Разбираем несколько задач и находим темы, где теряются баллы.",
+    state: "trial-1",
+  },
+  {
+    title: "Находим пробелы",
+    text: "Смотрим, где именно теряются баллы и почему.",
+    state: "trial-2",
+  },
+  {
+    title: "Предлагаю план",
+    text: "С чего начать и в каком ритме заниматься.",
+    state: "trial-3",
+  },
+];
 
 export default function TutoringPage() {
   const { tutor } = siteConfig;
@@ -54,53 +68,58 @@ export default function TutoringPage() {
         breadcrumbs={[{ name: "Главная", href: "/" }, { name: "Репетиторство" }]}
       />
 
-      <TrialSteps />
+      <PinnedEpisode
+        id="trial"
+        titleId="trial-title"
+        title="Как проходит пробное"
+        steps={TRIAL_STEPS}
+      />
 
       {hasTutorProfile ? (
-        <Section id="tutor" labelledBy="tutor-title" className="bg-surface">
+        <WorldSection id="tutor" worldState="tutor" labelledBy="tutor-title">
           <div className="reveal">
             <TutorProfile />
           </div>
-        </Section>
+        </WorldSection>
       ) : null}
 
       <ErrorBreakdown />
+      <IncludedBento />
 
-      <Section labelledBy="included-title" className="bg-surface-subtle">
-        <h2 id="included-title" className="heading-2 mb-8">
-          Что входит
-        </h2>
-        <ul className="reveal m-0 grid list-none gap-4 p-0 sm:grid-cols-2">
-          {SHORT_FACTS.map((fact) => (
-            <li key={fact.title} className="border-line bg-surface rounded-2xl border p-5">
-              <b className="text-ink block font-semibold">{fact.title}</b>
-              <span className="text-ink-soft mt-1 block text-base leading-relaxed">
-                {fact.text}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section id="faq" labelledBy="faq-title">
-        <h2 id="faq-title" className="heading-2 mb-8">
+      <WorldSection id="faq" worldState="faq" labelledBy="faq-title">
+        <h2 id="faq-title" data-split-text className="heading-2 heading-scrim mb-8">
           Вопросы и ответы
         </h2>
-        <Faq className="max-w-3xl" />
-      </Section>
-
-      <Section labelledBy="bottom-cta-title" className="bg-surface-subtle">
-        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-          <h2 id="bottom-cta-title" className="heading-3">
-            Готовы начать?
-          </h2>
-          <Button asChild>
-            <Link href="#request">
-              Записаться на пробное <ButtonArrow />
-            </Link>
-          </Button>
+        <div className="reveal">
+          <div className="border-line bg-surface rounded-2xl border px-6 py-2 shadow-[var(--shadow-elev-1)]">
+            <Faq className="max-w-3xl" />
+          </div>
         </div>
-      </Section>
+      </WorldSection>
+
+      <WorldSection worldState="summit" labelledBy="bottom-cta-title" className="py-20 md:py-32">
+        <div className="grid grid-cols-1 items-center gap-10 desk:grid-cols-12">
+          <div className="desk:col-span-6 reveal ">
+            <h2
+              id="bottom-cta-title"
+              data-split-text
+              className="heading-scrim text-[clamp(36px,5vw,72px)] leading-[1.02] font-medium tracking-[-0.03em]"
+            >
+              Начнём с диагностики
+            </h2>
+            <p className="text-ink-soft heading-scrim mt-5 max-w-[30em] text-lg leading-relaxed">
+              Оставьте контакт — договоримся о времени и разберём пару задач.
+            </p>
+          </div>
+
+          <div className="desk:col-span-5 desk:col-start-8 reveal ">
+            <div className="glass border-line rounded-2xl border p-5 md:p-6">
+              <h3 className="heading-3 mb-4">Записаться на пробное</h3>
+              <TutorLeadPanel />
+            </div>
+          </div>
+        </div>
+      </WorldSection>
     </>
   );
 }
