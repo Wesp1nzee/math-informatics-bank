@@ -1177,3 +1177,262 @@ html:not([data-js]) .reveal {
   font-size: 24px;
   line-height: 1.2;
 }
+
+/* ------------------------------------------------------------------ */
+/* World (WebGL background) — palette read by the renderer from CSS    */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --world-bg: #f3efe6;
+  --world-line: #c8c0af;
+  --world-line-major: #a89c87;
+  --world-accent: #4f63d0;
+  --world-peak: #2c3765;
+  --world-signal: #d64534;
+  --world-fog: #f3efe6;
+
+  --shadow-elev-1: 0 1px 2px rgba(20, 18, 40, 0.06), 0 8px 24px -12px rgba(20, 18, 40, 0.14);
+  --shadow-elev-2: 0 2px 4px rgba(20, 18, 40, 0.08), 0 16px 40px -16px rgba(20, 18, 40, 0.22);
+  --shadow-elev-3: 0 4px 8px rgba(20, 18, 40, 0.1), 0 28px 64px -24px rgba(20, 18, 40, 0.32);
+}
+
+:root[data-theme="dark"] {
+  --world-bg: #0a0e1c;
+  --world-line: #28345f;
+  --world-line-major: #3c4d8f;
+  --world-accent: #7c8dff;
+  --world-peak: #c9d7ff;
+  --world-signal: #ff7b6b;
+  --world-fog: #0a0e1c;
+
+  --shadow-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --shadow-elev-2: 0 2px 4px rgba(0, 0, 0, 0.45), 0 16px 40px -16px rgba(0, 0, 0, 0.7);
+  --shadow-elev-3: 0 4px 8px rgba(0, 0, 0, 0.5), 0 28px 64px -24px rgba(0, 0, 0, 0.8);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --world-bg: #0a0e1c;
+    --world-line: #28345f;
+    --world-line-major: #3c4d8f;
+    --world-accent: #7c8dff;
+    --world-peak: #c9d7ff;
+    --world-signal: #ff7b6b;
+    --world-fog: #0a0e1c;
+
+    --shadow-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+    --shadow-elev-2: 0 2px 4px rgba(0, 0, 0, 0.45), 0 16px 40px -16px rgba(0, 0, 0, 0.7);
+    --shadow-elev-3: 0 4px 8px rgba(0, 0, 0, 0.5), 0 28px 64px -24px rgba(0, 0, 0, 0.8);
+  }
+}
+
+.world-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.world-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.world-fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 42%, transparent 0%, var(--world-bg) 72%),
+    var(--world-bg);
+}
+
+.world-fallback-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.world-contour {
+  fill: none;
+  stroke: var(--world-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.55;
+}
+
+.world-fallback-glow {
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.world-fallback-glow-a {
+  top: -18vmax;
+  right: -14vmax;
+  background: var(--world-accent);
+}
+
+.world-fallback-glow-b {
+  bottom: -22vmax;
+  left: -16vmax;
+  background: var(--world-signal);
+  opacity: 0.07;
+}
+
+.world-fallback-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.7;
+}
+
+/* Glass surfaces: blurred only on fine-pointer desktops. */
+.glass {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-elev-2);
+}
+
+@media (min-width: 768px) and (pointer: fine) {
+  .glass {
+    background: color-mix(in oklch, var(--color-surface) 68%, transparent);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  }
+}
+
+/* Depth: floating showcase cards get 3D tilt from a client leaf. */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  will-change: transform;
+}
+
+/* SplitText line reveal. */
+.split-line {
+  display: block;
+  overflow: clip;
+}
+
+/* Pinned episode. */
+.pinned-episode {
+  position: relative;
+}
+
+.pinned-sticky {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 2rem;
+  align-items: center;
+  height: calc(100svh - 88px);
+  min-height: 560px;
+}
+
+.pinned-card {
+  box-shadow: var(--shadow-elev-2);
+}
+
+.pinned-step {
+  opacity: 0.45;
+  transition: opacity 420ms var(--ease-soft);
+}
+
+.pinned-step[data-active] {
+  opacity: 1;
+}
+
+.pinned-rail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2rem;
+}
+
+.pinned-rail-line {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: var(--color-line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pinned-rail-line > span {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: var(--color-accent);
+  transition: transform 300ms var(--ease-soft);
+}
+
+.pinned-rail-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-line-strong);
+  transition: background-color 300ms var(--ease-soft);
+}
+
+.pinned-rail-dot[data-active] {
+  background: var(--color-accent);
+}
+
+@media (max-width: 1099px), (max-height: 699px), (pointer: coarse) {
+  .pinned-sticky {
+    display: block;
+    height: auto;
+    min-height: 0;
+  }
+
+  .pinned-rail {
+    display: none;
+  }
+
+  .pinned-step {
+    opacity: 1;
+  }
+}
+
+/* Primary CTA glow ring (hover) and magnetic drift. */
+.cta-glow {
+  position: relative;
+}
+
+@media (pointer: fine) {
+  .cta-glow::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    border: 1px solid color-mix(in oklch, var(--color-accent) 55%, transparent);
+    opacity: 0;
+    transition: opacity 300ms var(--ease-soft);
+    pointer-events: none;
+  }
+
+  .cta-glow:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Content sections over the world: transparent so the scene shows through. */
+.world-content .world-section {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-canvas {
+    transition: none;
+  }
+}

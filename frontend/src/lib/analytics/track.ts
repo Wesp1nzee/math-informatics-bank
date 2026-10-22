@@ -9,6 +9,9 @@ export const ANALYTICS_EVENTS = {
   leadFormStart: "lead_form_start",
   leadFormSubmit: "lead_form_submit",
   leadFormError: "lead_form_error",
+  scrollDepth: "scroll_depth",
+  pinnedViewed: "pinned_viewed",
+  tabSwitch: "tab_switch",
 } as const;
 
 export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS];
