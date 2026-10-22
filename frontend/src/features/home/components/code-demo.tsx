@@ -3,7 +3,6 @@
 import { Pause, Play, SkipForward } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useMotionAllowed } from "@/components/motion/use-motion-allowed";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -16,14 +15,6 @@ import {
 import { cn } from "@/lib/utils/cn";
 
 type Status = "idle" | "typing" | "running" | "done";
-
-export type CodeStage = {
-  status: Status;
-  n?: number;
-  binary?: string;
-  r?: number;
-  result: number | null;
-};
 
 const STATUS_TONE: Record<Status, "neutral" | "accent" | "success"> = {
   idle: "neutral",
@@ -53,8 +44,7 @@ const VAR_VALUE =
 const CONTROL =
   "border-line-strong text-ink hover:border-ink hover:bg-surface inline-flex min-h-10 items-center gap-2 rounded-md border bg-transparent px-4 text-[15px] font-medium transition-colors";
 
-export function CodeDemo({ onStage }: { onStage?: (stage: CodeStage) => void }) {
-  const motionAllowed = useMotionAllowed();
+export function CodeDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
   const runIdRef = useRef(0);
   const pausedRef = useRef(false);
@@ -115,7 +105,7 @@ export function CodeDemo({ onStage }: { onStage?: (stage: CodeStage) => void }) 
 
     reset();
 
-    if (!motionAllowed) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       showFinal();
       return;
     }
@@ -188,7 +178,7 @@ export function CodeDemo({ onStage }: { onStage?: (stage: CodeStage) => void }) 
     setActiveLine(null);
     await pauseable(600);
     if (alive()) setInsightVisible(true);
-  }, [motionAllowed, reset, showFinal]);
+  }, [reset, showFinal]);
 
   const playRef = useRef(play);
 
@@ -222,10 +212,6 @@ export function CodeDemo({ onStage }: { onStage?: (stage: CodeStage) => void }) 
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    onStage?.({ status, n: vars.n, binary: vars.binary, r: vars.r, result });
-  }, [onStage, result, status, vars.binary, vars.n, vars.r]);
 
   const isRunning = status === "typing" || status === "running";
 

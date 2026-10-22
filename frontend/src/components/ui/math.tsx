@@ -1,3 +1,4 @@
+import "katex/dist/katex.min.css";
 import katex from "katex";
 
 import { cn } from "@/lib/utils/cn";

@@ -10,14 +10,12 @@ export {
   PRICING_FALLBACK_NOTE,
   REQUEST_PATH,
   REVIEWS,
+  SHORT_FACTS,
   SUBJECT_OPTIONS,
   TUTORING_FACTS,
   TUTORING_INTRO,
 } from "@/features/tutor-leads/content";
 export { Faq } from "@/features/tutor-leads/components/faq";
-export { FactsBento } from "@/features/tutor-leads/components/facts-bento";
-export { ProcessTimeline } from "@/features/tutor-leads/components/process-timeline";
-export { TopicMap } from "@/features/tutor-leads/components/topic-map";
 export { TutorLeadForm } from "@/features/tutor-leads/components/lead-form";
 export { TutoringHero } from "@/features/tutor-leads/components/tutoring-hero";
 export { Pricing } from "@/features/tutor-leads/components/pricing";
@@ -26,7 +24,6 @@ export { StickyCta } from "@/features/tutor-leads/components/sticky-cta";
 export { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 export { TutorLeadPanel } from "@/features/tutor-leads/components/tutor-lead-panel";
 export { TutorProfile } from "@/features/tutor-leads/components/tutor-profile";
-export { TutoringFacts } from "@/features/tutor-leads/components/tutoring-facts";
 export { selectPublishedReviews } from "@/features/tutor-leads/reviews";
 export type { CtaCopy, CtaPlacement } from "@/features/tutor-leads/content";
 export type {

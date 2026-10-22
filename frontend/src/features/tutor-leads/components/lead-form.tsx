@@ -27,7 +27,6 @@ import type {
 } from "@/features/tutor-leads/types";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { describeApiError } from "@/lib/api/errors";
-import { cn } from "@/lib/utils/cn";
 
 const DELIVERY_MESSAGE: Record<TutorLeadDelivery, string> = {
   api: "Заявка отправлена. Свяжусь с вами, чтобы договориться о времени.",
@@ -59,13 +58,7 @@ function toInput(values: TutorLeadFormValues): TutorLeadInput {
   };
 }
 
-export function TutorLeadForm({
-  channels,
-  className,
-}: {
-  channels: ContactChannels;
-  className?: string;
-}) {
+export function TutorLeadForm({ channels }: { channels: ContactChannels }) {
   const [delivery, setDelivery] = useState<TutorLeadDelivery | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -169,10 +162,7 @@ export function TutorLeadForm({
       onFocusCapture={markStarted}
       noValidate
       data-lead-form=""
-      className={cn(
-        "lead-form border-line bg-surface shadow-card flex flex-col gap-5 rounded-xl border p-6 md:p-8",
-        className,
-      )}
+      className="lead-form border-line bg-surface shadow-card flex flex-col gap-5 rounded-2xl border p-6 md:p-8"
     >
       <p className="text-ink-soft text-sm">
         Достаточно контакта и экзамена — остальное можно не заполнять.

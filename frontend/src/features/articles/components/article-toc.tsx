@@ -4,7 +4,7 @@ export function ArticleToc({ items }: { items: readonly ArticleTocItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-labelledby="toc-title" className="desk:sticky desk:top-24">
+    <nav aria-labelledby="toc-title" className="desk:self-start">
       <h2
         id="toc-title"
         className="text-ink-faint mb-4 text-sm font-medium tracking-[0.08em] uppercase"

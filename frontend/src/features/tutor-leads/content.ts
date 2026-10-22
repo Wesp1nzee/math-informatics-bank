@@ -95,6 +95,26 @@ export const TUTORING_FACTS: readonly { title: string; text: string }[] = [
   },
 ];
 
+/** Compact wording for the home and /podgotovka fact lists (source facts kept above). */
+export const SHORT_FACTS: readonly { title: string; text: string }[] = [
+  {
+    title: TUTORING_FACTS[0].title,
+    text: "Показываю, почему ошибка возникла именно у вас.",
+  },
+  {
+    title: TUTORING_FACTS[1].title,
+    text: "Начинаем с диагностики и идём от того, что не получается.",
+  },
+  {
+    title: TUTORING_FACTS[3].title,
+    text: "Посильные задания для закрепления, без лишнего объёма.",
+  },
+  {
+    title: TUTORING_FACTS[4].title,
+    text: "После занятия понятно, что получилось и что дальше.",
+  },
+];
+
 export const PRICING: PricingInfo | null = null;
 
 export const PRICING_FALLBACK_NOTE =

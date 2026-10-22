@@ -1,9 +1,9 @@
 import { StateMessage } from "@/components/ui/state-message";
-import { DeferredLeadForm } from "@/features/tutor-leads/components/deferred-lead-form";
+import { TutorLeadForm } from "@/features/tutor-leads/components/lead-form";
 import { isPublicApiConfigured } from "@/lib/api/config";
 import { mailHref, siteConfig, telegramHref } from "@/lib/constants/site";
 
-export function TutorLeadPanel({ formClassName }: { formClassName?: string }) {
+export function TutorLeadPanel() {
   const telegram = telegramHref(siteConfig.tutor.telegram);
   const email = mailHref(siteConfig.tutor.email);
   const apiConfigured = isPublicApiConfigured();
@@ -20,8 +20,7 @@ export function TutorLeadPanel({ formClassName }: { formClassName?: string }) {
   }
 
   return (
-    <DeferredLeadForm
-      className={formClassName}
+    <TutorLeadForm
       channels={{ telegramHref: telegram, emailHref: email, apiConfigured }}
     />
   );

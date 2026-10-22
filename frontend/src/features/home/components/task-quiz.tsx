@@ -2,24 +2,17 @@
 
 import { ArrowRight, CircleCheck } from "lucide-react";
 import Link from "next/link";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ComponentType,
-  type PointerEvent,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { useMotionAllowed } from "@/components/motion/use-motion-allowed";
-import type { QuizOptionsProps } from "@/features/home/components/quiz-options";
 import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
+import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
 
 export type QuizOption = { value: string; label: string };
 export type QuizStep = { note: string; content: ReactNode };
+export type Answer = { value: string; correct: boolean };
 
 type TaskQuizProps = {
   tag: string;
@@ -33,8 +26,6 @@ type TaskQuizProps = {
   steps: readonly QuizStep[];
   moreHref: string;
 };
-
-export type Answer = { value: string; correct: boolean };
 
 export function TaskQuiz({
   tag,
@@ -50,53 +41,14 @@ export function TaskQuiz({
 }: TaskQuizProps) {
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [visibleSteps, setVisibleSteps] = useState(0);
-  const [EnhancedOptions, setEnhancedOptions] =
-    useState<ComponentType<QuizOptionsProps> | null>(null);
-  const motionAllowed = useMotionAllowed();
+  const reducedMotion = usePrefersReducedMotion();
   const timersRef = useRef<number[]>([]);
-  const optionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     return () => {
       for (const timer of timersRef.current) window.clearTimeout(timer);
     };
   }, []);
-
-  useEffect(() => {
-    if (!motionAllowed || EnhancedOptions || answer) return;
-    const element = optionsRef.current;
-    if (!element) return;
-
-    let timer = 0;
-    let observer: IntersectionObserver | null = null;
-
-    const schedule = () => {
-      timer = window.setTimeout(() => {
-        void import("@/features/home/components/quiz-options").then((module) =>
-          setEnhancedOptions(() => module.QuizOptions),
-        );
-      }, 900);
-    };
-
-    if (typeof IntersectionObserver === "undefined") {
-      schedule();
-    } else {
-      observer = new IntersectionObserver(
-        (entries) => {
-          if (!entries.some((entry) => entry.isIntersecting)) return;
-          observer?.disconnect();
-          schedule();
-        },
-        { rootMargin: "320px 0px" },
-      );
-      observer.observe(element);
-    }
-
-    return () => {
-      if (timer) window.clearTimeout(timer);
-      observer?.disconnect();
-    };
-  }, [EnhancedOptions, answer, motionAllowed]);
 
   function clearTimers() {
     for (const timer of timersRef.current) window.clearTimeout(timer);
@@ -110,7 +62,7 @@ export function TaskQuiz({
     setAnswer({ value, correct });
     track(ANALYTICS_EVENTS.quizAnswer, { correct });
 
-    if (!motionAllowed) {
+    if (reducedMotion) {
       setVisibleSteps(steps.length);
       return;
     }
@@ -134,56 +86,36 @@ export function TaskQuiz({
     return undefined;
   }
 
-  function spotlight(event: PointerEvent<HTMLButtonElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty("--my", `${event.clientY - rect.top}px`);
-  }
-
   return (
     <article
       aria-labelledby="try-q"
-      className="border-line bg-surface shadow-card rounded-xl border p-6 md:p-10"
+      className="border-line bg-surface shadow-card rounded-xl border p-6 md:p-8"
     >
       <Badge>{tag}</Badge>
-      <h3 className="heading-3 mt-5 mb-1.5" id="try-q">
+      <h3 className="heading-3 mt-4 mb-1.5" id="try-q">
         {title}
       </h3>
 
-      <p className="mt-6 mb-2 text-[22px] leading-snug">{prompt}</p>
-      <div className="py-[18px] text-[26px]">{formula}</div>
+      <p className="mt-5 mb-2 text-[20px] leading-snug">{prompt}</p>
+      <div className="py-3 text-[24px]">{formula}</div>
 
-      <div ref={optionsRef}>
-        {EnhancedOptions ? (
-          <EnhancedOptions
-            options={options}
-            answer={answer}
-            correctValue={correctValue}
-            motionAllowed={motionAllowed}
-            onChoose={choose}
-            onSpotlight={spotlight}
-          />
-        ) : (
-          <div
-            role="group"
-            aria-label="Варианты ответа"
-            className="js-only mt-3 grid grid-cols-2 gap-2.5 md:grid-cols-4"
+      <div
+        role="group"
+        aria-label="Варианты ответа"
+        className="js-only mt-3 grid grid-cols-2 gap-2.5 md:grid-cols-4"
+      >
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            className="option"
+            disabled={answer !== null}
+            data-state={stateFor(option.value)}
+            onClick={() => choose(option.value)}
           >
-            {options.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className="option"
-                disabled={answer !== null}
-                data-state={stateFor(option.value)}
-                onClick={() => choose(option.value)}
-                onPointerMove={spotlight}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
+            {option.label}
+          </button>
+        ))}
       </div>
 
       <p className="no-js-only text-ink-soft mt-4 text-sm">
@@ -200,8 +132,8 @@ export function TaskQuiz({
         data-tone={answer?.correct === false ? "wrong" : answer ? "right" : undefined}
       >
         <div>
-          <div className="border-line mt-6 border-t pt-6 text-base">
-            <div className="answer-live" role="status" aria-live="polite" aria-atomic="true">
+          <div className="border-line mt-5 border-t pt-5 text-base">
+            <div role="status" aria-live="polite" aria-atomic="true">
               {answer ? (
                 <>
                   <span
@@ -216,12 +148,7 @@ export function TaskQuiz({
                     {answer.correct ? "Верно." : "Не совсем."}
                   </span>
 
-                  <p
-                    className={cn(
-                      "text-ink-soft",
-                      !answer.correct && "hint-signal rounded-r-md",
-                    )}
-                  >
+                  <p className="text-ink-soft">
                     {answer.correct
                       ? successNote
                       : `${hints[answer.value] ?? "Проверьте вычисления."} Правильный ход решения:`}
@@ -235,7 +162,7 @@ export function TaskQuiz({
                         data-visible={visibleSteps > index ? "" : undefined}
                         data-final={index === steps.length - 1 ? "" : undefined}
                       >
-                        <small className="text-ink-soft block text-[13px]">
+                        <small className="text-ink-soft block text-[14px]">
                           {step.note}
                         </small>
                         <span>{step.content}</span>
@@ -261,7 +188,7 @@ export function TaskQuiz({
                   </div>
 
                   {answer.correct ? (
-                    <TutorCta placement="quiz-success" size="compact" className="mt-6" />
+                    <TutorCta placement="quiz-success" size="compact" className="mt-5" />
                   ) : null}
                 </>
               ) : null}

@@ -5,7 +5,6 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
 import { BrandLogo } from "@/components/layout/brand-logo";
-import { MotionToggle } from "@/components/motion/motion-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
@@ -64,10 +63,6 @@ export function MobileNav() {
           <div className="border-line flex items-center justify-between border-b py-3.5">
             <span className="text-ink-soft text-sm">Тема</span>
             <ThemeToggle />
-          </div>
-
-          <div className="border-line border-b py-2.5">
-            <MotionToggle compact />
           </div>
 
           <Dialog.Close asChild>

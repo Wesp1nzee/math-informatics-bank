@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { Container } from "@/components/layout/container";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import { MotionToggle } from "@/components/motion/motion-toggle";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
@@ -51,7 +50,6 @@ export function SiteHeader() {
           </ul>
 
           <div className="ml-auto flex items-center gap-2">
-            <MotionToggle className="hidden md:inline-flex" />
             <ThemeToggle className="hidden md:inline-flex" />
 
             <Button asChild size="sm" className="hidden md:inline-flex">

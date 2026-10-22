@@ -4,7 +4,6 @@ import Script from "next/script";
 import type { ReactNode } from "react";
 
 import { siteConfig } from "@/lib/constants/site";
-import { motionInitScript } from "@/lib/motion";
 import { themeInitScript } from "@/lib/theme";
 import { YandexMetrika } from "@/lib/analytics/yandex-metrika";
 import "./globals.css";
@@ -17,7 +16,7 @@ const geist = Geist({
 
 const sourceSerif = Source_Serif_4({
   subsets: ["latin", "cyrillic"],
-  style: ["normal", "italic"],
+  style: ["italic"],
   variable: "--font-source-serif",
   display: "swap",
 });
@@ -43,11 +42,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
-        />
-        <Script
-          id="motion-init"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: motionInitScript }}
         />
         {children}
         <YandexMetrika />

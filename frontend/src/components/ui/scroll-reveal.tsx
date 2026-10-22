@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-const OFFSET = 40;
+const OFFSET = 24;
 
 export function ScrollReveal() {
   const pathname = usePathname();
@@ -29,7 +29,7 @@ export function ScrollReveal() {
           if (entry.isIntersecting) reveal(entry.target as HTMLElement);
         }
       },
-      { rootMargin: `0px 0px -${OFFSET}px 0px`, threshold: 0 },
+      { threshold: 0.25 },
     );
 
     function reveal(element: HTMLElement) {

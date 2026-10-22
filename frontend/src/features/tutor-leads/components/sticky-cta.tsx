@@ -10,7 +10,7 @@ import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
 
 function isRelevantPath(pathname: string): boolean {
-  if (pathname === "/") return true;
+  if (pathname === "/" || pathname === "/podgotovka") return true;
   return pathname.startsWith("/zadachi/") || pathname.startsWith("/articles/");
 }
 

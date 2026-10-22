@@ -1,14 +1,16 @@
-import Link from "next/link";
-import type { CSSProperties } from "react";
+import { CircleCheck } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import { FieldCanvas } from "@/components/motion/field-canvas";
-import { Magnetic } from "@/components/motion/magnetic";
-import { SplitHeading } from "@/components/motion/split-heading";
+import { ContourField } from "@/components/decor/contour-field";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/seo/breadcrumbs";
-import { Button, ButtonArrow } from "@/components/ui/button";
-import { TopicMap } from "@/features/tutor-leads/components/topic-map";
+import { TutorLeadPanel } from "@/features/tutor-leads/components/tutor-lead-panel";
 import { TUTORING_INTRO } from "@/features/tutor-leads/content";
+
+const CHECKS = [
+  "Разбор причин ошибок",
+  "Программа под ваш уровень",
+  "Онлайн, индивидуально",
+] as const;
 
 export function TutoringHero({
   breadcrumbs,
@@ -18,53 +20,42 @@ export function TutoringHero({
   return (
     <section
       aria-labelledby="tutoring-hero-title"
-      className="hero-section grain desk:pt-[146px] desk:pb-20 pt-[104px] pb-12 md:pt-32 md:pb-16"
+      className="hero-static grain relative isolate overflow-clip pt-[96px] pb-14 md:pt-28 md:pb-20"
     >
-      <FieldCanvas variant="scan" />
+      <ContourField muted />
 
-      <Container className="hero-content">
-        <Breadcrumbs className="mb-8" items={breadcrumbs} />
+      <Container className="relative z-[1]">
+        <Breadcrumbs className="mb-6 text-sm" items={breadcrumbs} />
 
-        <div className="grid grid-cols-12 items-start gap-4 md:gap-6">
-          <div className="hero-parallax desk:col-span-7 col-span-12">
-            <span className="eyebrow">Индивидуальные занятия</span>
-            <SplitHeading
-              as="h1"
+        <div className="flex flex-col gap-8 desk:grid desk:grid-cols-12 desk:gap-8">
+          <div className="desk:col-span-6 desk:row-start-1">
+            <h1
               id="tutoring-hero-title"
-              animate="load"
-              className="heading-2 max-w-[18ch]"
-              lines={[
-                [{ text: "Хотите" }, { text: "системный" }],
-                [{ text: "результат?", accent: true }],
-              ]}
-            />
-            <p className="body-large mt-6">{TUTORING_INTRO}</p>
+              className="heading-2 max-w-[16ch] text-balance"
+            >
+              Индивидуальные занятия по математике и информатике
+            </h1>
+            <p className="body-large mt-5">{TUTORING_INTRO}</p>
+          </div>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Magnetic>
-                <Button asChild className="cta-glow">
-                  <Link href="#request">
-                    Записаться на пробное <ButtonArrow />
-                  </Link>
-                </Button>
-              </Magnetic>
-              <Button asChild variant="secondary">
-                <Link href="/diagnostika">Пройти диагностику</Link>
-              </Button>
-            </div>
-
-            <div className="border-line text-ink-soft mt-10 grid max-w-[34rem] grid-cols-3 gap-3 border-t pt-5 text-xs">
-              <span className="instrument-coord">01 · диагностика</span>
-              <span className="instrument-coord">02 · пробелы</span>
-              <span className="instrument-coord">03 · работа</span>
+          <div
+            id="request"
+            className="desk:col-span-5 desk:col-start-8 desk:row-span-2 desk:row-start-1 order-2 scroll-mt-24"
+          >
+            <div className="border-line bg-surface shadow-card rounded-2xl border p-5 md:p-6">
+              <h2 className="heading-3 mb-4">Записаться на пробное</h2>
+              <TutorLeadPanel />
             </div>
           </div>
 
-          <div className="desk:col-span-5 desk:col-start-8 desk:mt-0 col-span-12 mt-10">
-            <div className="reveal" style={{ "--i": 2 } as CSSProperties}>
-              <TopicMap />
-            </div>
-          </div>
+          <ul className="desk:col-span-6 desk:row-start-2 order-3 m-0 flex list-none flex-col gap-3 p-0">
+            {CHECKS.map((item) => (
+              <li key={item} className="text-ink flex items-center gap-2 text-base">
+                <CircleCheck aria-hidden className="text-success size-5 shrink-0" />
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       </Container>
     </section>
