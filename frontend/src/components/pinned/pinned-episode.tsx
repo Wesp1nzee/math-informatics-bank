@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 
 import { Container } from "@/components/layout/container";
 import { setWorldState } from "@/features/world/bus";
@@ -21,6 +21,7 @@ type PinnedEpisodeProps = {
   title: string;
   subtitle?: string;
   steps: readonly PinnedStep[];
+  stages?: readonly ReactNode[];
   className?: string;
 };
 
@@ -41,6 +42,7 @@ export function PinnedEpisode({
   title,
   subtitle,
   steps,
+  stages,
   className,
 }: PinnedEpisodeProps) {
   const rootRef = useRef<HTMLElement>(null);
@@ -65,15 +67,28 @@ export function PinnedEpisode({
         const stepEls = Array.from(
           root.querySelectorAll<HTMLElement>("[data-pinned-step]"),
         );
-        const states = stepEls.map((step) => step.dataset.stepState ?? "").filter(Boolean);
+        const states = stepEls
+          .map((step) => step.dataset.stepState ?? "")
+          .filter(Boolean);
         const rail = root.querySelector<HTMLElement>("[data-rail-fill]");
         const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-rail-dot]"));
+        const stageEls = Array.from(
+          root.querySelectorAll<HTMLElement>("[data-pinned-stage]"),
+        );
+        const stageLabels = Array.from(
+          root.querySelectorAll<HTMLElement>("[data-stage-label]"),
+        );
 
         const setStep = (index: number) => {
           const clamped = Math.max(0, Math.min(stepEls.length - 1, index));
           stepEls.forEach((step, i) => {
             if (i === clamped) step.dataset.active = "";
             else delete step.dataset.active;
+          });
+          const stagePerStep = stageEls.length === stepEls.length;
+          stageEls.forEach((stage, i) => {
+            if (stagePerStep ? i === clamped : i === 0) stage.dataset.active = "";
+            else delete stage.dataset.active;
           });
           dots.forEach((dot, i) => {
             if (i <= clamped) dot.dataset.active = "";
@@ -83,6 +98,12 @@ export function PinnedEpisode({
             rail.style.transform = `scaleX(${clamped / Math.max(1, stepEls.length - 1)})`;
           }
           if (states[clamped]) setWorldState(states[clamped]);
+          for (const label of stageLabels) {
+            label.textContent = `Фаза ${String(clamped + 1).padStart(2, "0")} / ${String(stepEls.length).padStart(2, "0")}`;
+          }
+          root.dispatchEvent(
+            new CustomEvent("pinned-step", { detail: clamped, bubbles: false }),
+          );
         };
 
         ctx = gsap.context(() => {
@@ -99,7 +120,7 @@ export function PinnedEpisode({
             ScrollTrigger.create({
               trigger: root,
               start: `top top+=${HEADER_OFFSET}`,
-              end: () => `+=${Math.round(window.innerHeight * 2.4)}`,
+              end: () => `+=${Math.round(window.innerHeight * 2.2)}`,
               pin: true,
               anticipatePin: 1,
               invalidateOnRefresh: true,
@@ -168,11 +189,13 @@ export function PinnedEpisode({
                   className="pinned-step"
                 >
                   <div className="flex items-start gap-4">
-                    <span className="text-accent font-serif mt-0.5 text-2xl italic leading-none">
+                    <span className="text-accent mt-0.5 font-serif text-2xl leading-none italic">
                       {index + 1}
                     </span>
                     <div>
-                      <h3 className="text-ink m-0 text-lg font-semibold">{step.title}</h3>
+                      <h3 className="text-ink m-0 text-lg font-semibold">
+                        {step.title}
+                      </h3>
                       <p className="text-ink-soft mt-1.5 text-base leading-relaxed">
                         {step.text}
                       </p>
@@ -192,7 +215,34 @@ export function PinnedEpisode({
             </div>
           </div>
 
-          <div className="pinned-stage" aria-hidden="true" />
+          <div className="pinned-stage">
+            {stages?.length ? (
+              stages.map((stage, index) => (
+                <div
+                  key={index}
+                  data-pinned-stage=""
+                  data-active={index === 0 ? "" : undefined}
+                  className="pinned-stage-panel"
+                >
+                  <span className="pinned-stage-tag mb-3" data-stage-label="">
+                    Фаза 01 / {String(steps.length).padStart(2, "0")}
+                  </span>
+                  {stage}
+                </div>
+              ))
+            ) : (
+              <div className="pinned-stage-panel" data-pinned-stage="" data-active="">
+                <div className="glass border-line rounded-2xl border p-6">
+                  <p className="mono-label mb-3">Z-INDEX / PROGRESS</p>
+                  <p className="text-ink-soft text-base leading-relaxed">
+                    Этап {String(steps.length).padStart(2, "0")} из{" "}
+                    {String(steps.length).padStart(2, "0")} — маршрут разбора
+                    раскрывается по мере прокрутки.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </Container>
     </section>

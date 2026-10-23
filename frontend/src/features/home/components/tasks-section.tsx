@@ -5,30 +5,80 @@ import { Button, ButtonArrow } from "@/components/ui/button";
 import { TaskList } from "@/features/tasks/components/task-list";
 import { getFeaturedTasks } from "@/features/tasks/api";
 
+function PreviewGraph() {
+  return (
+    <svg
+      className="sparkline h-14 w-full"
+      viewBox="0 0 220 56"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M0 46 L26 40 L48 42 L72 30 L96 33 L120 20 L146 24 L170 12 L196 16 L220 4" />
+    </svg>
+  );
+}
+
 export async function TasksSection() {
   const tasks = await getFeaturedTasks(3);
 
   return (
-    <WorldSection id="tasks" worldState="materials" labelledBy="bank-title">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <h2 id="bank-title" data-split-text className="heading-2 heading-scrim">
-          Банк задач
-        </h2>
-        <p className="text-ink-soft heading-scrim m-0 text-base">
-          Без регистрации. Бесплатно.
-        </p>
+    <WorldSection
+      id="tasks"
+      worldState="materials"
+      labelledBy="bank-title"
+      className="section-frame"
+    >
+      <div className="desk:grid-cols-12 grid grid-cols-1 items-end gap-6">
+        <div className="desk:col-span-7">
+          <span className="mono-label mb-4">TASK BANK / LIVE</span>
+          <h2 id="bank-title" data-split-text className="heading-2 heading-scrim">
+            Банк задач
+          </h2>
+          <p className="text-ink-soft heading-scrim mt-4 max-w-[32em] text-lg leading-relaxed">
+            Без регистрации. Бесплатно. Каждая задача — с пошаговым разбором и проверкой
+            ответа.
+          </p>
+        </div>
+
+        <div className="desk:col-span-5">
+          <div className="bento-cell">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span className="mono-label">PROGRESS / 01</span>
+                <p className="text-ink mt-2 text-base font-medium">
+                  Живая траектория разбора
+                </p>
+              </div>
+              <span className="metric-chip">
+                <b>∞</b>
+                <span className="text-ink-soft">попыток</span>
+              </span>
+            </div>
+            <PreviewGraph />
+          </div>
+        </div>
       </div>
 
       <div className="reveal mt-8">
-        <TaskList tasks={tasks} />
+        {tasks.length > 0 ? (
+          <TaskList tasks={tasks} />
+        ) : (
+          <div className="glass border-line rounded-2xl border p-6 md:p-8">
+            <p className="text-ink-soft m-0 text-base leading-relaxed">
+              Подборка обновляется. Откройте банк, чтобы выбрать тему и уровень
+              сложности.
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 flex flex-wrap items-center gap-4">
         <Button asChild>
           <Link href="/zadachi">
             Открыть весь банк <ButtonArrow />
           </Link>
         </Button>
+        <span className="mono-label">математика · информатика · ОГЭ · ЕГЭ</span>
       </div>
     </WorldSection>
   );

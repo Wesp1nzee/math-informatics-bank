@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 import { WorldSection } from "@/components/layout/world-section";
 import { TaskQuiz, type QuizStep } from "@/features/home/components/task-quiz";
 
@@ -22,20 +24,94 @@ const HINTS: Record<string, string> = {
   "12": "12 — это только 3·2². Не забудьте слагаемые −8x и +7.",
 };
 
+const ERRORS = [
+  {
+    code: "E-01",
+    title: "Смысл условия теряется",
+    expect: "«Я понял, что нужно найти, значит решаю правильно».",
+    reality: "Формулировка ЕГЭ проверяет конкретный шаг, а не общее узнавание темы.",
+    action:
+      "Разбираем, что именно требует критерий, и учимся читать условие по частям.",
+  },
+  {
+    code: "E-02",
+    title: "Арифметика под давлением",
+    expect: "«Дома получалось, на экзамене тоже получится».",
+    reality:
+      "Скорость и волнение ломают подстановки и знаки в самый неподходящий момент.",
+    action: "Тренируем короткие проверки и доводим операции до автоматизма.",
+  },
+  {
+    code: "E-03",
+    title: "Оформление и критерии",
+    expect: "«Главное — правильный ответ».",
+    reality: "Часть баллов теряется там, где решение не соответствует критериям.",
+    action: "Сверяем каждую запись с форматом проверки и фиксируем шаблон.",
+  },
+] as const;
+
+const step = (index: number) => ({ "--i": index }) as CSSProperties;
+
 export function ErrorBreakdown() {
   return (
-    <WorldSection worldState="error-quiz" labelledBy="error-title">
-      <div className="grid grid-cols-1 items-start gap-8 desk:grid-cols-12">
-        <div className="desk:col-span-5 reveal ">
+    <WorldSection
+      worldState="error-quiz"
+      labelledBy="error-title"
+      className="section-frame"
+    >
+      <div className="desk:grid-cols-12 grid grid-cols-1 items-start gap-8">
+        <div className="desk:col-span-5 reveal">
+          <span className="mono-label mb-4">ERROR / ANATOMY</span>
           <h2 id="error-title" data-split-text className="heading-2 heading-scrim">
             Так выглядит разбор ошибки
           </h2>
           <p className="text-ink-soft heading-scrim mt-5 max-w-[28em] text-lg leading-relaxed">
             Показываю, почему решение не сошлось, и как разбирать похожие задачи.
           </p>
+
+          <div className="mt-8 grid gap-3">
+            {ERRORS.map((error, index) => (
+              <article
+                key={error.code}
+                className="bento-cell reveal"
+                style={step(index)}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="mono-label">{error.code}</span>
+                  <span className="text-ink-faint font-mono text-sm">
+                    {String(index + 1).padStart(2, "0")} / 03
+                  </span>
+                </div>
+                <h3 className="text-ink mt-2 mb-3 text-lg font-semibold">
+                  {error.title}
+                </h3>
+                <dl className="m-0 grid gap-2 text-sm leading-relaxed">
+                  <div>
+                    <dt className="text-ink-faint">Ожидание ученика</dt>
+                    <dd className="text-ink-soft m-0">{error.expect}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-faint">Реальность проверки</dt>
+                    <dd className="text-ink-soft m-0">{error.reality}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-success">Как закрываем</dt>
+                    <dd className="text-ink-soft m-0">{error.action}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
         </div>
 
-        <div className="desk:col-span-6 desk:col-start-7 reveal ">
+        <div className="desk:col-span-6 desk:col-start-7 reveal">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <span className="mono-label">LIVE / CHECK</span>
+            <span className="metric-chip">
+              <b>1</b>
+              <span className="text-ink-soft">задача до разбора</span>
+            </span>
+          </div>
           <TaskQuiz
             tag="ЕГЭ · Профиль"
             title="Производная"

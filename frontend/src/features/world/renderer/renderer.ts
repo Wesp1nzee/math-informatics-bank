@@ -10,7 +10,13 @@ import {
 } from "@/features/world/landscape";
 import type { PulseKind, Vec2, WorldPalette, WorldState } from "@/features/world/types";
 import { getWorldState } from "@/features/world/world-states";
-import { mat4Identity, mat4LookAt, mat4Multiply, mat4Perspective, type Mat4 } from "@/features/world/renderer/mat4";
+import {
+  mat4Identity,
+  mat4LookAt,
+  mat4Multiply,
+  mat4Perspective,
+  type Mat4,
+} from "@/features/world/renderer/mat4";
 import { compileProgram } from "@/features/world/renderer/program";
 
 const HALF = WORLD_SIZE / 2;
@@ -298,6 +304,121 @@ void main(){
 }
 `;
 
+const MORPH_VERT = `#version 300 es
+precision highp float;
+
+layout(location=0) in vec4 aSeed;
+layout(location=1) in vec3 aGrid;
+
+uniform mat4 uViewProj;
+uniform float uTime;
+uniform float uShape;
+uniform float uScroll;
+uniform vec2 uPointer;
+uniform vec3 uAccent;
+uniform vec3 uPeak;
+uniform vec3 uSignalColor;
+uniform float uGlow;
+uniform float uSignalAmt;
+uniform float uPixelRatio;
+uniform float uPulse;
+
+out vec3 vColor;
+out float vAlpha;
+
+void main(){
+  float t = uTime;
+  float u = aSeed.x;
+  float v = aSeed.y;
+  float rnd = aSeed.z;
+  vec3 g = aGrid;
+
+  float a = u * 6.2831853;
+  float b = v * 6.2831853;
+
+  float wobble = 1.0 + 0.08 * sin(t * 1.1 + a * 3.0);
+  vec3 pTorus = vec3(
+    (2.55 + 0.95 * cos(b)) * cos(a) * wobble,
+    (2.55 + 0.95 * cos(b)) * sin(a) * wobble,
+    0.95 * sin(b) * (1.0 + 0.12 * sin(t * 0.9 + a * 2.0))
+  );
+
+  float wx = g.x * 5.2;
+  float wz = g.z * 5.2;
+  vec3 pWave = vec3(
+    wx,
+    sin(wx * 1.5 + t * 0.35) * cos(wz * 1.5) * 1.45,
+    wz
+  );
+
+  vec3 q = floor((g * 0.5 + 0.5) * 5.0 + 0.5) / 5.0 * 2.0 - 1.0;
+  vec3 pLattice = vec3(q.x * 3.6, q.y * 3.0, q.z * 3.6);
+  float latticePulse = pow(max(0.0, sin(t * 1.7 + (q.x + q.y + q.z) * 2.6)), 8.0);
+  pLattice += normalize(q + vec3(0.001)) * latticePulse * 0.42;
+
+  vec3 n = normalize(g + vec3(0.001, 0.002, 0.003));
+  vec3 pSphere = n * (3.0 + 0.16 * sin(t * 1.2 + n.y * 5.0));
+
+  float ringRadius = 4.1 + 0.42 * sin(b * 2.0 + t * 1.2);
+  vec3 pRing = vec3(
+    cos(a) * ringRadius,
+    sin(a) * ringRadius * 0.74,
+    sin(b * 2.0 + t) * 0.55
+  );
+
+  vec3 p = pTorus;
+  p = mix(p, pWave, clamp(uShape, 0.0, 1.0));
+  p = mix(p, pLattice, clamp(uShape - 1.0, 0.0, 1.0));
+  p = mix(p, pSphere, clamp(uShape - 2.0, 0.0, 1.0));
+  p = mix(p, pRing, clamp(uShape - 3.0, 0.0, 1.0));
+
+  p.y += 1.45;
+
+  float heroWeight = 1.0 - clamp(uShape, 0.0, 1.0);
+  p.x += uPointer.x * heroWeight * (0.55 + rnd * 0.45);
+  p.y -= uPointer.y * heroWeight * (0.25 + rnd * 0.2);
+
+  float rot = t * 0.06 + uScroll * 1.35;
+  float cs = cos(rot);
+  float sn = sin(rot);
+  p.xz = mat2(cs, -sn, sn, cs) * p.xz;
+  p *= 1.0 + 0.025 * sin(t * 0.8);
+  p *= 1.0 + uPulse * 0.06;
+
+  gl_Position = uViewProj * vec4(p, 1.0);
+  gl_PointSize = (2.0 + 2.6 * rnd) * uPixelRatio * (1.0 + uPulse * 1.2);
+
+  vColor = mix(uAccent, uPeak, clamp(g.y * 0.5 + 0.5, 0.0, 1.0));
+  vColor = mix(vColor, uSignalColor, uSignalAmt * 0.55);
+  float band = step(0.86, fract(rnd * 9.0 + uPulse * 3.0));
+  vColor += band * 0.28;
+  vAlpha = mix(0.34, 0.92, rnd) * uGlow;
+}
+`;
+
+const MORPH_FRAG = `#version 300 es
+precision highp float;
+
+in vec3 vColor;
+in float vAlpha;
+
+out vec4 outColor;
+
+uniform float uLine;
+
+void main(){
+  if (uLine > 0.5) {
+    outColor = vec4(vColor, vAlpha * 0.22);
+    return;
+  }
+  vec2 c = gl_PointCoord * 2.0 - 1.0;
+  float r = length(c);
+  if (r > 1.0) discard;
+  float glow = pow(1.0 - r, 1.7);
+  outColor = vec4(vColor, glow * vAlpha);
+}
+`;
+
 // ---------------------------------------------------------------------------
 // Renderer
 // ---------------------------------------------------------------------------
@@ -305,6 +426,85 @@ void main(){
 type TerrainMesh = { vao: WebGLVertexArrayObject; count: number };
 type RibbonMesh = { vao: WebGLVertexArrayObject; vbo: WebGLBuffer; count: number };
 type QuadMesh = { vao: WebGLVertexArrayObject };
+type MorphMesh = {
+  pointVao: WebGLVertexArrayObject;
+  pointCount: number;
+  lineVao: WebGLVertexArrayObject;
+  lineCount: number;
+};
+
+function createMorphMesh(gl: WebGL2RenderingContext, n: number): MorphMesh {
+  const pointData: number[] = [];
+  const coords: [number, number, number][] = [];
+  for (let k = 0; k < n; k += 1) {
+    for (let j = 0; j < n; j += 1) {
+      for (let i = 0; i < n; i += 1) {
+        const gx = (i / (n - 1)) * 2 - 1;
+        const gy = (k / (n - 1)) * 2 - 1;
+        const gz = (j / (n - 1)) * 2 - 1;
+        const seed =
+          Math.abs(
+            Math.sin((i + 1) * 12.9898 + (j + 1) * 78.233 + (k + 1) * 37.719) *
+              43758.5453,
+          ) % 1;
+        pointData.push(i / (n - 1), j / (n - 1), seed, (i + j + k) % 3);
+        pointData.push(gx, gy, gz);
+        coords.push([i, j, k]);
+      }
+    }
+  }
+
+  const lineData: number[] = [];
+  const pushVertex = (i: number, j: number, k: number) => {
+    const gx = (i / (n - 1)) * 2 - 1;
+    const gy = (k / (n - 1)) * 2 - 1;
+    const gz = (j / (n - 1)) * 2 - 1;
+    const seed =
+      Math.abs(
+        Math.sin((i + 1) * 12.9898 + (j + 1) * 78.233 + (k + 1) * 37.719) * 43758.5453,
+      ) % 1;
+    lineData.push(i / (n - 1), j / (n - 1), seed, (i + j + k) % 3);
+    lineData.push(gx, gy, gz);
+  };
+  for (const [i, j, k] of coords) {
+    if (i < n - 1) {
+      pushVertex(i, j, k);
+      pushVertex(i + 1, j, k);
+    }
+    if (j < n - 1) {
+      pushVertex(i, j, k);
+      pushVertex(i, j + 1, k);
+    }
+    if (k < n - 1) {
+      pushVertex(i, j, k);
+      pushVertex(i, j, k + 1);
+    }
+  }
+
+  const buildVao = (data: number[]): WebGLVertexArrayObject => {
+    const vao = gl.createVertexArray()!;
+    gl.bindVertexArray(vao);
+    const vbo = gl.createBuffer()!;
+    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+    const stride = 7 * 4;
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 4, gl.FLOAT, false, stride, 0);
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 3, gl.FLOAT, false, stride, 4 * 4);
+    gl.bindVertexArray(null);
+    return vao;
+  };
+
+  const pointVao = buildVao(pointData);
+  const lineVao = buildVao(lineData);
+  return {
+    pointVao,
+    pointCount: pointData.length / 7,
+    lineVao,
+    lineCount: lineData.length / 7,
+  };
+}
 
 function createTerrain(gl: WebGL2RenderingContext, n: number): TerrainMesh {
   const step = WORLD_SIZE / n;
@@ -327,8 +527,12 @@ function createTerrain(gl: WebGL2RenderingContext, n: number): TerrainMesh {
       const b = a + 1;
       const c = a + verts;
       const d = c + 1;
-      indices[k++] = a; indices[k++] = c; indices[k++] = b;
-      indices[k++] = b; indices[k++] = c; indices[k++] = d;
+      indices[k++] = a;
+      indices[k++] = c;
+      indices[k++] = b;
+      indices[k++] = b;
+      indices[k++] = c;
+      indices[k++] = d;
     }
   }
 
@@ -375,7 +579,9 @@ export class WorldRenderer {
   private ribbonB: RibbonMesh;
   private groundProgram: ReturnType<typeof compileProgram>;
   private billboardProgram: ReturnType<typeof compileProgram>;
+  private morphProgram: ReturnType<typeof compileProgram>;
   private quad: QuadMesh;
+  private morph: MorphMesh;
 
   private current: WorldState;
   private target: WorldState;
@@ -392,6 +598,7 @@ export class WorldRenderer {
   private pointer = { x: 0, y: 0, active: false };
   private time = 0;
   private lastT = 0;
+  private scrollProgress = 0;
 
   private dpr = 1;
   private width = 0;
@@ -434,12 +641,14 @@ export class WorldRenderer {
     this.ribbonProgram = compileProgram(gl, RIBBON_VERT, RIBBON_FRAG);
     this.groundProgram = compileProgram(gl, GROUND_VERT, GROUND_FRAG);
     this.billboardProgram = compileProgram(gl, BILLBOARD_VERT, BILLBOARD_FRAG);
+    this.morphProgram = compileProgram(gl, MORPH_VERT, MORPH_FRAG);
 
     const detail = this.deviceDetailLevel();
     this.terrain = createTerrain(gl, detail);
     this.quad = createQuad(gl);
     this.ribbonA = this.createRibbon();
     this.ribbonB = this.createRibbon();
+    this.morph = createMorphMesh(gl, detail < 120 ? 8 : 10);
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
@@ -466,6 +675,7 @@ export class WorldRenderer {
       drawA: 0.9,
       drawB: 0.55,
       marker: [LANDSCAPE.plateauX, LANDSCAPE.plateauZ],
+      shape: 0,
     };
   }
 
@@ -548,6 +758,10 @@ export class WorldRenderer {
     this.dark = dark;
   }
 
+  setScroll(progress: number): void {
+    this.scrollProgress = Math.min(1, Math.max(0, progress));
+  }
+
   setDpr(dpr: number): void {
     this.dpr = dpr;
     this.resize(this.width, this.height);
@@ -573,7 +787,13 @@ export class WorldRenderer {
     this.idle = false;
   }
 
-  private spawnRipple(x: number, z: number, maxRadius: number, color: [number, number, number], dur: number): void {
+  private spawnRipple(
+    x: number,
+    z: number,
+    maxRadius: number,
+    color: [number, number, number],
+    dur: number,
+  ): void {
     this.ripples.push({ x, z, start: this.time, dur, maxRadius, color });
     if (this.ripples.length > 3) this.ripples.shift();
   }
@@ -589,7 +809,11 @@ export class WorldRenderer {
     const right = [f[2], 0, -f[0]] as const;
     const rl = Math.hypot(right[0], right[2]) || 1;
     const r = [right[0] / rl, 0, right[2] / rl];
-    const up = [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]] as const;
+    const up = [
+      r[1] * f[2] - r[2] * f[1],
+      r[2] * f[0] - r[0] * f[2],
+      r[0] * f[1] - r[1] * f[0],
+    ] as const;
     const tan = Math.tan(FOVY / 2);
     const aspect = this.width / Math.max(1, this.height);
 
@@ -674,12 +898,24 @@ export class WorldRenderer {
     }
   }
 
-  get stats(): { avgFrameMs: number; dpr: number; degradations: number; frames: number; stopped: boolean } {
+  get stats(): {
+    avgFrameMs: number;
+    dpr: number;
+    degradations: number;
+    frames: number;
+    stopped: boolean;
+  } {
     const avg =
       this.frameSamples.length > 0
         ? this.frameSamples.reduce((a, b) => a + b, 0) / this.frameSamples.length
         : 0;
-    return { avgFrameMs: avg, dpr: this.dpr, degradations: this.degradations, frames: this.frames, stopped: this.stopped };
+    return {
+      avgFrameMs: avg,
+      dpr: this.dpr,
+      degradations: this.degradations,
+      frames: this.frames,
+      stopped: this.stopped,
+    };
   }
 
   /** Debug pixel readback (requires preserveDrawingBuffer). */
@@ -712,6 +948,7 @@ export class WorldRenderer {
     c.glow = this.lerp1(c.glow, t.glow, k);
     c.drawA = this.lerp1(c.drawA, t.drawA, k);
     c.drawB = this.lerp1(c.drawB, t.drawB, k);
+    c.shape = this.lerp1(c.shape, t.shape, k);
     c.marker = this.lerp2(c.marker, t.marker, k);
 
     // signal combines the target and transient spikes.
@@ -729,7 +966,8 @@ export class WorldRenderer {
       if (this.scanT >= 1) this.scanT = -1;
     }
     for (let i = this.ripples.length - 1; i >= 0; i -= 1) {
-      if (this.time - this.ripples[i].start > this.ripples[i].dur) this.ripples.splice(i, 1);
+      if (this.time - this.ripples[i].start > this.ripples[i].dur)
+        this.ripples.splice(i, 1);
     }
   }
 
@@ -739,8 +977,16 @@ export class WorldRenderer {
   private lerp2(a: Vec2, b: Vec2, t: number): Vec2 {
     return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
   }
-  private lerp3(a: WorldState["cam"], b: WorldState["cam"], t: number): WorldState["cam"] {
-    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  private lerp3(
+    a: WorldState["cam"],
+    b: WorldState["cam"],
+    t: number,
+  ): WorldState["cam"] {
+    return [
+      a[0] + (b[0] - a[0]) * t,
+      a[1] + (b[1] - a[1]) * t,
+      a[2] + (b[2] - a[2]) * t,
+    ];
   }
 
   // --- geometry rebuild ----------------------------------------------------
@@ -754,7 +1000,10 @@ export class WorldRenderer {
     };
   }
 
-  private buildRibbonBuffer(path: Vec2[], halfWidth: number): { data: Float32Array; count: number } {
+  private buildRibbonBuffer(
+    path: Vec2[],
+    halfWidth: number,
+  ): { data: Float32Array; count: number } {
     const params = this.landscapeParams(this.current.signal);
     const n = path.length;
     const data = new Float32Array(n * 2 * 5);
@@ -768,7 +1017,8 @@ export class WorldRenderer {
       let dx = next[0] - prev[0];
       let dz = next[1] - prev[1];
       const len = Math.hypot(dx, dz) || 1;
-      dx /= len; dz /= len;
+      dx /= len;
+      dz /= len;
       // Perpendicular in xz-plane.
       const px = -dz;
       const pz = dx;
@@ -827,11 +1077,49 @@ export class WorldRenderer {
       (pxw / Math.max(1, this.height)) * dist * Math.tan(FOVY / 2) * 2;
 
     this.renderTerrain(eye);
+    this.renderMorph();
     this.renderRibbons(pxToWorld);
     this.renderMarker();
     this.renderRipples();
     this.renderPulse(pxToWorld);
     this.renderPillar();
+  }
+
+  private renderMorph(): void {
+    const gl = this.gl;
+    const c = this.current;
+    const u = this.morphProgram.uniforms;
+    gl.useProgram(this.morphProgram.program);
+    gl.uniformMatrix4fv(u.get("uViewProj")!, false, this.viewProj);
+    gl.uniform1f(u.get("uTime")!, this.time);
+    gl.uniform1f(u.get("uShape")!, c.shape);
+    gl.uniform1f(u.get("uScroll")!, this.scrollProgress);
+    gl.uniform2f(
+      u.get("uPointer")!,
+      this.pointer.active ? this.pointer.x : 0,
+      this.pointer.active ? -this.pointer.y : 0,
+    );
+    gl.uniform3fv(u.get("uAccent")!, this.palette.accent);
+    gl.uniform3fv(u.get("uPeak")!, this.palette.peak);
+    gl.uniform3fv(u.get("uSignalColor")!, this.palette.signal);
+    gl.uniform1f(u.get("uGlow")!, c.glow);
+    gl.uniform1f(u.get("uSignalAmt")!, c.signal);
+    gl.uniform1f(u.get("uPixelRatio")!, Math.min(this.dpr, 1.5));
+    gl.uniform1f(
+      u.get("uPulse")!,
+      this.pulseWave >= 0 ? Math.sin(Math.PI * this.pulseWave) : 0,
+    );
+
+    gl.depthMask(false);
+    this.glowBlend();
+    gl.uniform1f(u.get("uLine")!, 1);
+    gl.bindVertexArray(this.morph.lineVao);
+    gl.drawArrays(gl.LINES, 0, this.morph.lineCount);
+    gl.uniform1f(u.get("uLine")!, 0);
+    gl.bindVertexArray(this.morph.pointVao);
+    gl.drawArrays(gl.POINTS, 0, this.morph.pointCount);
+    gl.bindVertexArray(null);
+    gl.depthMask(true);
   }
 
   private setTerrainUniforms(eye: [number, number, number]): void {
@@ -865,7 +1153,10 @@ export class WorldRenderer {
     gl.uniform3fv(u.get("uFog")!, this.palette.fog);
     gl.uniform1f(u.get("uFogAmount")!, this.current.fog * 0.12);
     gl.uniform1f(u.get("uSignalAmt")!, this.current.signal);
-    gl.uniform1f(u.get("uScan")!, this.scanT >= 0 ? this.scanT * WORLD_SIZE - HALF : -999);
+    gl.uniform1f(
+      u.get("uScan")!,
+      this.scanT >= 0 ? this.scanT * WORLD_SIZE - HALF : -999,
+    );
     gl.uniform3fv(u.get("uCamPos")!, eye);
     gl.uniform1f(u.get("uHalf")!, HALF);
     gl.uniform3fv(u.get("uAccent")!, this.palette.accent);
@@ -902,7 +1193,10 @@ export class WorldRenderer {
     this.glowBlend();
 
     // Path A (solution) — accent.
-    gl.uniform3fv(u.get("uColor")!, this.dark ? this.palette.accent : this.mul(this.palette.accent, 0.9));
+    gl.uniform3fv(
+      u.get("uColor")!,
+      this.dark ? this.palette.accent : this.mul(this.palette.accent, 0.9),
+    );
     gl.uniform1f(u.get("uDraw")!, c.drawA);
     gl.uniform1f(u.get("uOpacity")!, 0.85 * c.glow);
     gl.bindVertexArray(this.ribbonA.vao);
@@ -1018,7 +1312,11 @@ export class WorldRenderer {
     const y = heightAt(point[0], point[1], params) + 0.1;
     const size = pxToWorld(26);
 
-    const forward = [this.current.look[0] - this.current.cam[0], this.current.look[1] - this.current.cam[1], this.current.look[2] - this.current.cam[2]];
+    const forward = [
+      this.current.look[0] - this.current.cam[0],
+      this.current.look[1] - this.current.cam[1],
+      this.current.look[2] - this.current.cam[2],
+    ];
     const fl = Math.hypot(...forward) || 1;
     const right = [forward[2] / fl, 0, -forward[0] / fl];
 
@@ -1046,7 +1344,10 @@ export class WorldRenderer {
 
   private glowBlend(): void {
     // Additive in dark mode (true glow); normal blending on light paper.
-    this.gl.blendFunc(this.gl.SRC_ALPHA, this.dark ? this.gl.ONE : this.gl.ONE_MINUS_SRC_ALPHA);
+    this.gl.blendFunc(
+      this.gl.SRC_ALPHA,
+      this.dark ? this.gl.ONE : this.gl.ONE_MINUS_SRC_ALPHA,
+    );
   }
 
   dispose(): void {
@@ -1058,6 +1359,8 @@ export class WorldRenderer {
     gl.deleteVertexArray(this.quad.vao);
     gl.deleteVertexArray(this.ribbonA.vao);
     gl.deleteVertexArray(this.ribbonB.vao);
+    gl.deleteVertexArray(this.morph.pointVao);
+    gl.deleteVertexArray(this.morph.lineVao);
     this.gl.getExtension("WEBGL_lose_context")?.loseContext();
   }
 }

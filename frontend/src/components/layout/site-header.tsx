@@ -25,8 +25,10 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-[14px] transition-colors duration-300",
-        scrolled ? "border-line bg-canvas/88" : "bg-canvas/60 border-transparent",
+        "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-[20px] transition-colors duration-300",
+        scrolled
+          ? "border-line bg-canvas/85 shadow-[0_18px_40px_-34px_rgba(11,18,32,0.6)]"
+          : "bg-canvas/60 border-transparent",
       )}
     >
       <Container>

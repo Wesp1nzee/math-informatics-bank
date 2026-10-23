@@ -38,7 +38,13 @@ const CSS_VARS = {
 function readHex(name: string): [number, number, number] {
   const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const hex = raw.replace(/^#/, "");
-  const full = hex.length === 3 ? hex.split("").map((c) => c + c).join("") : hex;
+  const full =
+    hex.length === 3
+      ? hex
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : hex;
   const n = Number.parseInt(full, 16);
   if (Number.isNaN(n)) return [0, 0, 0];
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
@@ -75,7 +81,10 @@ function detectSoftwareRenderer(): boolean {
 }
 
 function detectWeakDevice(): boolean {
-  const cores = typeof navigator.hardwareConcurrency === "number" ? navigator.hardwareConcurrency : 8;
+  const cores =
+    typeof navigator.hardwareConcurrency === "number"
+      ? navigator.hardwareConcurrency
+      : 8;
   const mem = (navigator as { deviceMemory?: number }).deviceMemory ?? 8;
   return cores <= 4 || mem <= 4;
 }
@@ -106,7 +115,8 @@ export function WorldCanvas() {
       const params = new URLSearchParams(window.location.search);
       const force = params.get("world") === "force";
       const saveData =
-        (navigator as { connection?: { saveData?: boolean } }).connection?.saveData === true;
+        (navigator as { connection?: { saveData?: boolean } }).connection?.saveData ===
+        true;
 
       let mode: string;
 
@@ -152,13 +162,25 @@ export function WorldCanvas() {
         const ny = (event.clientY / window.innerHeight) * 2 - 1;
         renderer?.setPointer(nx, ny);
       };
-      const onScroll = () => renderer?.resume();
+      let scrollFrame = 0;
+      const syncScroll = () => {
+        scrollFrame = 0;
+        if (!renderer) return;
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - window.innerHeight;
+        renderer.setScroll(max > 0 ? window.scrollY / max : 0);
+      };
+      const onScroll = () => {
+        renderer?.resume();
+        if (scrollFrame === 0) scrollFrame = window.requestAnimationFrame(syncScroll);
+      };
       const onKey = () => renderer?.resume();
 
       window.addEventListener("resize", onResize, { passive: true });
       window.addEventListener("pointermove", onPointerMove, { passive: true });
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("keydown", onKey, { passive: true });
+      syncScroll();
 
       const unsubscribeTheme = subscribeTheme(() => {
         renderer?.setPalette(readPalette(), isDark());
@@ -187,6 +209,7 @@ export function WorldCanvas() {
         window.removeEventListener("pointermove", onPointerMove);
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("keydown", onKey);
+        if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
         unsubscribeTheme();
         window.clearInterval(statsInterval);
         unregisterWorld();
@@ -199,7 +222,11 @@ export function WorldCanvas() {
 
     function scheduleInit(): void {
       const viaIdle = () => {
-        const idle = (window as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => void }).requestIdleCallback;
+        const idle = (
+          window as {
+            requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => void;
+          }
+        ).requestIdleCallback;
         if (typeof idle === "function") idle(() => init(), { timeout: 2500 });
         else window.setTimeout(init, 300);
       };
