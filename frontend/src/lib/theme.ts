@@ -62,4 +62,4 @@ export function getThemePreference(): ThemePreference {
 
 export const themeInitScript = `(function(){try{var value=localStorage.getItem(${JSON.stringify(
   THEME_STORAGE_KEY,
-)});if(value!=="light"&&value!=="dark"){value=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=value;document.documentElement.dataset.js="true"}catch(e){}})();`;
+)});if(value!=="light"&&value!=="dark"){value="dark"}document.documentElement.dataset.theme=value;document.documentElement.dataset.js="true"}catch(e){}})();`;

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Source_Serif_4 } from "next/font/google";
+import {
+  Geist,
+  JetBrains_Mono,
+  Onest,
+  Source_Serif_4,
+} from "next/font/google";
 import Script from "next/script";
 import type { ReactNode } from "react";
 
@@ -21,6 +26,20 @@ const sourceSerif = Source_Serif_4({
   display: "swap",
 });
 
+const onest = Onest({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "700", "800"],
+  variable: "--font-onest",
+  display: "swap",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin", "cyrillic"],
+  weight: ["500"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: "Математика и информатика — задачи, разборы и занятия",
@@ -33,7 +52,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="ru"
-      className={`${geist.variable} ${sourceSerif.variable}`}
+      className={`${geist.variable} ${sourceSerif.variable} ${onest.variable} ${jetBrainsMono.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

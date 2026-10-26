@@ -1,25 +1,42 @@
 import type { Metadata } from "next";
 
-import { Container } from "@/components/layout/container";
+import { JsonLd } from "@/components/seo/json-ld";
+import { TutoringPage } from "@/features/landing/tutoring-page";
+import { FAQ_ITEMS, TUTORING_INTRO } from "@/features/tutor-leads/content";
+import { hasTutorProfile, siteConfig } from "@/lib/constants/site";
+import { faqPageJsonLd, personJsonLd, serviceJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Подготовка — в разработке",
-  description: "Страница временно заменена заглушкой.",
+  title: "Репетиторство: индивидуальные занятия по математике и информатике",
+  description:
+    "Индивидуальные занятия по математике и информатике для подготовки к ОГЭ и ЕГЭ. Находим пробелы по темам и выстраиваем работу вокруг них.",
   path: "/podgotovka",
-  noIndex: true,
 });
 
-export default function TutoringPage() {
+export default function TutoringRoute() {
+  const { tutor } = siteConfig;
+
   return (
-    <section className="desk:pt-[150px] desk:pb-16 pt-[104px] pb-10 md:pt-32">
-      <Container>
-        <h1 className="heading-2">Подготовка</h1>
-        <p className="body-large mt-6 max-w-[60ch]">
-          Страница временно заменена текстовой заглушкой. Скоро здесь появится новая
-          версия.
-        </p>
-      </Container>
-    </section>
+    <>
+      <JsonLd data={faqPageJsonLd(FAQ_ITEMS)} />
+      {hasTutorProfile ? (
+        <JsonLd
+          data={personJsonLd({
+            name: tutor.name,
+            description: tutor.about.split("\n")[0],
+            image: tutor.photo || undefined,
+          })}
+        />
+      ) : null}
+      <JsonLd
+        data={serviceJsonLd({
+          name: "Индивидуальные занятия по математике и информатике",
+          description: TUTORING_INTRO,
+          providerName: hasTutorProfile ? tutor.name : undefined,
+        })}
+      />
+      <TutoringPage />
+    </>
   );
 }

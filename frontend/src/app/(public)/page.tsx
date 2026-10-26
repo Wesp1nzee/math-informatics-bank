@@ -1,25 +1,49 @@
 import type { Metadata } from "next";
 
-import { Container } from "@/components/layout/container";
+import { LandingPage } from "@/features/landing/landing";
+import { siteConfig } from "@/lib/constants/site";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Главная — в разработке",
-  description: "Страница временно заменена заглушкой.",
+  title: "ОСНОВА — математика и информатика, 7–11 классы",
+  description:
+    "Индивидуальные занятия по математике и информатике для 7–11 классов. Подготовка к ОГЭ и ЕГЭ.",
   path: "/",
-  noIndex: true,
 });
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Индивидуальные занятия по математике и информатике",
+  description: siteConfig.description,
+  areaServed: "RU",
+  provider: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+  },
+  serviceType: ["Математика", "Информатика", "Подготовка к ОГЭ", "Подготовка к ЕГЭ"],
+};
+
 export default function HomePage() {
+  const { tutor } = siteConfig;
+  const teacher =
+    tutor.name && tutor.about
+      ? {
+          name: tutor.name,
+          role: "Преподаватель",
+          approach: tutor.about,
+          photo: tutor.photo || undefined,
+        }
+      : undefined;
+
   return (
-    <section className="desk:pt-[150px] desk:pb-16 pt-[104px] pb-10 md:pt-32">
-      <Container>
-        <h1 className="heading-2">Главная</h1>
-        <p className="body-large mt-6 max-w-[60ch]">
-          Страница временно заменена текстовой заглушкой. Скоро здесь появится новая
-          версия.
-        </p>
-      </Container>
-    </section>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <LandingPage teacher={teacher} />
+    </>
   );
 }
