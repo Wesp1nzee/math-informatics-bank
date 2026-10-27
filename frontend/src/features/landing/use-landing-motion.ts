@@ -133,24 +133,8 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
     const nodes = track ? Array.from(track.querySelectorAll<HTMLElement>(".node")) : [];
     const steps = Array.from(root.querySelectorAll<HTMLElement>(".step"));
 
-    /*
-     * The progress route only needs work while its section is on screen. The
-     * observer parks it completely once the reader scrolls past.
-     */
-    let trackNear = true;
-    const trackObserver =
-      track && typeof IntersectionObserver !== "undefined"
-        ? new IntersectionObserver(
-            (entries) => {
-              trackNear = entries[0]?.isIntersecting ?? false;
-            },
-            { rootMargin: "35% 0px 35% 0px", threshold: 0 },
-          )
-        : null;
-    if (track && trackObserver) {
-      trackNear = false;
-      trackObserver.observe(track);
-    }
+    /* Only touched while the process section is near the viewport. */
+    let trackNear = typeof IntersectionObserver === "undefined";
 
     const curveHeight = (x: number): number =>
       60 + 26 * Math.sin((x / 1000) * Math.PI * 3);
@@ -234,6 +218,25 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
     };
 
     if (compact || reduce) clearParallax();
+
+    /*
+     * The progress route parks completely once the reader scrolls past. The
+     * first intersection report can arrive after the scroll that revealed the
+     * section, so it re-runs one frame itself.
+     */
+    const trackObserver =
+      track && typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => {
+              const next = entries[0]?.isIntersecting ?? false;
+              if (next === trackNear) return;
+              trackNear = next;
+              onScroll();
+            },
+            { rootMargin: "35% 0px 35% 0px", threshold: 0 },
+          )
+        : null;
+    if (track) trackObserver?.observe(track);
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);

@@ -1,5 +1,18 @@
 import { expect, test } from "@playwright/test";
 
+async function scrollThrough(page: import("@playwright/test").Page): Promise<void> {
+  await page.evaluate(async () => {
+    const step = Math.max(200, Math.round(window.innerHeight * 0.55));
+    const max = document.documentElement.scrollHeight;
+    for (let y = 0; y <= max; y += step) {
+      window.scrollTo({ top: y, behavior: "instant" });
+      await new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      );
+    }
+  });
+}
+
 test.describe("landing motion", () => {
   test("process steps become active while scrolling", async ({ page }) => {
     await page.goto("/");
@@ -17,9 +30,7 @@ test.describe("landing motion", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
     await page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
-    await page.evaluate(() =>
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
-    );
+    await scrollThrough(page);
 
     await expect
       .poll(() =>
