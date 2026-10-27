@@ -45,6 +45,56 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
     const parallaxItems = Array.from(root.querySelectorAll<HTMLElement>("[data-p]"));
     const visualItems = Array.from(root.querySelectorAll<HTMLElement>(".viz"));
 
+    const revealGroups = new Map<Element, number>();
+    for (const element of revealItems) {
+      const group = element.closest("section") ?? root;
+      const index = revealGroups.get(group) ?? 0;
+      revealGroups.set(group, index + 1);
+      element.style.setProperty("--stagger-index", String(Math.min(index, 6)));
+    }
+
+    const pendingReveals = new Set(revealItems);
+
+    const finishReveal = (element: HTMLElement) => {
+      element.style.filter = "none";
+      element.style.willChange = "auto";
+      element.dataset.revealed = "";
+    };
+
+    const revealElement = (element: HTMLElement) => {
+      if (!pendingReveals.delete(element)) return;
+      element.dataset.inView = "";
+
+      const onTransitionEnd = (event: TransitionEvent) => {
+        if (event.target !== element || event.propertyName !== "filter") return;
+        element.removeEventListener("transitionend", onTransitionEnd);
+        finishReveal(element);
+      };
+      element.addEventListener("transitionend", onTransitionEnd);
+      window.setTimeout(() => finishReveal(element), 1200);
+    };
+
+    const revealObserver =
+      !reduce && typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) revealElement(entry.target as HTMLElement);
+              }
+            },
+            { threshold: 0.16, rootMargin: "0px 0px -7% 0px" },
+          )
+        : null;
+
+    if (reduce || !revealObserver) {
+      for (const element of revealItems) {
+        element.dataset.inView = "";
+        if (!reduce) finishReveal(element);
+      }
+    } else {
+      for (const element of revealItems) revealObserver.observe(element);
+    }
+
     const trackPath = query<SVGPathElement>("#pl");
     const trackBase = query<SVGPathElement>("#pb");
     const progressDot = query<HTMLElement>("#pdot");
@@ -78,22 +128,14 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
         const y = window.scrollY;
 
         if (!reduce) {
-          revealItems.forEach((element) => {
-            const bounds = element.getBoundingClientRect();
-            const progress =
-              1 -
-              Math.pow(
-                1 -
-                  clamp(
-                    (viewportHeight * 0.94 - bounds.top) / (viewportHeight * 0.3),
-                    0,
-                    1,
-                  ),
-                3,
-              );
-            element.style.opacity = progress.toFixed(3);
-            element.style.transform = `translate3d(0, ${((1 - progress) * 28).toFixed(1)}px, 0)`;
-          });
+          if (revealObserver && pendingReveals.size > 0) {
+            const limit = viewportHeight * 0.94;
+            for (const element of Array.from(pendingReveals)) {
+              if (element.getBoundingClientRect().top < limit) {
+                revealElement(element);
+              }
+            }
+          }
 
           visualItems.forEach((element) => {
             const bounds = element.getBoundingClientRect();
@@ -387,9 +429,13 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
         visualizer.update(99);
       });
       revealItems.forEach((element) => {
+        element.dataset.inView = "";
         element.style.opacity = "";
         element.style.transform = "";
+        element.style.filter = "";
+        element.style.willChange = "";
       });
+      revealObserver?.disconnect();
       [...parallaxItems, ...visualItems].forEach((element) => {
         element.style.removeProperty("translate");
       });
@@ -401,6 +447,7 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       motionQuery.removeEventListener("change", onMotionChange);
+      revealObserver?.disconnect();
       visualObservers.forEach((observer) => observer.disconnect());
       cancelAnimationFrame(loopRaf);
     };

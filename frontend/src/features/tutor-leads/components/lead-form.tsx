@@ -202,7 +202,7 @@ export function TutorLeadForm({
       <div
         role="status"
         data-lead-form=""
-        className="border-success/40 bg-success-soft shadow-card relative overflow-hidden rounded-xl border p-6 md:p-8"
+        className="border-success/40 bg-success-soft shadow-card relative w-full min-w-0 overflow-hidden rounded-xl border p-5 sm:p-6 md:p-8"
       >
         <span className="success-crystal mb-4" aria-hidden="true">
           <span />
@@ -251,7 +251,7 @@ export function TutorLeadForm({
       onChange={syncSnapshot}
       noValidate
       data-lead-form=""
-      className="lead-form border-line bg-surface shadow-card flex flex-col gap-5 rounded-2xl border p-5 md:p-6"
+      className="lead-form border-line bg-surface shadow-card flex w-full max-w-full min-w-0 flex-col gap-5 rounded-2xl border p-4 sm:p-5 md:p-6"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-ink-soft m-0 text-sm">
@@ -430,14 +430,23 @@ export function TutorLeadForm({
         </p>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-3">
-        <Button type="submit" disabled={pending} className="cta-glow">
+      <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <Button
+          type="submit"
+          disabled={pending}
+          className="cta-glow min-h-11 w-full sm:w-auto"
+        >
           <Send aria-hidden className="size-4" />
           {pending ? "Отправляем…" : "Отправить заявку"}
         </Button>
 
         {channels.telegramHref ? (
-          <Button type="button" variant="secondary" onClick={openTelegram}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={openTelegram}
+            className="min-h-11 w-full sm:w-auto"
+          >
             <SendHorizontal aria-hidden className="size-4" />
             Написать в Telegram
           </Button>

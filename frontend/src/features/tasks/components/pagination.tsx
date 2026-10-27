@@ -62,7 +62,10 @@ export function Pagination({
   return (
     <nav
       aria-label="Постраничная навигация"
-      className={cn("flex items-center justify-center gap-2", className)}
+      className={cn(
+        "flex w-full max-w-full flex-wrap items-center justify-center gap-2",
+        className,
+      )}
     >
       <StepLink
         href={hrefForPage(Math.max(1, page - 1))}
@@ -71,7 +74,7 @@ export function Pagination({
         disabled={page <= 1}
       />
 
-      <ul className="m-0 flex list-none items-center gap-2 p-0">
+      <ul className="m-0 flex max-w-full list-none flex-wrap items-center justify-center gap-2 p-0">
         {pages.map((item) => {
           const active = item === page;
           return (

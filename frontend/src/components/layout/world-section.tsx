@@ -29,7 +29,7 @@ export function WorldSection({
       id={id}
       aria-labelledby={labelledBy}
       data-world-state={worldState}
-      className={cn("world-section relative py-14 md:py-24", className)}
+      className={cn("world-section relative w-full min-w-0 py-14 md:py-24", className)}
     >
       <Container className={containerClassName}>{children}</Container>
     </section>

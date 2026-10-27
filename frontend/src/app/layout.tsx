@@ -53,7 +53,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
-      <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
+      <body
+        className="flex min-h-dvh w-full max-w-full flex-col overflow-x-clip"
+        suppressHydrationWarning
+      >
         <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
         <Script
           id="theme-init"

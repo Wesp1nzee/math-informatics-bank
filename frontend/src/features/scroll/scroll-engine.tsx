@@ -177,6 +177,7 @@ export function ScrollEngine() {
         const max = doc.scrollHeight - window.innerHeight;
         const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
         doc.style.setProperty("--scroll-progress", progress.toFixed(4));
+        doc.style.setProperty("--scroll-y", `${window.scrollY.toFixed(1)}px`);
         const vh = window.innerHeight;
         for (const item of parallaxItems) {
           const raw = (window.scrollY - item.top + vh) / (vh + item.height);

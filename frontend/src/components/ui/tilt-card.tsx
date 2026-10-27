@@ -3,10 +3,19 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils/cn";
+import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
+
+const SPRING = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 /**
- * Pointer-driven tilt (≤ 6°) for showcase cards. Fine-pointer desktops only;
- * disabled for reduced motion. Interactive input cards should not use this.
+ * Pointer-driven tilt (≤ 6°) for showcase cards.
+ *
+ * - Fine pointers: magnetic tilt + specular glare under the cursor.
+ * - Coarse pointers: touch tilt while dragging plus a subtle scroll-linked
+ *   glare so cards still feel glassy while the page moves.
+ *
+ * Only CSS custom properties are written from rAF callbacks, so the compositor
+ * handles transform/opacity. Reduced motion opts out entirely.
  */
 export function TiltCard({
   children,
@@ -18,48 +27,136 @@ export function TiltCard({
   max?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (reduceMotion) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    let raf = 0;
-    const onMove = (event: PointerEvent) => {
-      const rect = el.getBoundingClientRect();
-      const px = (event.clientX - rect.left) / rect.width;
-      const py = (event.clientY - rect.top) / rect.height;
-      const rx = (0.5 - py) * 2 * max;
-      const ry = (px - 0.5) * 2 * max;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        el.style.transform = `perspective(1000px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
-      });
+    const coarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    const touchMax = Math.min(max, 4.5);
+
+    let frame = 0;
+    let scrollFrame = 0;
+    let touching = false;
+
+    const setTilt = (rx: number, ry: number) => {
+      el.style.setProperty("--tilt-x", `${rx.toFixed(2)}deg`);
+      el.style.setProperty("--tilt-y", `${ry.toFixed(2)}deg`);
     };
-    const onLeave = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+
+    const setGlare = (x: number, y: number, opacity: number) => {
+      el.style.setProperty("--glare-x", `${x.toFixed(1)}%`);
+      el.style.setProperty("--glare-y", `${y.toFixed(1)}%`);
+      el.style.setProperty("--glare-opacity", opacity.toFixed(3));
+    };
+
+    const reset = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        setTilt(0, 0);
+        setGlare(50, 50, 0);
       });
     };
 
-    el.addEventListener("pointermove", onMove);
-    el.addEventListener("pointerleave", onLeave);
-    return () => {
-      el.removeEventListener("pointermove", onMove);
-      el.removeEventListener("pointerleave", onLeave);
-      cancelAnimationFrame(raf);
+    const fromPointer = (event: PointerEvent, limit: number) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const px = (event.clientX - rect.left) / rect.width;
+      const py = (event.clientY - rect.top) / rect.height;
+      const clampedX = Math.min(1, Math.max(0, px));
+      const clampedY = Math.min(1, Math.max(0, py));
+      const rx = (0.5 - clampedY) * 2 * limit;
+      const ry = (clampedX - 0.5) * 2 * limit;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        setTilt(rx, ry);
+        setGlare(clampedX * 100, clampedY * 100, coarse ? 0.22 : 0.3);
+      });
     };
-  }, [max]);
+
+    if (!coarse) {
+      const onMove = (event: PointerEvent) => {
+        if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+        fromPointer(event, max);
+      };
+      const onLeave = () => reset();
+
+      el.addEventListener("pointermove", onMove);
+      el.addEventListener("pointerleave", onLeave);
+      return () => {
+        el.removeEventListener("pointermove", onMove);
+        el.removeEventListener("pointerleave", onLeave);
+        cancelAnimationFrame(frame);
+      };
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.pointerType === "mouse") return;
+      touching = true;
+      fromPointer(event, touchMax);
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (!touching || event.pointerType === "mouse") return;
+      fromPointer(event, touchMax);
+    };
+
+    const release = () => {
+      touching = false;
+      reset();
+    };
+
+    const onScroll = () => {
+      if (touching || scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = 0;
+        const rect = el.getBoundingClientRect();
+        const viewport = window.innerHeight || 1;
+        const center = rect.top + rect.height / 2;
+        const visibility = Math.min(
+          1,
+          Math.max(0, 1 - Math.abs(center - viewport / 2) / (viewport * 0.9)),
+        );
+        const tilt = (center / viewport - 0.5) * 1.4;
+        setTilt(tilt, 0);
+        setGlare(50, 12 + (center / viewport) * 76, 0.06 + visibility * 0.12);
+      });
+    };
+
+    el.addEventListener("pointerdown", onPointerDown, { passive: true });
+    el.addEventListener("pointermove", onPointerMove, { passive: true });
+    el.addEventListener("pointerup", release, { passive: true });
+    el.addEventListener("pointercancel", release, { passive: true });
+    el.addEventListener("pointerleave", release, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    onScroll();
+
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", release);
+      el.removeEventListener("pointercancel", release);
+      el.removeEventListener("pointerleave", release);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+      if (scrollFrame) cancelAnimationFrame(scrollFrame);
+    };
+  }, [max, reduceMotion]);
 
   return (
     <div
       ref={ref}
       className={cn("tilt-card", className)}
-      style={{ transition: "transform 220ms ease-out" }}
+      style={{
+        transition: `transform 260ms ${SPRING}`,
+      }}
     >
       {children}
+      <span className="tilt-glare" aria-hidden="true" />
     </div>
   );
 }

@@ -1,9 +1,19 @@
+"use client";
+
+import { useEffect, useMemo, useRef, type CSSProperties } from "react";
+
+import { currentWorldState, subscribeWorldState } from "@/features/world/bus";
 import { heightAt, LANDSCAPE, WORLD_SIZE } from "@/features/world/landscape";
+import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
 
 /**
- * Static, no-JS fallback rendered before (and behind) the WebGL world. It
- * draws real isolines of the same landscape using marching squares, plus a
- * gradient and grain, so the background is never empty or flashing white.
+ * Mobile-first 2.5D fallback rendered before (and behind) the WebGL world.
+ *
+ * Desktop keeps the original static isoline look while the canvas warms up.
+ * On phones the layers come alive: ambient aura drifts, contours draw in and
+ * each depth plane follows the page scroll through CSS custom properties.
+ * Section changes on the shared world bus recolor the aura without re-rendering
+ * React trees.
  */
 
 const VIEW_W = 1200;
@@ -82,6 +92,10 @@ function buildContours(): string[] {
   return paths;
 }
 
+function round(value: number, digits = 3): number {
+  return Number(value.toFixed(digits));
+}
+
 function buildOrbNodes(): { x: number; y: number; r: number; o: number }[] {
   const nodes: { x: number; y: number; r: number; o: number }[] = [];
   const count = 96;
@@ -91,10 +105,12 @@ function buildOrbNodes(): { x: number; y: number; r: number; o: number }[] {
     const x = 0.72 + Math.sin(phi) * Math.cos(theta) * 0.22;
     const y = 0.36 + Math.cos(phi) * 0.22;
     nodes.push({
-      x: x * VIEW_W,
-      y: y * VIEW_H,
-      r: 1.2 + ((i * 7) % 5) * 0.5,
-      o: 0.35 + ((i * 11) % 6) * 0.09,
+      // Round server/client trig results: V8 versions may differ in the last
+      // bits, and React treats that as a hydration mismatch.
+      x: round(x * VIEW_W),
+      y: round(y * VIEW_H),
+      r: round(1.2 + ((i * 7) % 5) * 0.5, 2),
+      o: round(0.35 + ((i * 11) % 6) * 0.09, 2),
     });
   }
   return nodes;
@@ -103,17 +119,92 @@ function buildOrbNodes(): { x: number; y: number; r: number; o: number }[] {
 const ORB_NODES = buildOrbNodes();
 
 export function WorldFallback() {
-  const contours = buildContours();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = usePrefersReducedMotion();
+  const contours = useMemo(() => buildContours(), []);
   const cx = VIEW_W * 0.72;
   const cy = VIEW_H * 0.36;
 
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    if (!window.matchMedia("(max-width: 767px)").matches) return;
+
+    const applyState = (name: string) => {
+      root.dataset.worldLive = name || "hero";
+    };
+    applyState(currentWorldState() ?? "hero");
+    const unsubscribe = subscribeWorldState(applyState);
+
+    if (reduceMotion) {
+      root.style.setProperty("--fallback-scroll-a", "0px");
+      root.style.setProperty("--fallback-scroll-b", "0px");
+      root.style.setProperty("--fallback-scroll-c", "0px");
+      root.style.setProperty("--fallback-scroll-progress", "0");
+      return () => {
+        unsubscribe();
+      };
+    }
+
+    let frame = 0;
+    let maxScroll = 1;
+
+    const measure = () => {
+      maxScroll = Math.max(
+        1,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
+    };
+
+    const paint = () => {
+      frame = 0;
+      const y = window.scrollY;
+      root.style.setProperty("--fallback-scroll-a", `${(y * 0.025).toFixed(1)}px`);
+      root.style.setProperty("--fallback-scroll-b", `${(y * 0.06).toFixed(1)}px`);
+      root.style.setProperty("--fallback-scroll-c", `${(y * 0.11).toFixed(1)}px`);
+      root.style.setProperty(
+        "--fallback-scroll-progress",
+        Math.min(1, Math.max(0, y / maxScroll)).toFixed(3),
+      );
+    };
+
+    const onScroll = () => {
+      if (frame === 0) frame = window.requestAnimationFrame(paint);
+    };
+    const onResize = () => {
+      measure();
+      onScroll();
+    };
+
+    measure();
+    paint();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [reduceMotion]);
+
   return (
-    <div className="world-fallback" aria-hidden="true">
-      <div className="world-fallback-glow world-fallback-glow-a" />
-      <div className="world-fallback-glow world-fallback-glow-b" />
-      <div className="world-fallback-orb" />
-      <div className="world-fallback-ring world-fallback-ring-a" />
-      <div className="world-fallback-ring world-fallback-ring-b" />
+    <div
+      ref={rootRef}
+      data-world-live="hero"
+      className="world-fallback world-fallback-live"
+      aria-hidden="true"
+    >
+      <div className="world-fallback-aura" aria-hidden="true">
+        <div className="world-fallback-glow world-fallback-glow-a" />
+        <div className="world-fallback-glow world-fallback-glow-b" />
+      </div>
+      <div className="world-fallback-depth world-fallback-depth-mid">
+        <div className="world-fallback-orb" />
+        <div className="world-fallback-ring world-fallback-ring-a" />
+        <div className="world-fallback-ring world-fallback-ring-b" />
+      </div>
       <svg
         className="world-fallback-svg"
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -132,35 +223,45 @@ export function WorldFallback() {
           </linearGradient>
         </defs>
 
-        {contours.map((d, index) => (
-          <path key={index} d={d} className="world-contour" />
-        ))}
-
-        <circle cx={cx} cy={cy} r={VIEW_W * 0.27} fill="url(#world-orb-fill)" />
-        <g className="world-orb-lines" stroke="url(#world-orb-stroke)" fill="none">
-          <ellipse cx={cx} cy={cy} rx={VIEW_W * 0.27} ry={VIEW_W * 0.095} />
-          <ellipse
-            cx={cx}
-            cy={cy}
-            rx={VIEW_W * 0.27}
-            ry={VIEW_W * 0.095}
-            transform={`rotate(58 ${cx} ${cy})`}
-          />
-          <ellipse
-            cx={cx}
-            cy={cy}
-            rx={VIEW_W * 0.27}
-            ry={VIEW_W * 0.095}
-            transform={`rotate(-58 ${cx} ${cy})`}
-          />
-          <circle cx={cx} cy={cy} r={VIEW_W * 0.27} />
-          <circle cx={cx} cy={cy} r={VIEW_W * 0.205} opacity={0.55} />
-          <circle cx={cx} cy={cy} r={VIEW_W * 0.135} opacity={0.32} />
-        </g>
-        <g fill="var(--world-accent)">
-          {ORB_NODES.map((node, index) => (
-            <circle key={index} cx={node.x} cy={node.y} r={node.r} opacity={node.o} />
+        <g className="world-fallback-contours">
+          {contours.map((d, index) => (
+            <path
+              key={index}
+              d={d}
+              pathLength={1}
+              className="world-contour"
+              style={{ "--i": index } as CSSProperties}
+            />
           ))}
+        </g>
+
+        <g className="world-fallback-orb-layer">
+          <circle cx={cx} cy={cy} r={VIEW_W * 0.27} fill="url(#world-orb-fill)" />
+          <g className="world-orb-lines" stroke="url(#world-orb-stroke)" fill="none">
+            <ellipse cx={cx} cy={cy} rx={VIEW_W * 0.27} ry={VIEW_W * 0.095} />
+            <ellipse
+              cx={cx}
+              cy={cy}
+              rx={VIEW_W * 0.27}
+              ry={VIEW_W * 0.095}
+              transform={`rotate(58 ${cx} ${cy})`}
+            />
+            <ellipse
+              cx={cx}
+              cy={cy}
+              rx={VIEW_W * 0.27}
+              ry={VIEW_W * 0.095}
+              transform={`rotate(-58 ${cx} ${cy})`}
+            />
+            <circle cx={cx} cy={cy} r={VIEW_W * 0.27} />
+            <circle cx={cx} cy={cy} r={VIEW_W * 0.205} opacity={0.55} />
+            <circle cx={cx} cy={cy} r={VIEW_W * 0.135} opacity={0.32} />
+          </g>
+          <g fill="var(--world-accent)" className="world-fallback-nodes">
+            {ORB_NODES.map((node, index) => (
+              <circle key={index} cx={node.x} cy={node.y} r={node.r} opacity={node.o} />
+            ))}
+          </g>
         </g>
       </svg>
       <div className="world-fallback-grain" />

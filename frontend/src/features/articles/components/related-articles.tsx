@@ -14,9 +14,9 @@ export function RelatedArticles({ articles }: { articles: readonly Article[] }) 
         <h2 id="related-articles-title" className="heading-3 mb-10">
           Связанные материалы
         </h2>
-        <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 md:gap-6">
+        <ul className="m-0 grid w-full min-w-0 list-none gap-4 p-0 sm:grid-cols-2 md:gap-6">
           {articles.map((article) => (
-            <li key={article.slug} className="flex">
+            <li key={article.slug} className="flex min-w-0">
               <ArticleCard article={article} />
             </li>
           ))}

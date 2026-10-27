@@ -57,13 +57,13 @@ export function TaskTypeHubPage({ hub }: { hub: ExamHub }) {
       </PageHero>
 
       <Section labelledBy="task-hub-how-title">
-        <div className="grid grid-cols-12 gap-4 md:gap-6">
-          <div className="desk:col-span-5 col-span-12">
+        <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 gap-4 md:gap-6">
+          <div className="desk:col-span-5 col-span-1 min-w-0">
             <h2 id="task-hub-how-title" className="heading-3">
               Как пользоваться картой
             </h2>
           </div>
-          <div className="desk:col-span-6 desk:col-start-7 col-span-12">
+          <div className="desk:col-span-6 desk:col-start-7 col-span-1 min-w-0">
             <p className="body-large">
               Не пытайтесь решать всё подряд. Сначала определите, какие номера дают
               базовый балл, затем добавьте темы, где вы уже понимаете условие, но

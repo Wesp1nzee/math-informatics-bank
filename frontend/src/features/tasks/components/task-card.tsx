@@ -11,14 +11,14 @@ export function TaskCard({ task }: { task: Task }) {
   return (
     <Link
       href={getTaskPath(task.id)}
-      className="group border-line bg-surface ease-soft hover:border-ink shadow-card hover:shadow-float flex h-full w-full flex-col gap-3.5 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-0.5"
+      className="group border-line bg-surface ease-soft hover:border-ink shadow-card hover:shadow-float flex h-full w-full min-w-0 flex-col gap-3.5 rounded-2xl border p-5 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-0.5 sm:p-6"
     >
       <span className="text-ink-faint text-sm tabular-nums">#{task.id}</span>
-      <h3 className="text-2xl leading-tight font-medium tracking-[-0.02em]">
+      <h3 className="text-2xl leading-tight font-medium tracking-[-0.02em] break-words">
         {task.title}
       </h3>
       <Badge className="self-start">{task.examLabel}</Badge>
-      <p className="text-ink-soft flex-1 text-base">{task.summary}</p>
+      <p className="text-ink-soft flex-1 text-base break-words">{task.summary}</p>
       <div className="border-line text-ink-soft flex items-center justify-between gap-3 border-t pt-4 text-sm">
         <span className="inline-flex flex-wrap items-center gap-x-1">
           <DifficultyMeter level={task.level} />

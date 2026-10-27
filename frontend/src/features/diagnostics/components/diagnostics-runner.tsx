@@ -14,6 +14,7 @@ import type {
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
+import { triggerHaptic } from "@/lib/utils/haptics";
 
 function answerList(
   items: readonly DiagnosticItem[],
@@ -39,6 +40,7 @@ export function DiagnosticsRunner({ items }: { items: readonly DiagnosticItem[] 
 
     setError(null);
     setReport(buildDiagnosticReport(items, answerList(items, answers)));
+    triggerHaptic([10, 22, 10]);
     window.requestAnimationFrame(() => reportHeadingRef.current?.focus());
   }
 
@@ -66,7 +68,7 @@ export function DiagnosticsRunner({ items }: { items: readonly DiagnosticItem[] 
             : "Ошибок нет. Обсудим, как держать этот уровень на экзамене."}
         </p>
 
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+        <ul className="mt-8 grid w-full min-w-0 gap-3 sm:grid-cols-2">
           {report.topics.map((topic) => (
             <li
               key={topic.topic}
@@ -98,12 +100,18 @@ export function DiagnosticsRunner({ items }: { items: readonly DiagnosticItem[] 
               return (
                 <li key={item.id} className="flex items-start gap-3">
                   {isCorrect ? (
-                    <CheckCircle2 aria-hidden className="text-success mt-0.5 size-5 shrink-0" />
+                    <CheckCircle2
+                      aria-hidden
+                      className="text-success mt-0.5 size-5 shrink-0"
+                    />
                   ) : (
-                    <XCircle aria-hidden className="text-danger mt-0.5 size-5 shrink-0" />
+                    <XCircle
+                      aria-hidden
+                      className="text-danger mt-0.5 size-5 shrink-0"
+                    />
                   )}
-                  <div>
-                    <p className="text-ink font-medium">
+                  <div className="min-w-0">
+                    <p className="text-ink font-medium [overflow-wrap:anywhere]">
                       {index + 1}. {item.prompt}
                     </p>
                     <p className="text-ink-soft mt-1 text-sm">{item.explanation}</p>
@@ -136,11 +144,15 @@ export function DiagnosticsRunner({ items }: { items: readonly DiagnosticItem[] 
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="flex w-full min-w-0 flex-col gap-6"
+    >
       {items.map((item, index) => (
         <fieldset
           key={item.id}
-          className="border-line bg-surface rounded-xl border p-5 md:p-6"
+          className="border-line bg-surface w-full min-w-0 rounded-xl border p-4 sm:p-5 md:p-6"
         >
           <legend className="text-ink px-1 text-lg leading-snug font-medium">
             {index + 1}. {item.prompt}
@@ -154,7 +166,7 @@ export function DiagnosticsRunner({ items }: { items: readonly DiagnosticItem[] 
                   key={option.value}
                   htmlFor={id}
                   className={cn(
-                    "flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-4 transition-colors",
+                    "flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-4 transition-[background-color,border-color,transform] duration-150 ease-out motion-safe:active:scale-[0.99]",
                     selected
                       ? "border-accent bg-accent-soft"
                       : "border-line-strong hover:border-ink hover:bg-surface-subtle",
@@ -166,12 +178,13 @@ export function DiagnosticsRunner({ items }: { items: readonly DiagnosticItem[] 
                     name={item.id}
                     value={option.value}
                     checked={selected}
-                    onChange={() =>
+                    onChange={() => {
+                      triggerHaptic(8);
                       setAnswers((previous) => ({
                         ...previous,
                         [item.id]: option.value,
-                      }))
-                    }
+                      }));
+                    }}
                     className="accent-accent size-4"
                   />
                   <span className="text-ink">{option.label}</span>
@@ -190,7 +203,7 @@ export function DiagnosticsRunner({ items }: { items: readonly DiagnosticItem[] 
 
       <div className="flex flex-wrap items-center gap-4">
         <Button type="submit">Показать результат</Button>
-        <span className="text-ink-soft tabular-nums text-sm">
+        <span className="text-ink-soft text-sm tabular-nums">
           Отвечено {answeredCount} из {items.length}
         </span>
       </div>

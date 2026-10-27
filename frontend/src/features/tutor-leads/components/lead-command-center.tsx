@@ -28,9 +28,9 @@ export function LeadCommandCenter({ channels }: { channels: ContactChannels }) {
   const percent = sent ? 100 : state.percent;
 
   return (
-    <div className="lead-command">
-      <div className="lead-command-grid">
-        <aside className="lead-readiness" aria-label="Готовность заявки">
+    <div className="lead-command w-full max-w-full min-w-0">
+      <div className="lead-command-grid w-full min-w-0">
+        <aside className="lead-readiness w-full min-w-0" aria-label="Готовность заявки">
           <div className="lead-readiness-head flex items-center justify-between gap-3">
             <span className="mono-label">READINESS</span>
             <span className="metric-chip">
@@ -136,7 +136,7 @@ export function LeadCommandCenter({ channels }: { channels: ContactChannels }) {
           </p>
         </aside>
 
-        <div>
+        <div className="w-full min-w-0">
           <TutorLeadForm
             channels={channels}
             onProgress={(next) => {

@@ -38,7 +38,7 @@ function ArticleBlockView({ block }: { block: ArticleBlock }) {
       );
     case "formula":
       return (
-        <figure className="border-accent-soft my-2 flex flex-col gap-2 overflow-x-auto border-l-2 pl-4">
+        <figure className="border-accent-soft my-2 flex max-w-full min-w-0 flex-col gap-2 overflow-x-auto border-l-2 py-1 pl-4">
           <Math display tex={block.tex} />
           {block.caption ? (
             <figcaption className="text-ink-faint text-sm">{block.caption}</figcaption>
@@ -65,7 +65,7 @@ export function ArticleBody({
   const midIndex = globalThis.Math.floor((blocks.length - 1) / 2);
 
   return (
-    <div className="flex max-w-[68ch] flex-col gap-5">
+    <div className="flex w-full max-w-[68ch] min-w-0 flex-col gap-5">
       {blocks.map((block, index) => (
         <Fragment key={`${block.type}-${"id" in block ? block.id : index}`}>
           <ArticleBlockView block={block} />

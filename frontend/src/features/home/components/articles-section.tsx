@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { WorldSection } from "@/components/layout/world-section";
+import { PeekCarousel, PEEK_ITEM } from "@/components/ui/peek-carousel";
 import { getArticlePath, getArticles } from "@/features/articles/api";
 import { isSeoArticleSlug } from "@/features/seo/pages";
 import { SUBJECT_LABEL } from "@/features/tasks/labels";
@@ -81,10 +82,15 @@ export async function ArticlesSection() {
         </div>
 
         {lead ? (
-          <div className="desk:grid-cols-12 desk:gap-6 grid grid-cols-1 items-stretch gap-4">
+          <PeekCarousel
+            count={1 + side.length}
+            label="Разборы"
+            className="desk:grid-cols-12 desk:gap-6 items-stretch sm:gap-4"
+          >
             <Link
               href={getArticlePath(lead.slug)}
-              className="group glass hover:shadow-float desk:col-span-7 desk:min-h-[420px] flex min-h-[300px] flex-col justify-between rounded-2xl border border-[var(--color-line)] p-6 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)] md:p-8"
+              data-peek-item=""
+              className={`${PEEK_ITEM} group glass hover:shadow-float desk:col-span-7 desk:min-h-[420px] flex min-h-[300px] min-w-0 flex-col justify-between rounded-2xl border border-[var(--color-line)] p-5 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)] sm:p-6 md:p-8`}
             >
               <div>
                 <div className="flex items-start justify-between gap-6">
@@ -96,7 +102,7 @@ export async function ArticlesSection() {
                     <span className="text-ink-soft">лонгрид</span>
                   </span>
                 </div>
-                <h3 className="my-5 max-w-[13em] text-[clamp(28px,3.4vw,44px)] leading-[1.08] font-medium tracking-[-0.03em]">
+                <h3 className="my-5 max-w-[13em] text-[clamp(28px,3.4vw,44px)] leading-[1.08] font-medium tracking-[-0.03em] [overflow-wrap:anywhere]">
                   {lead.title}
                 </h3>
                 <FormulaPreview variant={0} />
@@ -116,12 +122,13 @@ export async function ArticlesSection() {
               </div>
             </Link>
 
-            <div className="desk:col-span-4 desk:col-start-9 desk:mt-0 mt-4 flex flex-col gap-4">
+            <div className="desk:col-span-4 desk:col-start-9 desk:mt-0 contents sm:mt-4 sm:flex sm:w-full sm:min-w-0 sm:flex-col sm:gap-4">
               {side.map((article, index) => (
                 <Link
                   key={article.slug}
                   href={getArticlePath(article.slug)}
-                  className="group glass hover:shadow-float flex flex-1 flex-col rounded-2xl border border-[var(--color-line)] p-6 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]"
+                  data-peek-item=""
+                  className={`${PEEK_ITEM} group glass hover:shadow-float flex min-w-0 flex-col rounded-2xl border border-[var(--color-line)] p-5 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)] sm:flex-1 sm:p-6`}
                 >
                   <span className="text-ink-soft text-sm">
                     {article.subject ? `${SUBJECT_LABEL[article.subject]} · ` : ""}
@@ -150,7 +157,7 @@ export async function ArticlesSection() {
                 </div>
               ) : null}
             </div>
-          </div>
+          </PeekCarousel>
         ) : (
           <div className="glass border-line rounded-2xl border p-6 md:p-8">
             <p className="text-ink-soft m-0 text-base leading-relaxed">

@@ -20,7 +20,7 @@ export function SingleChoiceBlock({
 
   if (options.length === 0) {
     return (
-      <section className="border-line-strong bg-surface rounded-xl border p-6">
+      <section className="border-line-strong bg-surface w-full max-w-full min-w-0 rounded-xl border p-4 sm:p-6">
         <p className="text-ink text-lg leading-snug font-medium">
           <InlineNodes nodes={prompt} />
         </p>
@@ -35,10 +35,10 @@ export function SingleChoiceBlock({
       exerciseId={block.id}
       kind="choice"
       name={name}
-      className="border-line-strong bg-surface scroll-mt-24 rounded-xl border p-5 shadow-sm md:p-6"
+      className="border-line-strong bg-surface w-full max-w-full min-w-0 scroll-mt-24 rounded-xl border p-4 shadow-sm sm:p-5 md:p-6"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-ink-faint text-xs font-semibold uppercase tracking-wide">
+        <p className="text-ink-faint text-xs font-semibold tracking-wide uppercase">
           Проверьте себя
         </p>
         {source || bankId ? (
@@ -50,7 +50,7 @@ export function SingleChoiceBlock({
       </div>
 
       <fieldset className="m-0 mt-3 min-w-0 border-0 p-0">
-        <legend className="text-ink px-0 text-lg leading-snug font-medium break-words [overflow-wrap:anywhere]">
+        <legend className="text-ink px-0 text-lg leading-snug font-medium [overflow-wrap:anywhere] break-words">
           <InlineNodes nodes={prompt} />
         </legend>
 
@@ -68,7 +68,7 @@ export function SingleChoiceBlock({
                   value={optionId}
                   className="accent-accent size-4 shrink-0"
                 />
-                <span className="text-ink min-w-0 break-words [overflow-wrap:anywhere]">
+                <span className="text-ink min-w-0 [overflow-wrap:anywhere] break-words">
                   <InlineNodes nodes={asArray(option.label)} />
                 </span>
               </label>

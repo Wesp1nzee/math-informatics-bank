@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const PAGES = [
-  { path: "/", title: /Математика и информатика/ },
+  { path: "/", title: /математика и информатика/i },
   { path: "/zadachi", title: /Банк задач/ },
   { path: "/matematika", title: /Математика/ },
   { path: "/informatika", title: /Информатика/ },
@@ -26,7 +26,9 @@ test.describe("SEO basics", () => {
       const canonical = page.locator('link[rel="canonical"]');
       await expect(canonical).toHaveAttribute("href", /^https?:\/\/.+/);
 
-      expect(await page.locator('meta[property="og:image"]').count()).toBe(0);
+      const ogImage = page.locator('meta[property="og:image"]');
+      await expect(ogImage).toHaveCount(1);
+      await expect(ogImage).toHaveAttribute("content", /^https?:\/\/.+/);
     });
   }
 

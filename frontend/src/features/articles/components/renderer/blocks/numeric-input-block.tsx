@@ -22,10 +22,10 @@ export function NumericInputBlock({
   return (
     <section
       aria-labelledby={promptId}
-      className="border-line-strong bg-surface min-w-0 scroll-mt-24 rounded-xl border p-5 shadow-sm md:p-6"
+      className="border-line-strong bg-surface w-full max-w-full min-w-0 scroll-mt-24 rounded-xl border p-4 shadow-sm sm:p-5 md:p-6"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-ink-faint text-xs font-semibold uppercase tracking-wide">
+        <p className="text-ink-faint text-xs font-semibold tracking-wide uppercase">
           Проверьте себя
         </p>
         {source || bankId ? (
@@ -46,7 +46,7 @@ export function NumericInputBlock({
       >
         <div
           id={promptId}
-          className="text-ink mt-3 text-lg leading-snug font-medium break-words [overflow-wrap:anywhere]"
+          className="text-ink mt-3 text-lg leading-snug font-medium [overflow-wrap:anywhere] break-words"
         >
           <InlineNodes nodes={prompt} />
         </div>

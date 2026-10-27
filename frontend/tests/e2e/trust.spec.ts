@@ -37,12 +37,19 @@ test.describe("trust and offer", () => {
     );
   });
 
-  test("hero offers a trial lesson and a task", async ({ page }) => {
+  test("hero offers a trial lesson and access to the task bank", async ({
+    page,
+    isMobile,
+  }) => {
     await page.goto("/");
 
     await expect(
-      page.getByRole("link", { name: /Записаться на пробное/ }).first(),
-    ).toHaveAttribute("href", "/podgotovka#request");
-    await expect(page.getByRole("link", { name: "Попробовать задачу" })).toBeVisible();
+      page.locator('a[href="/podgotovka#request"]:visible').first(),
+    ).toBeVisible();
+
+    if (isMobile) {
+      await page.getByRole("button", { name: "Открыть меню" }).click();
+    }
+    await expect(page.locator('a[href="/zadachi"]:visible').first()).toBeVisible();
   });
 });

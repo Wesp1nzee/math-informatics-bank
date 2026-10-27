@@ -7,8 +7,7 @@ function cellLabel(headers: string[] | undefined, index: number): string {
 }
 
 export function TableBlock({ block }: { block: Block }) {
-  const { caption, headers, rows, first_column_header: firstColumnHeader } =
-    block.data;
+  const { caption, headers, rows, first_column_header: firstColumnHeader } = block.data;
 
   if (!Array.isArray(rows) || rows.length === 0) {
     return null;
@@ -21,11 +20,9 @@ export function TableBlock({ block }: { block: Block }) {
   const useCards = columnCount >= 3;
 
   return (
-    <figure className="my-2 min-w-0 scroll-mt-24">
+    <figure className="my-2 w-full max-w-full min-w-0 scroll-mt-24">
       {caption ? (
-        <figcaption className="text-ink mb-2 text-sm font-medium">
-          {caption}
-        </figcaption>
+        <figcaption className="text-ink mb-2 text-sm font-medium">{caption}</figcaption>
       ) : null}
 
       {useCards ? (
@@ -44,9 +41,7 @@ export function TableBlock({ block }: { block: Block }) {
                     <dt className="text-ink-faint text-xs font-medium">
                       {cellLabel(headers, cellIndex)}
                     </dt>
-                    <dd className="text-ink m-0 min-w-0 text-sm break-words">
-                      {cell}
-                    </dd>
+                    <dd className="text-ink m-0 min-w-0 text-sm break-words">{cell}</dd>
                   </div>
                 ))}
               </dl>
@@ -56,7 +51,7 @@ export function TableBlock({ block }: { block: Block }) {
       ) : null}
 
       <div
-        className={`border-line-strong bg-surface overflow-x-auto rounded-lg border shadow-sm ${
+        className={`border-line-strong bg-surface w-full max-w-full overflow-x-auto rounded-lg border shadow-sm ${
           useCards ? "hidden sm:block" : ""
         }`}
       >

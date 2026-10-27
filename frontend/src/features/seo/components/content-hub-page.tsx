@@ -127,13 +127,13 @@ export function ContentHubPage({ hub }: { hub: SeoContentHub }) {
           bordered={index > 0 || Boolean(hub.facts?.length)}
           labelledBy={`content-hub-section-${index}`}
         >
-          <div className="grid grid-cols-12 gap-4 md:gap-6">
-            <div className="desk:col-span-5 col-span-12">
+          <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 gap-4 md:gap-6">
+            <div className="desk:col-span-5 col-span-1 min-w-0">
               <h2 id={`content-hub-section-${index}`} className="heading-3">
                 {section.title}
               </h2>
             </div>
-            <div className="desk:col-span-6 desk:col-start-7 col-span-12">
+            <div className="desk:col-span-6 desk:col-start-7 col-span-1 min-w-0">
               {section.paragraphs?.map((paragraph) => (
                 <p key={paragraph} className="body-large mb-4 last:mb-0">
                   {paragraph}

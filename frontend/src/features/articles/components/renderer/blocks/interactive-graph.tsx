@@ -958,7 +958,7 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
     : "Интерактивный график";
 
   return (
-    <div className="article-graph flex flex-col gap-4">
+    <div className="article-graph flex w-full max-w-full min-w-0 flex-col gap-4">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
@@ -966,7 +966,7 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
         aria-label={ariaLabel}
         focusable="false"
         tabIndex={traceEnabled ? 0 : undefined}
-        className="border-line bg-canvas focus-visible:outline-accent w-full rounded-lg border focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="border-line bg-canvas focus-visible:outline-accent block h-auto w-full max-w-full rounded-lg border focus-visible:outline-2 focus-visible:outline-offset-2"
         style={{ touchAction: "pan-y", aspectRatio: "480 / 280" }}
         onPointerMove={handlePointerMove}
         onPointerLeave={hideTrace}
@@ -1044,12 +1044,12 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
       />
 
       {zoomEnabled ? (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex w-full flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <button
             type="button"
             onClick={() => zoom(0.8)}
             aria-label="Приблизить график"
-            className="border-line-strong text-ink hover:bg-surface-subtle min-h-9 rounded-md border px-3 text-sm"
+            className="border-line-strong text-ink hover:bg-surface-subtle min-h-11 w-full rounded-md border px-3 text-sm sm:w-auto"
           >
             +
           </button>
@@ -1057,14 +1057,14 @@ function InteractiveGraphContent({ data }: { data: InteractiveGraphBlockData }) 
             type="button"
             onClick={() => zoom(1.25)}
             aria-label="Отдалить график"
-            className="border-line-strong text-ink hover:bg-surface-subtle min-h-9 rounded-md border px-3 text-sm"
+            className="border-line-strong text-ink hover:bg-surface-subtle min-h-11 w-full rounded-md border px-3 text-sm sm:w-auto"
           >
             −
           </button>
           <button
             type="button"
             onClick={resetView}
-            className="border-line-strong text-ink hover:bg-surface-subtle min-h-9 rounded-md border px-3 text-sm"
+            className="border-line-strong text-ink hover:bg-surface-subtle min-h-11 w-full rounded-md border px-3 text-sm sm:w-auto"
           >
             Сбросить вид
           </button>

@@ -16,12 +16,28 @@ export function ScrollReveal() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       typeof IntersectionObserver === "undefined"
     ) {
-      for (const element of all) element.dataset.revealIn = "";
+      for (const element of all) {
+        element.dataset.revealIn = "";
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          element.style.filter = "none";
+          element.style.willChange = "auto";
+        }
+      }
       return;
     }
 
     const pending = new Set(all);
     let frame = 0;
+
+    const groups = new Map<Element, number>();
+    for (const element of all) {
+      const parent = element.parentElement ?? document.body;
+      const index = groups.get(parent) ?? 0;
+      groups.set(parent, index + 1);
+      if (!element.style.getPropertyValue("--stagger-index")) {
+        element.style.setProperty("--stagger-index", String(Math.min(index, 6)));
+      }
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -29,13 +45,29 @@ export function ScrollReveal() {
           if (entry.isIntersecting) reveal(entry.target as HTMLElement);
         }
       },
-      { threshold: 0.25 },
+      { threshold: 0.2, rootMargin: "0px 0px -6% 0px" },
     );
+
+    function finish(element: HTMLElement) {
+      element.style.filter = "none";
+      element.style.willChange = "auto";
+      element.dataset.revealed = "";
+    }
 
     function reveal(element: HTMLElement) {
       if (!pending.delete(element)) return;
       element.dataset.revealIn = "";
       observer.unobserve(element);
+
+      const onTransitionEnd = (event: TransitionEvent) => {
+        if (event.target !== element) return;
+        if (event.propertyName !== "filter") return;
+        element.removeEventListener("transitionend", onTransitionEnd);
+        finish(element);
+      };
+      element.addEventListener("transitionend", onTransitionEnd);
+      window.setTimeout(() => finish(element), 1100);
+
       if (pending.size === 0) detach();
     }
 

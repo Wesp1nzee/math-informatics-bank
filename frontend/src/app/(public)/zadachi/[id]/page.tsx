@@ -99,8 +99,8 @@ export default async function TaskPage({ params }: TaskPageProps) {
       </PageHero>
 
       <Section bordered>
-        <div className="grid grid-cols-12 items-start gap-4 md:gap-6">
-          <div className="desk:col-span-7 col-span-12">
+        <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 items-start gap-4 md:gap-6">
+          <div className="desk:col-span-7 col-span-1 w-full min-w-0">
             <h2 className="heading-3 mb-6">Условие</h2>
             <TaskStatement blocks={task.statement} />
 
@@ -125,7 +125,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
             ) : null}
           </div>
 
-          <div className="desk:col-span-5 col-span-12">
+          <div className="desk:col-span-5 col-span-1 w-full min-w-0">
             <AnswerForm
               taskId={task.id}
               expected={task.answer.value}

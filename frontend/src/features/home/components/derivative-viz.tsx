@@ -2,7 +2,7 @@ import { DerivativeGraph } from "@/features/home/components/derivative-graph";
 
 export function DerivativeViz() {
   return (
-    <div>
+    <div className="w-full max-w-full min-w-0">
       <DerivativeGraph
         formulas={
           <div className="formulas formula-plain" aria-hidden="true">

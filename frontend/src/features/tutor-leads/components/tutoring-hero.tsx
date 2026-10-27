@@ -29,8 +29,8 @@ export function TutoringHero({
       <Container className="relative z-[1]">
         <Breadcrumbs className="mb-6 text-sm" items={breadcrumbs} />
 
-        <div className="desk:grid desk:grid-cols-12 desk:gap-8 flex flex-col gap-8">
-          <div className="desk:col-span-5 desk:row-start-1">
+        <div className="desk:grid desk:grid-cols-12 desk:gap-8 flex w-full min-w-0 flex-col gap-8">
+          <div className="desk:col-span-5 desk:row-start-1 w-full min-w-0">
             <span className="mono-label mb-4">X-RAY / KNOWLEDGE MAP</span>
             <h1
               id="tutoring-hero-title"
@@ -63,7 +63,7 @@ export function TutoringHero({
 
           <div
             id="request"
-            className="desk:col-span-7 desk:col-start-6 desk:row-start-1 order-2 scroll-mt-24"
+            className="desk:col-span-7 desk:col-start-6 desk:row-start-1 order-2 w-full min-w-0 scroll-mt-24"
           >
             <div className="glass-strong tech-corners rounded-2xl border border-[var(--glass-border)] p-4 md:p-5">
               <div className="mb-4 flex flex-wrap items-end justify-between gap-3 px-1">

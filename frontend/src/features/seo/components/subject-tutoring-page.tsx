@@ -75,13 +75,13 @@ export function SubjectTutoringPage({ landing }: { landing: SeoTutorLanding }) {
 
       {landing.sections.map((section, index) => (
         <Section key={section.title} bordered labelledBy={`tutor-section-${index}`}>
-          <div className="grid grid-cols-12 gap-4 md:gap-6">
-            <div className="desk:col-span-5 col-span-12">
+          <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 gap-4 md:gap-6">
+            <div className="desk:col-span-5 col-span-1 min-w-0">
               <h2 id={`tutor-section-${index}`} className="heading-3">
                 {section.title}
               </h2>
             </div>
-            <div className="desk:col-span-6 desk:col-start-7 col-span-12">
+            <div className="desk:col-span-6 desk:col-start-7 col-span-1 min-w-0">
               {section.paragraphs?.map((paragraph) => (
                 <p key={paragraph} className="body-large mb-4 last:mb-0">
                   {paragraph}
@@ -127,13 +127,13 @@ export function SubjectTutoringPage({ landing }: { landing: SeoTutorLanding }) {
       ) : null}
 
       <Section bordered labelledBy="tutor-faq-title">
-        <div className="grid grid-cols-12 gap-4 md:gap-6">
-          <div className="desk:col-span-5 col-span-12">
+        <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 gap-4 md:gap-6">
+          <div className="desk:col-span-5 col-span-1 min-w-0">
             <h2 id="tutor-faq-title" className="heading-3">
               Вопросы и ответы
             </h2>
           </div>
-          <div className="desk:col-span-6 desk:col-start-7 col-span-12">
+          <div className="desk:col-span-6 desk:col-start-7 col-span-1 min-w-0">
             <div className="grid gap-3">
               {landing.faq.map((item) => (
                 <details

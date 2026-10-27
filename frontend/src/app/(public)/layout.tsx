@@ -14,7 +14,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         Перейти к содержимому
       </a>
       <SiteHeader />
-      <main id="main" className="relative z-[1] flex-1">
+      <main id="main" className="relative z-[1] w-full min-w-0 flex-1 pb-20 md:pb-0">
         {children}
       </main>
       <div className="relative z-[1]">

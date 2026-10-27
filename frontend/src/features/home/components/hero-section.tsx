@@ -26,8 +26,8 @@ export async function HeroSection() {
       <div className="hero-scrim" aria-hidden="true" />
 
       <Container className="relative z-[1]">
-        <div className="desk:grid-cols-12 desk:gap-8 grid grid-cols-1 items-center gap-12">
-          <div className="desk:col-span-6">
+        <div className="desk:grid-cols-12 desk:gap-8 grid w-full min-w-0 grid-cols-1 items-center gap-12">
+          <div className="desk:col-span-6 w-full min-w-0">
             <span className="mono-label mb-5">
               ОГЭ / ЕГЭ · математика × информатика
             </span>
@@ -38,7 +38,7 @@ export async function HeroSection() {
               {TUTORING_INTRO}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Magnetic>
+              <Magnetic className="w-full sm:w-auto">
                 <RequestCta placement="hero" className="cta-glow w-full sm:w-auto">
                   Записаться на пробное
                 </RequestCta>
@@ -48,24 +48,24 @@ export async function HeroSection() {
               </Button>
             </div>
 
-            <dl className="border-line mt-10 grid max-w-[34em] grid-cols-3 gap-4 border-t pt-6">
-              <div>
+            <dl className="border-line mt-10 grid w-full max-w-[34em] min-w-0 grid-cols-3 gap-3 border-t pt-6 sm:gap-4">
+              <div className="min-w-0">
                 <dt className="mono-label">Формат</dt>
                 <dd className="text-ink mt-2 text-base font-medium">Онлайн</dd>
               </div>
-              <div>
+              <div className="min-w-0">
                 <dt className="mono-label">Предметы</dt>
                 <dd className="text-ink mt-2 text-base font-medium">2 трека</dd>
               </div>
-              <div>
+              <div className="min-w-0">
                 <dt className="mono-label">Старт</dt>
                 <dd className="text-ink mt-2 text-base font-medium">Пробное</dd>
               </div>
             </dl>
           </div>
 
-          <div className="desk:col-span-6">
-            <div className="hero-stage" data-parallax="0.09">
+          <div className="desk:col-span-6 w-full min-w-0">
+            <div className="hero-stage w-full min-w-0" data-parallax="0.09">
               <div className="hero-orb" aria-hidden="true" />
               <div
                 className="glass-strong hero-viz-shell relative mx-auto w-[min(100%,560px)] overflow-hidden rounded-[1.35rem] p-2"
@@ -102,7 +102,7 @@ export async function HeroSection() {
               </div>
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-5 flex w-full min-w-0 flex-wrap gap-3">
               <span className="depth-chip">Бесплатный банк задач</span>
               <span className="depth-chip depth-chip-high">
                 Потяните точку — производная пересчитается

@@ -9,6 +9,7 @@ import { TutorCta } from "@/features/tutor-leads/components/tutor-cta";
 import { pulseWorld } from "@/features/world/bus";
 import { ANALYTICS_EVENTS, track } from "@/lib/analytics";
 import { cn } from "@/lib/utils/cn";
+import { triggerHaptic } from "@/lib/utils/haptics";
 import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
 
 export type QuizOption = { value: string; label: string };
@@ -61,6 +62,7 @@ export function TaskQuiz({
     clearTimers();
     const correct = value === correctValue;
     setAnswer({ value, correct });
+    triggerHaptic(correct ? [10, 26, 12] : 18);
     track(ANALYTICS_EVENTS.quizAnswer, { correct });
     pulseWorld(correct ? "ok" : "err");
 
@@ -91,7 +93,8 @@ export function TaskQuiz({
   return (
     <article
       aria-labelledby="try-q"
-      className="border-line bg-surface shadow-card rounded-xl border p-6 md:p-8"
+      data-result={answer ? (answer.correct ? "right" : "wrong") : undefined}
+      className="quiz-card border-line bg-surface shadow-card relative w-full max-w-full min-w-0 rounded-xl border p-4 sm:p-6 md:p-8"
     >
       <Badge>{tag}</Badge>
       <h3 className="heading-3 mt-4 mb-1.5" id="try-q">
@@ -99,7 +102,7 @@ export function TaskQuiz({
       </h3>
 
       <p className="mt-5 mb-2 text-[20px] leading-snug">{prompt}</p>
-      <div className="py-3 text-[24px]">{formula}</div>
+      <div className="max-w-full overflow-x-auto py-3 text-[24px]">{formula}</div>
 
       <div
         role="group"
@@ -110,7 +113,7 @@ export function TaskQuiz({
           <button
             key={option.value}
             type="button"
-            className="option"
+            className="option motion-safe:active:scale-[0.97]"
             disabled={answer !== null}
             data-state={stateFor(option.value)}
             onClick={() => choose(option.value)}
@@ -140,7 +143,7 @@ export function TaskQuiz({
                 <>
                   <span
                     className={cn(
-                      "mb-2.5 flex items-center gap-2 font-semibold",
+                      "result-badge mb-2.5 flex items-center gap-2 font-semibold",
                       answer.correct ? "text-success" : "text-danger",
                     )}
                   >
@@ -190,7 +193,11 @@ export function TaskQuiz({
                   </div>
 
                   {answer.correct ? (
-                    <TutorCta placement="quiz-success" size="compact" className="mt-5" />
+                    <TutorCta
+                      placement="quiz-success"
+                      size="compact"
+                      className="mt-5"
+                    />
                   ) : null}
                 </>
               ) : null}

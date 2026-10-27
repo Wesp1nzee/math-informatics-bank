@@ -1,12 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 const SECTION_HEADINGS = [
-  "Попробуйте сами",
+  "Два направления",
   "Как проходят занятия",
-  "Банк задач",
-  "Разборы",
-  "Вопросы и ответы",
-  "Начнём с вашей ошибки",
+  "Давайте разберёмся",
 ];
 
 test.describe("home page", () => {
@@ -14,7 +11,7 @@ test.describe("home page", () => {
     await page.goto("/");
 
     await expect(
-      page.getByRole("heading", { level: 1, name: /Математика/ }),
+      page.getByRole("heading", { level: 1, name: /Сложное/ }),
     ).toBeVisible();
 
     for (const heading of SECTION_HEADINGS) {
@@ -26,11 +23,11 @@ test.describe("home page", () => {
     await expect(page.getByRole("contentinfo")).toBeVisible();
   });
 
-  test("renders formulas in the initial HTML without KaTeX on the landing page", async ({
-    page,
-  }) => {
+  test("renders the hero without KaTeX on the landing page", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".formula-plain").first()).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Сложное/ }),
+    ).toBeVisible();
     await expect(page.locator(".katex")).toHaveCount(0);
   });
 
@@ -48,23 +45,7 @@ test.describe("home page", () => {
     expect(errors).toEqual([]);
   });
 
-  test("quiz reacts to a correct and a wrong answer", async ({ page }) => {
-    await page.goto("/");
-
-    const options = page.getByRole("group", { name: "Варианты ответа" });
-
-    await options.getByRole("button", { name: "0", exact: true }).click();
-    await expect(page.getByText("Не совсем.")).toBeVisible();
-
-    await page.getByRole("button", { name: "Попробовать снова" }).click();
-    await options.getByRole("button", { name: "3", exact: true }).click();
-    await expect(page.getByText("Верно.")).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: /Разобрать подробнее/ }),
-    ).toHaveAttribute("href", "/zadachi");
-  });
-
-  test("every revealed section becomes visible after scrolling", async ({ page }) => {
+  test("every scroll-revealed block becomes visible", async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
     await page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
@@ -75,8 +56,15 @@ test.describe("home page", () => {
           window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
         );
         return page.evaluate(() => {
-          const all = Array.from(document.querySelectorAll(".reveal"));
-          return all.length > 0 && all.every((el) => el.hasAttribute("data-reveal-in"));
+          const all = Array.from(document.querySelectorAll<HTMLElement>("[data-r]"));
+          return (
+            all.length > 0 &&
+            all.every(
+              (el) =>
+                el.closest("[hidden]") !== null ||
+                Number.parseFloat(getComputedStyle(el).opacity) >= 0.99,
+            )
+          );
         });
       })
       .toBe(true);
@@ -95,23 +83,83 @@ test.describe("home page", () => {
           window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
         );
         return page.evaluate(() => {
-          const all = Array.from(document.querySelectorAll(".reveal"));
-          return all.length > 0 && all.every((el) => el.hasAttribute("data-reveal-in"));
+          const all = Array.from(document.querySelectorAll<HTMLElement>("[data-r]"));
+          return (
+            all.length > 0 &&
+            all.every(
+              (el) =>
+                el.closest("[hidden]") !== null ||
+                Number.parseFloat(getComputedStyle(el).opacity) >= 0.99,
+            )
+          );
         });
       })
       .toBe(true);
   });
 
-  test("code walkthrough auto-plays when scrolled into view", async ({ page }) => {
+  test("process steps activate on scroll", async ({ page }) => {
     await page.goto("/");
+    await page.locator("#process").scrollIntoViewIfNeeded();
 
-    await page.getByRole("tab", { name: "Информатика" }).click();
-    await page
-      .locator('[role="tabpanel"][data-active="true"]')
-      .scrollIntoViewIfNeeded();
+    await expect(page.locator("#process .step.on").first()).toBeAttached();
+  });
 
+  test("subject cards become a swipeable peek carousel on mobile", async ({
+    page,
+    isMobile,
+  }) => {
+    await page.goto("/");
+    const rail = page.locator(".lp .sub .grid");
+    const metrics = await rail.evaluate((element) => ({
+      overflowX: getComputedStyle(element).overflowX,
+      scrollWidth: element.scrollWidth,
+      clientWidth: element.clientWidth,
+    }));
+    const dots = page.locator('[aria-label="Направления: прогресс"]');
+
+    if (isMobile) {
+      expect(metrics.overflowX).toBe("auto");
+      expect(metrics.scrollWidth).toBeGreaterThan(metrics.clientWidth);
+      await expect(dots).toBeVisible();
+
+      const first = page.locator(".lp .sub .grid > [data-peek-item]").first();
+      await expect(first).toHaveAttribute("data-active", "");
+      const box = await first.boundingBox();
+      const viewport = page.viewportSize()?.width ?? 375;
+      expect(box).not.toBeNull();
+      expect(Math.abs(box!.x + box!.width / 2 - viewport / 2)).toBeLessThan(2);
+    } else {
+      expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
+      await expect(dots).toBeHidden();
+    }
+  });
+
+  test("the 2.5D fallback is live on phones and hidden on desktop", async ({
+    page,
+    isMobile,
+  }) => {
+    await page.goto("/");
+    const layer = page.locator(".lp-mobile-world");
+
+    if (!isMobile) {
+      await expect(layer).toBeHidden();
+      return;
+    }
+
+    await expect(layer).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, 800));
     await expect
-      .poll(() => page.locator(".js-only .code .ln").first().textContent())
-      .toContain("def r(n):");
+      .poll(() =>
+        page.evaluate(() => {
+          const fallback = document.querySelector<HTMLElement>(
+            ".lp-mobile-world .world-fallback",
+          );
+          if (!fallback) return "0px";
+          return getComputedStyle(fallback)
+            .getPropertyValue("--fallback-scroll-a")
+            .trim();
+        }),
+      )
+      .not.toBe("0px");
   });
 });

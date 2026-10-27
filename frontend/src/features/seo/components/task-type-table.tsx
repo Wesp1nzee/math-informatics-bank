@@ -11,7 +11,7 @@ export function TaskTypeTable({
   className?: string;
 }) {
   return (
-    <ol className={cn("m-0 grid list-none gap-3 p-0", className)}>
+    <ol className={cn("m-0 grid w-full min-w-0 list-none gap-3 p-0", className)}>
       {items.map((item) => (
         <li
           key={item.number}

@@ -13,6 +13,7 @@ import { isPublicApiConfigured } from "@/lib/api/config";
 import { describeApiError } from "@/lib/api/errors";
 import { isAnswerCorrect, type AnswerKind } from "@/lib/utils/check-answer";
 import { cn } from "@/lib/utils/cn";
+import { triggerHaptic } from "@/lib/utils/haptics";
 
 type AnswerFormProps = {
   taskId: string;
@@ -24,7 +25,13 @@ type AnswerFormProps = {
 
 type Status = "idle" | "correct" | "wrong";
 
-export function AnswerForm({ taskId, expected, kind, answerNote, solution }: AnswerFormProps) {
+export function AnswerForm({
+  taskId,
+  expected,
+  kind,
+  answerNote,
+  solution,
+}: AnswerFormProps) {
   const inputId = useId();
   const statusId = useId();
   const [value, setValue] = useState("");
@@ -44,6 +51,7 @@ export function AnswerForm({ taskId, expected, kind, answerNote, solution }: Ans
     if (!trimmed) {
       setStatus("wrong");
       setAttempts((count) => count + 1);
+      triggerHaptic(18);
       track(ANALYTICS_EVENTS.taskAnswerAttempt, {
         correct: false,
         attempt: attempts + 1,
@@ -61,6 +69,7 @@ export function AnswerForm({ taskId, expected, kind, answerNote, solution }: Ans
       } catch (error) {
         setChecking(false);
         setFailure(describeApiError(error));
+        triggerHaptic(20);
         track(ANALYTICS_EVENTS.taskAnswerAttempt, {
           correct: false,
           attempt: attempts + 1,
@@ -74,6 +83,7 @@ export function AnswerForm({ taskId, expected, kind, answerNote, solution }: Ans
 
     setStatus(correct ? "correct" : "wrong");
     setAttempts((count) => count + 1);
+    triggerHaptic(correct ? [10, 26, 12] : 20);
     track(ANALYTICS_EVENTS.taskAnswerAttempt, {
       correct,
       attempt: attempts + 1,
@@ -99,10 +109,10 @@ export function AnswerForm({ taskId, expected, kind, answerNote, solution }: Ans
           : "Пока неверно. Проверьте вычисления и попробуйте ещё раз.";
 
   return (
-    <div className="border-line bg-surface rounded-xl border p-6 md:p-8">
+    <div className="border-line bg-surface w-full min-w-0 rounded-xl border p-5 sm:p-6 md:p-8">
       <form onSubmit={handleSubmit} noValidate>
         <Label htmlFor={inputId}>Ваш ответ</Label>
-        <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row">
           <Input
             id={inputId}
             name="answer"
@@ -113,10 +123,11 @@ export function AnswerForm({ taskId, expected, kind, answerNote, solution }: Ans
             aria-describedby={statusId}
             disabled={status === "correct"}
             placeholder={kind === "number" ? "Число" : "Ответ"}
+            className="min-h-11 w-full min-w-0 sm:flex-1"
           />
           <Button
             type="submit"
-            className="shrink-0 sm:w-auto"
+            className="min-h-11 w-full shrink-0 sm:w-auto"
             disabled={status === "correct" || checking}
           >
             {checking ? "Проверяем…" : "Проверить"}

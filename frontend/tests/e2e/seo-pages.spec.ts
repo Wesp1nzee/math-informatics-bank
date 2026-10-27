@@ -177,7 +177,9 @@ test.describe("SEO pages", () => {
       .getByRole("button", { name: "Проверить" })
       .click();
     await expect(page.getByText("Верно.").first()).toBeVisible();
-    await expect(page.getByText(/Подходит последовательность 12211/).first()).toBeVisible();
+    await expect(
+      page.getByText(/Подходит последовательность 12211/).first(),
+    ).toBeVisible();
   });
 
   test("numeric exercise checks a search query", async ({ page }) => {

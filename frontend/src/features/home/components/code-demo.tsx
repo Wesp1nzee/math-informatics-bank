@@ -3,7 +3,6 @@
 import { Pause, Play, SkipForward } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-
 import { Badge } from "@/components/ui/badge";
 import {
   highlightPython,
@@ -206,7 +205,10 @@ export function CodeDemo() {
         observer.disconnect();
         void playRef.current();
       },
-      { threshold: 0.45 },
+      {
+        threshold: window.matchMedia("(max-width: 767px)").matches ? 0.2 : 0.45,
+        rootMargin: "0px 0px -6% 0px",
+      },
     );
 
     observer.observe(element);
@@ -227,10 +229,10 @@ export function CodeDemo() {
   }
 
   return (
-    <div ref={containerRef} className="grid justify-items-start gap-4">
-      <div className="js-only grid w-full justify-items-start gap-4">
+    <div ref={containerRef} className="grid w-full min-w-0 justify-items-stretch gap-4">
+      <div className="js-only grid w-full min-w-0 justify-items-stretch gap-4">
         <div
-          className="editor"
+          className="editor w-full max-w-full overflow-hidden"
           role="img"
           aria-label="Код на Python, который перебирает N и находит наименьшее R, большее 83"
         >
@@ -244,7 +246,9 @@ export function CodeDemo() {
               <span
                 key={index}
                 className="ln"
-                data-active={activeLine === index ? "" : undefined}
+                data-active={
+                  activeLine === index || typingLine === index ? "" : undefined
+                }
                 dangerouslySetInnerHTML={{
                   __html:
                     highlightPython(typedLines[index] ?? "") +
@@ -255,7 +259,7 @@ export function CodeDemo() {
           </pre>
         </div>
 
-        <div className="border-line bg-surface grid w-full gap-4 rounded-lg border p-5">
+        <div className="border-line bg-surface grid w-full min-w-0 gap-4 rounded-lg border p-4 sm:p-5">
           <div className="desk:grid-cols-[1fr_2fr_1fr] grid grid-cols-2 gap-3">
             <div className={cn(VAR_CELL, "order-1")}>
               <small className={VAR_LABEL}>N</small>
@@ -276,7 +280,11 @@ export function CodeDemo() {
             </div>
           </div>
 
-          <div className="log min-h-[120px]" role="log" aria-label="Ход выполнения">
+          <div
+            className="log min-h-[120px] min-w-0 overflow-x-auto"
+            role="log"
+            aria-label="Ход выполнения"
+          >
             {log.map((row) => (
               <div key={row.n} className="log-row" data-hit={row.hit ? "" : undefined}>
                 <span>N={row.n}</span>
@@ -341,8 +349,8 @@ export function CodeDemo() {
       </div>
 
       <div className="no-js-only">
-        <div className="grid w-full gap-3">
-          <div className="editor">
+        <div className="grid w-full min-w-0 gap-3">
+          <div className="editor w-full max-w-full overflow-hidden">
             <div className="editor-bar">
               <span>task5.py</span>
               <Badge tone="neutral">Python</Badge>

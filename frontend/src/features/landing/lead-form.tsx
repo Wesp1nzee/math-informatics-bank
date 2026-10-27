@@ -182,6 +182,7 @@ export function LeadForm() {
       className="f"
       noValidate
       data-r
+      data-lead-form=""
       aria-label="Заявка на занятия"
       onSubmit={handleSubmit}
       onFocusCapture={markStarted}

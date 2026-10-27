@@ -6,6 +6,10 @@ import { LeadForm } from "@/features/landing/lead-form";
 import { useHeroScene } from "@/features/landing/use-hero-scene";
 import { useLandingMotion } from "@/features/landing/use-landing-motion";
 import { useSmoothScroll } from "@/features/landing/use-smooth-scroll";
+import { PeekCarousel, PEEK_ITEM } from "@/components/ui/peek-carousel";
+import { TiltCard } from "@/components/ui/tilt-card";
+import { MobileWorld } from "@/features/world/mobile-world";
+import { useWorldSections } from "@/features/world/use-world-sections";
 
 type TeacherProfile = {
   name: string;
@@ -29,6 +33,7 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
   useHeroScene(hostRef, heroRef);
   useLandingMotion(rootRef);
   useSmoothScroll();
+  useWorldSections();
 
   useEffect(() => {
     if (teacher) return;
@@ -70,9 +75,10 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
   return (
     <div className="lp" ref={rootRef}>
       <div id="gl" ref={hostRef} aria-hidden="true" />
+      <MobileWorld />
 
       <main id="top">
-        <section className="hero" ref={heroRef}>
+        <section className="hero" ref={heroRef} data-world-state="hero">
           <div className="wrap heroin">
             <div className="copy">
               <p className="eyebrow mono fa">ОСНОВА · Математика и информатика</p>
@@ -111,183 +117,191 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
           </div>
         </section>
 
-        <section className="sub" id="subjects">
+        <section className="sub" id="subjects" data-world-state="materials">
           <div className="wrap">
             <h2 data-r>
               Два направления.
               <br />
               Одна система.
             </h2>
-            <div className="grid">
-              <article className="col" id="math" data-r>
-                <div className="n mono">
-                  <span>01</span>
-                  <span>7–11 класс</span>
-                </div>
-                <h3>Математика</h3>
-                <p>
-                  Понимаем темы, а не заучиваем шаблоны. Закрываем пробелы и идём к ОГЭ
-                  или ЕГЭ.
-                </p>
-                <ul className="mono">
-                  <li>Алгебра</li>
-                  <li>Геометрия</li>
-                  <li>ОГЭ</li>
-                  <li>ЕГЭ</li>
-                </ul>
-                <svg
-                  className="viz"
-                  viewBox="0 0 440 190"
-                  fill="none"
-                  role="img"
-                  aria-label="График функции с отмеченной точкой"
-                >
-                  <path
-                    id="mGrid"
-                    d="M130 12V170M230 12V170M330 12V170M30 60H430M30 115H430"
-                    stroke="var(--line)"
-                    strokeWidth="1"
-                  />
-                  <path
-                    id="mAx"
-                    d="M10 170H430M30 10V180"
-                    stroke="var(--mut)"
-                    strokeWidth="1.2"
-                  />
-                  <path
-                    id="mPv"
-                    d="M150 28V170"
-                    stroke="var(--mut)"
-                    strokeDasharray="3 5"
-                  />
-                  <path
-                    id="mPh"
-                    d="M150 28H30"
-                    stroke="var(--mut)"
-                    strokeDasharray="3 5"
-                  />
-                  <text
-                    id="mLx"
-                    x="150"
-                    y="186"
-                    textAnchor="middle"
-                    fill="var(--acc-t)"
-                    fontFamily="JetBrains Mono,monospace"
-                    fontSize="12"
-                  >
-                    x
-                    <tspan dy="3" fontSize="9">
-                      0
-                    </tspan>
-                  </text>
-                  <text
-                    id="mLy"
-                    x="22"
-                    y="32"
-                    textAnchor="end"
-                    fill="var(--acc-t)"
-                    fontFamily="JetBrains Mono,monospace"
-                    fontSize="12"
-                  >
-                    f(x
-                    <tspan dy="3" fontSize="9">
-                      0
-                    </tspan>
-                    <tspan dy="-3">)</tspan>
-                  </text>
-                  <path
-                    id="mCurve"
-                    d="M30 150C100 150 110 24 165 36S280 176 430 40"
-                    stroke="var(--acc)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <g id="mDot" transform="translate(150 28)">
-                    <circle r="13" fill="var(--lime)" opacity=".28" />
-                    <circle
-                      r="6.5"
-                      fill="var(--lime)"
-                      stroke="var(--ink)"
-                      strokeWidth="2"
-                    />
-                  </g>
-                  <text
-                    x="260"
-                    y="30"
-                    fill="var(--acc-t)"
-                    fontFamily="JetBrains Mono,monospace"
-                    fontSize="15"
-                  >
-                    ƒ(x)
-                  </text>
-                </svg>
-              </article>
+            <PeekCarousel count={2} label="Направления" className="grid">
+              <div data-peek-item="" className={`${PEEK_ITEM} min-w-0`}>
+                <TiltCard className="h-full">
+                  <article className="col" id="math" data-r>
+                    <div className="n mono">
+                      <span>01</span>
+                      <span>7–11 класс</span>
+                    </div>
+                    <h3>Математика</h3>
+                    <p>
+                      Понимаем темы, а не заучиваем шаблоны. Закрываем пробелы и идём к
+                      ОГЭ или ЕГЭ.
+                    </p>
+                    <ul className="mono">
+                      <li>Алгебра</li>
+                      <li>Геометрия</li>
+                      <li>ОГЭ</li>
+                      <li>ЕГЭ</li>
+                    </ul>
+                    <svg
+                      className="viz"
+                      viewBox="0 0 440 190"
+                      fill="none"
+                      role="img"
+                      aria-label="График функции с отмеченной точкой"
+                    >
+                      <path
+                        id="mGrid"
+                        d="M130 12V170M230 12V170M330 12V170M30 60H430M30 115H430"
+                        stroke="var(--line)"
+                        strokeWidth="1"
+                      />
+                      <path
+                        id="mAx"
+                        d="M10 170H430M30 10V180"
+                        stroke="var(--mut)"
+                        strokeWidth="1.2"
+                      />
+                      <path
+                        id="mPv"
+                        d="M150 28V170"
+                        stroke="var(--mut)"
+                        strokeDasharray="3 5"
+                      />
+                      <path
+                        id="mPh"
+                        d="M150 28H30"
+                        stroke="var(--mut)"
+                        strokeDasharray="3 5"
+                      />
+                      <text
+                        id="mLx"
+                        x="150"
+                        y="186"
+                        textAnchor="middle"
+                        fill="var(--acc-t)"
+                        fontFamily="JetBrains Mono,monospace"
+                        fontSize="12"
+                      >
+                        x
+                        <tspan dy="3" fontSize="9">
+                          0
+                        </tspan>
+                      </text>
+                      <text
+                        id="mLy"
+                        x="22"
+                        y="32"
+                        textAnchor="end"
+                        fill="var(--acc-t)"
+                        fontFamily="JetBrains Mono,monospace"
+                        fontSize="12"
+                      >
+                        f(x
+                        <tspan dy="3" fontSize="9">
+                          0
+                        </tspan>
+                        <tspan dy="-3">)</tspan>
+                      </text>
+                      <path
+                        id="mCurve"
+                        d="M30 150C100 150 110 24 165 36S280 176 430 40"
+                        stroke="var(--acc)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+                      <g id="mDot" transform="translate(150 28)">
+                        <circle r="13" fill="var(--lime)" opacity=".28" />
+                        <circle
+                          r="6.5"
+                          fill="var(--lime)"
+                          stroke="var(--ink)"
+                          strokeWidth="2"
+                        />
+                      </g>
+                      <text
+                        x="260"
+                        y="30"
+                        fill="var(--acc-t)"
+                        fontFamily="JetBrains Mono,monospace"
+                        fontSize="15"
+                      >
+                        ƒ(x)
+                      </text>
+                    </svg>
+                  </article>
+                </TiltCard>
+              </div>
 
-              <article className="col" id="info" data-r>
-                <div className="n mono">
-                  <span>02</span>
-                  <span>7–11 класс</span>
-                </div>
-                <h3>Информатика</h3>
-                <p>
-                  Алгоритмы, программирование и разбор экзаменационных задач — шаг за
-                  шагом.
-                </p>
-                <ul className="mono">
-                  <li>Алгоритмы</li>
-                  <li>Программирование</li>
-                  <li>ОГЭ</li>
-                  <li>ЕГЭ</li>
-                </ul>
-                <svg
-                  className="viz"
-                  viewBox="0 0 440 190"
-                  fill="none"
-                  role="img"
-                  aria-label="Схема алгоритма: дерево решений"
-                >
-                  <g id="aE" stroke="var(--line)" strokeWidth="2">
-                    <path d="M220 20L110 90" />
-                    <path d="M220 20L330 90" />
-                    <path d="M110 90L55 165" />
-                    <path d="M110 90L165 165" />
-                    <path d="M330 90L275 165" />
-                    <path d="M330 90L385 165" />
-                  </g>
-                  <g className="rt" stroke="var(--acc)" strokeWidth="3">
-                    <path id="aR1" d="M220 20L330 90" />
-                    <path id="aR2" d="M330 90L275 165" />
-                  </g>
-                  <g id="aN" fill="var(--bg)" stroke="var(--ink)" strokeWidth="2">
-                    <circle cx="220" cy="20" r="8" />
-                    <circle cx="110" cy="90" r="8" />
-                    <circle cx="330" cy="90" r="8" />
-                    <circle cx="55" cy="165" r="8" />
-                    <circle cx="165" cy="165" r="8" />
-                    <circle cx="275" cy="165" r="8" />
-                    <circle cx="385" cy="165" r="8" />
-                  </g>
-                  <g id="aL" fill="var(--lime)" stroke="var(--ink)" strokeWidth="2">
-                    <circle cx="220" cy="20" r="8" />
-                    <circle cx="330" cy="90" r="8" />
-                    <circle cx="275" cy="165" r="9" />
-                  </g>
-                  <circle id="aH" r="13" fill="var(--lime)" opacity="0" />
-                  <circle
-                    id="aD"
-                    r="5"
-                    fill="var(--lime)"
-                    stroke="var(--ink)"
-                    strokeWidth="1.5"
-                    opacity="0"
-                  />
-                </svg>
-              </article>
-            </div>
+              <div data-peek-item="" className={`${PEEK_ITEM} lp-sub-offset min-w-0`}>
+                <TiltCard className="h-full">
+                  <article className="col" id="info" data-r>
+                    <div className="n mono">
+                      <span>02</span>
+                      <span>7–11 класс</span>
+                    </div>
+                    <h3>Информатика</h3>
+                    <p>
+                      Алгоритмы, программирование и разбор экзаменационных задач — шаг
+                      за шагом.
+                    </p>
+                    <ul className="mono">
+                      <li>Алгоритмы</li>
+                      <li>Программирование</li>
+                      <li>ОГЭ</li>
+                      <li>ЕГЭ</li>
+                    </ul>
+                    <svg
+                      className="viz"
+                      viewBox="0 0 440 190"
+                      fill="none"
+                      role="img"
+                      aria-label="Схема алгоритма: дерево решений"
+                    >
+                      <g id="aE" stroke="var(--line)" strokeWidth="2">
+                        <path d="M220 20L110 90" />
+                        <path d="M220 20L330 90" />
+                        <path d="M110 90L55 165" />
+                        <path d="M110 90L165 165" />
+                        <path d="M330 90L275 165" />
+                        <path d="M330 90L385 165" />
+                      </g>
+                      <g className="rt" stroke="var(--acc)" strokeWidth="3">
+                        <path id="aR1" d="M220 20L330 90" />
+                        <path id="aR2" d="M330 90L275 165" />
+                      </g>
+                      <g id="aN" fill="var(--bg)" stroke="var(--ink)" strokeWidth="2">
+                        <circle cx="220" cy="20" r="8" />
+                        <circle cx="110" cy="90" r="8" />
+                        <circle cx="330" cy="90" r="8" />
+                        <circle cx="55" cy="165" r="8" />
+                        <circle cx="165" cy="165" r="8" />
+                        <circle cx="275" cy="165" r="8" />
+                        <circle cx="385" cy="165" r="8" />
+                      </g>
+                      <g id="aL" fill="var(--lime)" stroke="var(--ink)" strokeWidth="2">
+                        <circle cx="220" cy="20" r="8" />
+                        <circle cx="330" cy="90" r="8" />
+                        <circle cx="275" cy="165" r="9" />
+                      </g>
+                      <circle id="aH" r="13" fill="var(--lime)" opacity="0" />
+                      <circle
+                        id="aD"
+                        r="5"
+                        fill="var(--lime)"
+                        stroke="var(--ink)"
+                        strokeWidth="1.5"
+                        opacity="0"
+                      />
+                    </svg>
+                  </article>
+                </TiltCard>
+              </div>
+            </PeekCarousel>
           </div>
         </section>
 
-        <section className="proc" id="process">
+        <section className="proc" id="process" data-world-state="teaching">
           <div className="wrap">
             <h2 data-r>Как проходят занятия</h2>
             <div className="track" id="track">
@@ -330,7 +344,12 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
           </div>
         </section>
 
-        <section className="teacher" id="teacher" hidden={!teacher}>
+        <section
+          className="teacher"
+          id="teacher"
+          data-world-state="tutor"
+          hidden={!teacher}
+        >
           <div className="wrap in">
             <figure id="tFig" data-r hidden={!teacher?.photo}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -361,7 +380,7 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
           </div>
         </section>
 
-        <section className="final" id="apply">
+        <section className="final" id="apply" data-world-state="summit">
           <div className="wrap in">
             <div data-r>
               <h2>Давайте разберёмся, с чего начать.</h2>

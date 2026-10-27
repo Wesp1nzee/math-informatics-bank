@@ -35,12 +35,20 @@ export function Math({ tex, display = false, className }: MathProps) {
   }
 
   if (display) {
-    return <div className={className} dangerouslySetInnerHTML={{ __html: html }} />;
+    return (
+      <div
+        className={cn("max-w-full min-w-0 overflow-x-auto py-1", className)}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
   }
 
   return (
     <span
-      className={cn("inline-block", className)}
+      className={cn(
+        "inline-block max-w-full overflow-x-auto overflow-y-hidden align-baseline",
+        className,
+      )}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

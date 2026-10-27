@@ -9,6 +9,7 @@ import { checkArticleExercise } from "@/features/articles/exercises-api";
 import type { ExerciseCheckResult } from "@/features/articles/exercises-api";
 import { describeApiError } from "@/lib/api/errors";
 import { cn } from "@/lib/utils/cn";
+import { triggerHaptic } from "@/lib/utils/haptics";
 
 type Status = "idle" | "checking" | "correct" | "wrong";
 
@@ -64,6 +65,7 @@ export function ExerciseForm({
     if (!answer) {
       setStatus("idle");
       setError("Выберите или введите ответ.");
+      triggerHaptic(18);
       return;
     }
 
@@ -81,9 +83,11 @@ export function ExerciseForm({
       setExplanation(result.explanation);
       setAttempts(result.attempts ?? (attempts ?? 0) + 1);
       setSolved(result.solved);
+      triggerHaptic(result.isCorrect ? [10, 26, 12] : 20);
     } catch (caught) {
       setStatus("idle");
       setError(describeApiError(caught));
+      triggerHaptic(20);
     }
   }
 
@@ -107,7 +111,16 @@ export function ExerciseForm({
           : "";
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} noValidate className={cn("min-w-0", className)}>
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      noValidate
+      data-result={status === "idle" ? undefined : status}
+      className={cn(
+        "exercise-form result-glow relative w-full max-w-full min-w-0",
+        className,
+      )}
+    >
       {children}
 
       {kind === "numeric" || kind === "text" ? (
@@ -115,7 +128,7 @@ export function ExerciseForm({
           <label htmlFor={inputId} className="text-ink-soft block text-sm font-medium">
             Ваш ответ{kind === "numeric" && unit ? `, ${unit}` : ""}
           </label>
-          <div className="mt-2 flex items-center gap-3">
+          <div className="mt-2 flex w-full flex-col items-stretch gap-3 sm:flex-row sm:items-center">
             <Input
               id={inputId}
               name={name}
@@ -131,7 +144,11 @@ export function ExerciseForm({
               disabled={disabled}
               aria-invalid={status === "wrong"}
               aria-describedby={statusId}
-              className={kind === "numeric" ? "max-w-48" : "max-w-md"}
+              className={
+                kind === "numeric"
+                  ? "w-full max-w-48 sm:w-auto"
+                  : "w-full max-w-md sm:w-auto"
+              }
             />
             {kind === "numeric" && unit ? (
               <span className="text-ink-soft text-sm">{unit}</span>
@@ -162,6 +179,7 @@ export function ExerciseForm({
         aria-live="polite"
         className={cn(
           "mt-3 min-h-6 text-sm",
+          status === "correct" || status === "wrong" ? "result-badge" : null,
           status === "correct" && "text-success font-medium",
           status === "wrong" && "text-danger",
           status === "checking" && "text-ink-faint",

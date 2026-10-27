@@ -4,7 +4,18 @@ export type TaskDifficulty = "easy" | "medium" | "hard";
 export type StatementBlock =
   | { type: "paragraph"; text: string }
   | { type: "list"; ordered?: boolean; items: string[] }
-  | { type: "formula"; tex: string; caption?: string };
+  | { type: "formula"; tex: string; caption?: string }
+  | { type: "heading"; text: string; id?: string }
+  | { type: "quote"; text: string }
+  | { type: "table"; headers?: string[]; rows: string[][]; caption?: string }
+  | {
+      type: "image";
+      src: string;
+      alt?: string;
+      caption?: string;
+      width?: number;
+      height?: number;
+    };
 
 export type SolutionStep = {
   note: string;

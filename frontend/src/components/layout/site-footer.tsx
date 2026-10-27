@@ -15,14 +15,14 @@ export function SiteFooter() {
   return (
     <footer className="border-line border-t py-16 pb-12">
       <Container>
-        <div className="grid grid-cols-12 gap-x-4 gap-y-10 md:gap-x-6">
-          <div className="desk:col-span-5 col-span-12">
+        <div className="grid w-full min-w-0 grid-cols-12 gap-x-4 gap-y-10 md:gap-x-6">
+          <div className="desk:col-span-5 col-span-12 min-w-0">
             <BrandLogo className="h-14" />
           </div>
 
           <nav
             aria-label="Нижняя навигация"
-            className="desk:col-span-3 col-span-6 grid content-start gap-1"
+            className="desk:col-span-3 col-span-6 grid min-w-0 content-start gap-1"
           >
             {footerNav.map((item) => (
               <Link
@@ -35,13 +35,13 @@ export function SiteFooter() {
             ))}
           </nav>
 
-          <div className="desk:col-span-3 col-span-6 flex flex-col items-start">
+          <div className="desk:col-span-3 col-span-6 flex min-w-0 flex-col items-start">
             {hasContacts ? (
               <>
                 {telegram ? (
                   <a
                     href={telegram}
-                    className="text-ink-soft hover:text-accent inline-block py-1.5 transition-colors"
+                    className="text-ink-soft hover:text-accent inline-block max-w-full py-1.5 break-words transition-colors"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
@@ -51,7 +51,7 @@ export function SiteFooter() {
                 {email ? (
                   <a
                     href={email}
-                    className="text-ink-soft hover:text-accent inline-block py-1.5 transition-colors"
+                    className="text-ink-soft hover:text-accent inline-block max-w-full py-1.5 break-words transition-colors"
                   >
                     {siteConfig.tutor.email}
                   </a>

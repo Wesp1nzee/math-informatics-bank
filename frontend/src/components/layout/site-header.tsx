@@ -24,12 +24,12 @@ export function SiteHeader() {
   return (
     <header
       data-scrolled={scrolled || undefined}
-      className="site-header fixed inset-x-0 top-0 z-50 border-b backdrop-blur-[26px] backdrop-saturate-[1.7]"
+      className="site-header fixed inset-x-0 top-0 z-50 w-full max-w-full overflow-x-clip border-b backdrop-blur-[26px] backdrop-saturate-[1.7]"
     >
       <Container>
         <nav
           aria-label="Основная навигация"
-          className="desk:gap-12 flex h-16 items-center gap-8"
+          className="desk:gap-12 flex h-16 w-full min-w-0 items-center gap-3 sm:gap-8"
         >
           <BrandLogo priority className="h-11 sm:h-12" />
 
@@ -46,7 +46,7 @@ export function SiteHeader() {
             ))}
           </ul>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
             <ThemeToggle className="hidden md:inline-flex" />
 
             <Button asChild size="sm" className="hidden md:inline-flex">

@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+
+import { cn } from "@/lib/utils/cn";
+import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
 
 function f(x: number): number {
   return x ** 3 - 4 * x ** 2 + 7 * x;
@@ -39,6 +42,32 @@ function formatValue(value: number): string {
 
 export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
   const [x, setX] = useState(2);
+  const [drawn, setDrawn] = useState(false);
+  const figureRef = useRef<HTMLElement>(null);
+  const reduceMotion = usePrefersReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const element = figureRef.current;
+    if (!element) return;
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = window.requestAnimationFrame(() => setDrawn(true));
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        setDrawn(true);
+        observer.disconnect();
+      },
+      { threshold: 0.25, rootMargin: "0px 0px -8% 0px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [reduceMotion]);
+
+  const isDrawn = drawn || reduceMotion;
 
   const slope = df(x);
   const pointX = mapX(x);
@@ -54,7 +83,11 @@ export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
   }
 
   return (
-    <figure className="viz m-0">
+    <figure
+      ref={figureRef}
+      data-drawn={isDrawn ? "true" : "false"}
+      className="viz m-0 w-full max-w-full min-w-0 overflow-x-auto"
+    >
       <div className="viz-top">
         <b>Математика · Производная</b>
         <output aria-live="polite" aria-atomic="true" className="tabular-nums">
@@ -64,9 +97,9 @@ export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
 
       {formulas}
 
-      <div className="graph-wrap relative">
+      <div className="graph-wrap relative w-full max-w-full min-w-0">
         <svg
-          className="graph"
+          className="graph h-auto w-full max-w-full"
           viewBox="0 0 520 380"
           role="img"
           aria-label="График функции f от x равно x в кубе минус 4 x в квадрате плюс 7 x. Точка на кривой двигается, касательная и значение производной пересчитываются."
@@ -74,10 +107,22 @@ export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
         >
           <g className="g-grid">
             {X_TICKS.map((tick) => (
-              <line key={`vx-${tick}`} x1={mapX(tick)} y1={20} x2={mapX(tick)} y2={340} />
+              <line
+                key={`vx-${tick}`}
+                x1={mapX(tick)}
+                y1={20}
+                x2={mapX(tick)}
+                y2={340}
+              />
             ))}
             {[0, ...Y_TICKS].map((tick) => (
-              <line key={`hy-${tick}`} x1={40} y1={mapY(tick)} x2={500} y2={mapY(tick)} />
+              <line
+                key={`hy-${tick}`}
+                x1={40}
+                y1={mapY(tick)}
+                x2={500}
+                y2={mapY(tick)}
+              />
             ))}
           </g>
 
@@ -105,44 +150,70 @@ export function DerivativeGraph({ formulas }: { formulas: ReactNode }) {
           </text>
 
           <path
-            className="g-curve draw-in"
+            className={cn("g-curve", isDrawn && "draw-in")}
             d={CURVE_PATH}
             pathLength={1}
-            style={{ "--dur": "900ms" } as CSSProperties}
+            style={
+              {
+                "--dur": "900ms",
+                opacity: isDrawn ? undefined : 0,
+              } as CSSProperties
+            }
           />
 
           <line
-            className="g-drop fade-el"
+            className={cn("g-drop", isDrawn && "fade-el")}
             x1={pointX}
             x2={pointX}
             y1={pointY}
             y2={340}
-            style={{ "--d": "250ms" } as CSSProperties}
+            style={
+              {
+                "--d": "250ms",
+                opacity: isDrawn ? undefined : 0,
+              } as CSSProperties
+            }
           />
 
           <line
-            className="g-tan draw-in"
+            className={cn("g-tan", isDrawn && "draw-in")}
             x1={mapX(tangentStartX)}
             y1={tangentStartY}
             x2={mapX(tangentEndX)}
             y2={tangentEndY}
             pathLength={1}
-            style={{ "--d": "350ms", "--dur": "500ms" } as CSSProperties}
+            style={
+              {
+                "--d": "350ms",
+                "--dur": "500ms",
+                opacity: isDrawn ? undefined : 0,
+              } as CSSProperties
+            }
           />
 
           <circle
-            className="g-pt fade-el"
+            className={cn("g-pt", isDrawn && "fade-el")}
             cx={pointX}
             cy={pointY}
             r={7}
-            style={{ "--d": "250ms" } as CSSProperties}
+            style={
+              {
+                "--d": "250ms",
+                opacity: isDrawn ? undefined : 0,
+              } as CSSProperties
+            }
           />
 
           <text
-            className="g-label fade-el"
+            className={cn("g-label", isDrawn && "fade-el")}
             x={pointX + 14}
             y={pointY + 28}
-            style={{ "--d": "250ms" } as CSSProperties}
+            style={
+              {
+                "--d": "250ms",
+                opacity: isDrawn ? undefined : 0,
+              } as CSSProperties
+            }
           >
             f′({formatValue(x)}) = {formatValue(slope)}
           </text>

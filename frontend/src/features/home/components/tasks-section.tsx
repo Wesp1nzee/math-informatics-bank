@@ -2,7 +2,8 @@ import Link from "next/link";
 
 import { WorldSection } from "@/components/layout/world-section";
 import { Button, ButtonArrow } from "@/components/ui/button";
-import { TaskList } from "@/features/tasks/components/task-list";
+import { PeekCarousel, PEEK_ITEM } from "@/components/ui/peek-carousel";
+import { TaskCard } from "@/features/tasks/components/task-card";
 import { getFeaturedTasks } from "@/features/tasks/api";
 
 function PreviewGraph() {
@@ -28,8 +29,8 @@ export async function TasksSection() {
       labelledBy="bank-title"
       className="section-frame"
     >
-      <div className="desk:grid-cols-12 grid grid-cols-1 items-end gap-6">
-        <div className="desk:col-span-7">
+      <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 items-end gap-6">
+        <div className="desk:col-span-7 w-full min-w-0">
           <span className="mono-label mb-4">TASK BANK / LIVE</span>
           <h2 id="bank-title" data-split-text className="heading-2 heading-scrim">
             Банк задач
@@ -40,7 +41,7 @@ export async function TasksSection() {
           </p>
         </div>
 
-        <div className="desk:col-span-5">
+        <div className="desk:col-span-5 w-full min-w-0">
           <div className="bento-cell">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -61,7 +62,18 @@ export async function TasksSection() {
 
       <div className="reveal mt-8">
         {tasks.length > 0 ? (
-          <TaskList tasks={tasks} />
+          <PeekCarousel
+            as="ul"
+            count={tasks.length}
+            label="Задачи"
+            className="desk:grid-cols-3 items-stretch sm:grid-cols-2 md:gap-6"
+          >
+            {tasks.map((task) => (
+              <li key={task.id} data-peek-item="" className={`${PEEK_ITEM} flex`}>
+                <TaskCard task={task} />
+              </li>
+            ))}
+          </PeekCarousel>
         ) : (
           <div className="glass border-line rounded-2xl border p-6 md:p-8">
             <p className="text-ink-soft m-0 text-base leading-relaxed">

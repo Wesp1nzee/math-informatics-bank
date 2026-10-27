@@ -24,7 +24,7 @@ export function Section({
       aria-labelledby={labelledBy}
       className={cn(
         bordered && "border-line border-t",
-        "desk:py-[88px] py-14 md:py-[88px]",
+        "desk:py-[88px] w-full min-w-0 py-14 md:py-[88px]",
         className,
       )}
     >

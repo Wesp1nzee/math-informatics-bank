@@ -14,13 +14,13 @@ export function TaskList({
   return (
     <ul
       className={cn(
-        "m-0 grid list-none gap-4 p-0 md:gap-6",
+        "m-0 grid w-full min-w-0 list-none gap-4 p-0 md:gap-6",
         columns === 3 ? "desk:grid-cols-3 sm:grid-cols-2" : "sm:grid-cols-2",
         className,
       )}
     >
       {tasks.map((task) => (
-        <li key={task.id} className="flex">
+        <li key={task.id} className="flex min-w-0">
           <TaskCard task={task} />
         </li>
       ))}

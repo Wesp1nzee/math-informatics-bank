@@ -39,9 +39,9 @@ export default async function ArticlesPage() {
       />
 
       <Section bordered>
-        <ul className="desk:grid-cols-3 m-0 grid list-none gap-4 p-0 sm:grid-cols-2 md:gap-6">
+        <ul className="desk:grid-cols-3 m-0 grid w-full min-w-0 list-none gap-4 p-0 sm:grid-cols-2 md:gap-6">
           {items.map((article) => (
-            <li key={article.slug} className="flex">
+            <li key={article.slug} className="flex min-w-0">
               <ArticleCard article={article} />
             </li>
           ))}

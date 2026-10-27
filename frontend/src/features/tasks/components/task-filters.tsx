@@ -25,9 +25,9 @@ function FilterGroup<T extends string>({
   hrefFor: (value?: T) => string;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+    <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
       <span className="text-ink-faint text-sm">{label}</span>
-      <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+      <ul className="m-0 flex min-w-0 list-none flex-wrap gap-2 p-0">
         {options.map((option) => {
           const active = option.value === current;
           return (
@@ -36,7 +36,7 @@ function FilterGroup<T extends string>({
                 href={hrefFor(option.value)}
                 aria-current={active ? "true" : undefined}
                 className={cn(
-                  "inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm transition-colors",
+                  "inline-flex min-h-10 items-center rounded-full border px-3.5 text-sm transition-colors",
                   active
                     ? "border-ink bg-ink text-canvas"
                     : "border-line bg-surface text-ink-soft hover:border-ink hover:text-ink",
@@ -76,7 +76,7 @@ export function TaskFilters({
   ];
 
   return (
-    <div className="border-line mb-10 flex flex-col gap-3 border-b pb-6">
+    <div className="border-line mb-10 flex w-full min-w-0 flex-col gap-3 border-b pb-6">
       <FilterGroup
         label="Предмет"
         options={subjectOptions}

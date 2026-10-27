@@ -22,16 +22,19 @@ export function Breadcrumbs({
     <nav aria-label="Хлебные крошки" className={className}>
       <ol className="text-ink-soft flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
         {items.map((item, index) => (
-          <li key={`${item.name}-${index}`} className="flex items-center gap-2">
+          <li key={`${item.name}-${index}`} className="flex min-w-0 items-center gap-2">
             {index > 0 ? (
               <ChevronRight aria-hidden className="text-ink-faint size-3.5" />
             ) : null}
             {item.href ? (
-              <Link href={item.href} className="hover:text-accent transition-colors">
+              <Link
+                href={item.href}
+                className="hover:text-accent min-w-0 break-words transition-colors"
+              >
                 {item.name}
               </Link>
             ) : (
-              <span aria-current="page" className={cn("text-ink")}>
+              <span aria-current="page" className={cn("text-ink min-w-0 break-words")}>
                 {item.name}
               </span>
             )}

@@ -1,50 +1,59 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("animations", () => {
-  test("hero graph is draggable with the keyboard", async ({ page }) => {
+test.describe("landing motion", () => {
+  test("process steps become active while scrolling", async ({ page }) => {
     await page.goto("/");
 
-    const slider = page.getByRole("slider", {
-      name: "Положение точки на графике",
-    });
-    await slider.focus();
-    await page.keyboard.press("ArrowRight");
+    const process = page.locator("#process");
+    await process.scrollIntoViewIfNeeded();
 
-    await expect(slider).toHaveValue("2.05");
-    await expect(slider).toHaveAttribute("aria-valuetext", /f′\(x\) = 3\.2/);
+    await expect(process.locator(".step.on").first()).toBeAttached();
+    await expect(process.locator(".node.on").first()).toBeAttached();
   });
 
-  test("code demo can be paused and skipped", async ({ page }) => {
+  test("scroll-revealed content is visible at the bottom of the page", async ({
+    page,
+  }) => {
     await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
+    await page.evaluate(() =>
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
+    );
 
-    await page.getByRole("tab", { name: "Информатика" }).click();
-    await page
-      .locator('[role="tabpanel"][data-active="true"]')
-      .scrollIntoViewIfNeeded();
-
-    await page.getByRole("button", { name: "Пауза" }).click();
-    await expect(page.getByRole("button", { name: "Продолжить" })).toBeVisible();
-
-    await page.getByRole("button", { name: "Пропустить" }).click();
-    await expect(page.getByText(/Вывод:/)).toBeVisible();
-    await expect(page.getByRole("button", { name: "Повторить" })).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const items = Array.from(
+            document.querySelectorAll<HTMLElement>("#subjects [data-r]"),
+          );
+          return (
+            items.length > 0 &&
+            items.every((el) => Number.parseFloat(getComputedStyle(el).opacity) >= 0.99)
+          );
+        }),
+      )
+      .toBe(true);
   });
 
-  test("reduced motion keeps the hero visible and the graph usable", async ({
+  test("reduced motion keeps the hero visible and removes continuous motion", async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
 
     await expect(
-      page.getByRole("heading", { level: 1, name: /Математика/ }),
+      page.getByRole("heading", { level: 1, name: /Сложное/ }),
     ).toBeVisible();
 
-    const slider = page.getByRole("slider", {
-      name: "Положение точки на графике",
-    });
-    await slider.focus();
-    await page.keyboard.press("ArrowRight");
-    await expect(slider).toHaveValue("2.05");
+    const running = await page.evaluate(
+      () =>
+        document.getAnimations().filter((animation) => {
+          if (animation.playState !== "running") return false;
+          const duration = Number(animation.effect?.getTiming().duration ?? 0);
+          return duration > 10;
+        }).length,
+    );
+    expect(running).toBe(0);
   });
 });

@@ -23,7 +23,10 @@ export function MethodStage({ active: initial = 0 }: { active?: number }) {
   }, []);
 
   return (
-    <div ref={ref} className="glass border-line rounded-2xl border p-6">
+    <div
+      ref={ref}
+      className="glass border-line w-full min-w-0 rounded-2xl border p-4 sm:p-6"
+    >
       <div className="flex items-center justify-between gap-3">
         <span className="mono-label">TRACE / COMPARE</span>
         <span className="metric-chip">
@@ -85,7 +88,9 @@ export function MethodStage({ active: initial = 0 }: { active?: number }) {
             data-active={index === active ? "" : undefined}
           >
             <span className="text-ink-faint font-mono text-sm">{row.id}</span>
-            <span className="text-ink-soft flex-1 text-sm">{row.title}</span>
+            <span className="text-ink-soft min-w-0 flex-1 text-sm break-words">
+              {row.title}
+            </span>
             <b className="text-ink font-mono text-sm">{row.value}</b>
           </li>
         ))}

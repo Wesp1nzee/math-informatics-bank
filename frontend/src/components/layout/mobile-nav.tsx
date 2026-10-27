@@ -26,7 +26,7 @@ export function MobileNav() {
       <Dialog.Portal>
         <Dialog.Overlay className="bg-ink/25 fixed inset-0 z-40" />
         <Dialog.Content
-          className="border-line bg-canvas fixed inset-x-0 top-0 z-50 border-b px-5 pb-5 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.4)]"
+          className="border-line bg-canvas fixed inset-x-0 top-0 z-50 max-h-[100dvh] w-full max-w-full overflow-y-auto overscroll-contain border-b px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[0_18px_40px_-24px_rgba(0,0,0,0.4)] sm:px-5"
           aria-label="Меню"
         >
           <Dialog.Title className="sr-only">Навигация</Dialog.Title>

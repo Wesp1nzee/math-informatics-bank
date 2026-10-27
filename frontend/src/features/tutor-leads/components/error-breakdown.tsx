@@ -59,8 +59,8 @@ export function ErrorBreakdown() {
       labelledBy="error-title"
       className="section-frame"
     >
-      <div className="desk:grid-cols-12 grid grid-cols-1 items-start gap-8">
-        <div className="desk:col-span-5 reveal">
+      <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 items-start gap-8">
+        <div className="desk:col-span-5 reveal w-full min-w-0">
           <span className="mono-label mb-4">ERROR / ANATOMY</span>
           <h2 id="error-title" data-split-text className="heading-2 heading-scrim">
             Так выглядит разбор ошибки
@@ -104,7 +104,7 @@ export function ErrorBreakdown() {
           </div>
         </div>
 
-        <div className="desk:col-span-6 desk:col-start-7 reveal">
+        <div className="desk:col-span-6 desk:col-start-7 reveal w-full min-w-0">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <span className="mono-label">LIVE / CHECK</span>
             <span className="metric-chip">

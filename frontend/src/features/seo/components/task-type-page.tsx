@@ -78,11 +78,11 @@ export function TaskTypePageView({
       </PageHero>
 
       <Section bordered>
-        <div className="grid grid-cols-12 items-start gap-4 md:gap-6">
-          <div className="desk:col-span-8 col-span-12">
+        <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 items-start gap-4 md:gap-6">
+          <div className="desk:col-span-8 col-span-1 w-full min-w-0">
             <ArticleRenderer content={article.content} articleSlug={article.slug} />
           </div>
-          <aside className="desk:col-span-3 desk:col-start-10 col-span-12 mt-10 md:mt-0">
+          <aside className="desk:col-span-3 desk:col-start-10 col-span-1 mt-10 w-full min-w-0 md:mt-0">
             <div className="border-line bg-surface rounded-lg border p-5">
               <p className="text-ink-faint text-sm">Навигация</p>
               <ul className="m-0 mt-3 grid list-none gap-2 p-0 text-sm">
@@ -139,9 +139,9 @@ export function TaskTypePageView({
               <Link href={`/zadachi?subject=${page.subject}`}>Все задачи</Link>
             </Button>
           </div>
-          <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="m-0 grid w-full min-w-0 list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {relatedTasks.map((task) => (
-              <li key={task.id} className="flex">
+              <li key={task.id} className="flex min-w-0">
                 <TaskCard task={task} />
               </li>
             ))}
@@ -154,9 +154,9 @@ export function TaskTypePageView({
           <h2 id="task-type-articles-title" className="heading-3 mb-8">
             Связанные разборы
           </h2>
-          <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2">
+          <ul className="m-0 grid w-full min-w-0 list-none gap-4 p-0 sm:grid-cols-2">
             {relatedArticles.map((related) => (
-              <li key={related.slug} className="flex">
+              <li key={related.slug} className="flex min-w-0">
                 <ArticleCard article={related} />
               </li>
             ))}

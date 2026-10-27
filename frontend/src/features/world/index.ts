@@ -1,4 +1,10 @@
-export { pulseWorld, scanWorld, setWorldState, currentWorldState } from "@/features/world/bus";
+export {
+  pulseWorld,
+  scanWorld,
+  setWorldState,
+  currentWorldState,
+  subscribeWorldState,
+} from "@/features/world/bus";
 export {
   buildPathA,
   buildPathB,
@@ -10,4 +16,10 @@ export {
   WORLD_SIZE,
 } from "@/features/world/landscape";
 export { getWorldState, WORLD_STATES } from "@/features/world/world-states";
-export type { PulseKind, Vec2, Vec3, WorldPalette, WorldState } from "@/features/world/types";
+export type {
+  PulseKind,
+  Vec2,
+  Vec3,
+  WorldPalette,
+  WorldState,
+} from "@/features/world/types";

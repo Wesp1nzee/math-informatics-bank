@@ -39,7 +39,7 @@ export function ArticleRenderer({
   const midIndex = Math.floor((blocks.length - 1) / 2);
 
   return (
-    <div className="text-ink flex min-w-0 max-w-[68ch] flex-col gap-5">
+    <div className="text-ink flex w-full max-w-[68ch] min-w-0 flex-col gap-5">
       {blocks.map((block, index) => (
         <Fragment
           key={

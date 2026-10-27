@@ -5,6 +5,10 @@ import { useRef } from "react";
 import { LeadForm } from "@/features/landing/lead-form";
 import { useHeroScene } from "@/features/landing/use-hero-scene";
 import { useLandingMotion } from "@/features/landing/use-landing-motion";
+import { PeekCarousel, PEEK_ITEM } from "@/components/ui/peek-carousel";
+import { TiltCard } from "@/components/ui/tilt-card";
+import { MobileWorld } from "@/features/world/mobile-world";
+import { useWorldSections } from "@/features/world/use-world-sections";
 import {
   FAQ_ITEMS,
   TUTORING_FACTS,
@@ -36,13 +40,19 @@ export function TutoringPage() {
 
   useHeroScene(hostRef, heroRef);
   useLandingMotion(rootRef);
+  useWorldSections();
 
   return (
     <div className="lp" ref={rootRef}>
       <div id="gl" ref={hostRef} aria-hidden="true" />
+      <MobileWorld />
 
       <main>
-        <section className="hero hero--tutoring" ref={heroRef}>
+        <section
+          className="hero hero--tutoring"
+          ref={heroRef}
+          data-world-state="tutoring-hero"
+        >
           <div className="wrap heroin">
             <div className="copy">
               <p className="eyebrow mono fa">ОСНОВА · Репетиторство</p>
@@ -78,7 +88,7 @@ export function TutoringPage() {
           </div>
         </section>
 
-        <section className="proc" id="trial">
+        <section className="proc" id="trial" data-world-state="teaching">
           <div className="wrap">
             <h2 data-r>Как проходит пробное</h2>
             <div className="track" id="track">
@@ -111,29 +121,41 @@ export function TutoringPage() {
           </div>
         </section>
 
-        <section className="sub" id="about">
+        <section className="sub" id="about" data-world-state="materials">
           <div className="wrap">
             <h2 data-r>
               Что разбираем
               <br />
               на занятиях.
             </h2>
-            <div className="tutor-cards">
+            <PeekCarousel
+              count={TUTORING_FACTS.length}
+              label="Что разбираем на занятиях"
+              className="tutor-cards"
+            >
               {TUTORING_FACTS.map((fact, index) => (
-                <article className="col" data-r key={fact.title}>
-                  <div className="n mono">
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <span>7–11 класс</span>
-                  </div>
-                  <h3>{fact.title}</h3>
-                  <p>{fact.text}</p>
-                </article>
+                <div
+                  key={fact.title}
+                  data-peek-item=""
+                  className={`${PEEK_ITEM} min-w-0`}
+                >
+                  <TiltCard className="h-full">
+                    <article className="col" data-r>
+                      <div className="n mono">
+                        <span>{String(index + 1).padStart(2, "0")}</span>
+                        <span>7–11 класс</span>
+                      </div>
+                      <h3>{fact.title}</h3>
+                      <p>{fact.text}</p>
+                    </article>
+                  </TiltCard>
+                </div>
               ))}
-            </div>
+            </PeekCarousel>
           </div>
         </section>
 
-        <section className="proc tutor-faq-section" id="faq">
+        <section className="proc tutor-faq-section" id="faq" data-world-state="faq">
           <div className="wrap">
             <h2 data-r>Вопросы и ответы</h2>
             <div className="tutor-faq" data-r>
@@ -149,7 +171,7 @@ export function TutoringPage() {
           </div>
         </section>
 
-        <section className="final" id="request">
+        <section className="final" id="request" data-world-state="summit">
           <div className="wrap in">
             <div data-r>
               <h2>Начнём с диагностики.</h2>

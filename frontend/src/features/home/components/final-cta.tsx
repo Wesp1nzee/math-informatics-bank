@@ -13,8 +13,8 @@ export function FinalCta() {
     >
       <div className="final-halo" aria-hidden="true" />
 
-      <div className="desk:grid-cols-12 relative grid grid-cols-1 items-center gap-10">
-        <div className="reveal desk:col-span-6">
+      <div className="desk:grid-cols-12 relative grid w-full min-w-0 grid-cols-1 items-center gap-10">
+        <div className="reveal desk:col-span-6 w-full min-w-0">
           <span className="mono-label mb-5">CONVERSION / PORTAL</span>
           <h2
             id="final-title"
@@ -42,7 +42,7 @@ export function FinalCta() {
           </div>
         </div>
 
-        <div className="reveal desk:col-span-5 desk:col-start-8">
+        <div className="reveal desk:col-span-5 desk:col-start-8 w-full min-w-0">
           <div className="glass-strong rounded-2xl border border-[var(--glass-border)] p-5 md:p-6">
             <h3 className="heading-3 mb-4">Записаться на пробное</h3>
             <TutorLeadPanel />

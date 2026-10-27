@@ -9,27 +9,20 @@ test.describe("no-JavaScript fallback", () => {
     await page.goto("/");
 
     await expect(
-      page.getByRole("heading", { level: 1, name: /Математика/ }),
+      page.getByRole("heading", { level: 1, name: /Сложное/ }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: /Попробуйте сами/ }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Два направления/ })).toBeVisible();
 
     const state = await page.evaluate(() => {
-      const reveal = document.querySelector(".reveal");
-      const quizOptions = document.querySelector(
-        '[role="group"][aria-label="Варианты ответа"]',
-      );
+      const reveal = document.querySelector<HTMLElement>("[data-r]");
       return {
         hasJsClass: document.documentElement.classList.contains("js"),
         revealOpacity: reveal ? getComputedStyle(reveal).opacity : null,
-        quizOptionsDisplay: quizOptions ? getComputedStyle(quizOptions).display : null,
       };
     });
 
     expect(state.hasJsClass).toBe(false);
     expect(state.revealOpacity).toBe("1");
-    expect(state.quizOptionsDisplay).toBe("none");
   });
 
   test("the solution is readable", async ({ page }) => {
@@ -44,12 +37,12 @@ test.describe("no-JavaScript fallback", () => {
     expect(display).toBe("block");
   });
 
-  test("the Python listing is available", async ({ page }) => {
-    await page.goto("/");
+  test("the request form is available", async ({ page }) => {
+    await page.goto("/podgotovka");
 
-    const listing = page.locator("[data-static-code]");
-    await expect(listing).toBeVisible();
-    await expect(listing).toContainText("while r(n)");
-    await expect(listing).toContainText("print(r(n))");
+    await expect(page.locator("[data-lead-form]").first()).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Занятия/ }),
+    ).toBeVisible();
   });
 });

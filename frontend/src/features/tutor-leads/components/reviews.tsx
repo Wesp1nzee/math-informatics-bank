@@ -1,3 +1,4 @@
+import { PeekCarousel, PEEK_ITEM } from "@/components/ui/peek-carousel";
 import { selectPublishedReviews } from "@/features/tutor-leads/reviews";
 import { REVIEWS } from "@/features/tutor-leads/content";
 import { cn } from "@/lib/utils/cn";
@@ -7,11 +8,17 @@ export function Reviews({ className }: { className?: string }) {
   if (reviews.length === 0) return null;
 
   return (
-    <ul className={cn("grid gap-4 md:grid-cols-2", className)}>
+    <PeekCarousel
+      as="ul"
+      count={reviews.length}
+      label="Отзывы учеников"
+      className={cn("items-stretch md:grid-cols-2", className)}
+    >
       {reviews.map((review) => (
         <li
           key={`${review.name}-${review.exam}`}
-          className="glass flex flex-col gap-4 rounded-xl border border-[var(--glass-border)] p-6"
+          data-peek-item=""
+          className={`${PEEK_ITEM} glass flex flex-col gap-4 rounded-xl border border-[var(--glass-border)] p-6`}
         >
           <blockquote className="text-ink text-lg leading-relaxed">
             {review.text}
@@ -32,6 +39,6 @@ export function Reviews({ className }: { className?: string }) {
           </footer>
         </li>
       ))}
-    </ul>
+    </PeekCarousel>
   );
 }

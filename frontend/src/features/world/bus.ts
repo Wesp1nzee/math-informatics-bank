@@ -13,9 +13,12 @@ type WorldApi = {
   scan: () => void;
 };
 
+type StateListener = (name: string) => void;
+
 let worldApi: WorldApi | null = null;
 let lastState: string | null = null;
 let scanPending = false;
+const stateListeners = new Set<StateListener>();
 
 export function registerWorld(api: WorldApi): void {
   worldApi = api;
@@ -33,6 +36,17 @@ export function unregisterWorld(): void {
 export function setWorldState(name: string): void {
   lastState = name;
   worldApi?.setState(name);
+  for (const listener of stateListeners) listener(name);
+}
+
+/**
+ * Lets non-WebGL surfaces (the mobile 2.5D fallback) react to the same
+ * section changes as the canvas without pulling in the renderer.
+ */
+export function subscribeWorldState(listener: StateListener): () => void {
+  stateListeners.add(listener);
+  if (lastState) listener(lastState);
+  return () => stateListeners.delete(listener);
 }
 
 export function pulseWorld(kind: PulseKind): void {

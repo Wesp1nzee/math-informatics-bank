@@ -63,6 +63,8 @@ export function PinnedEpisode({
         ]);
         if (disposed) return;
         gsap.registerPlugin(ScrollTrigger);
+        // Prevent virtual-keyboard / URL-bar resizes on phones from moving pins.
+        ScrollTrigger.config({ ignoreMobileResize: true });
 
         const stepEls = Array.from(
           root.querySelectorAll<HTMLElement>("[data-pinned-step]"),
@@ -168,8 +170,8 @@ export function PinnedEpisode({
       className={cn("pinned-episode", className)}
     >
       <Container>
-        <div className="pinned-sticky">
-          <div className="pinned-card glass rounded-2xl border border-[var(--color-line)] p-6 md:p-9">
+        <div className="pinned-sticky w-full min-w-0">
+          <div className="pinned-card glass w-full min-w-0 rounded-2xl border border-[var(--color-line)] p-4 sm:p-6 md:p-9">
             {eyebrow ? <span className="eyebrow mb-3">{eyebrow}</span> : null}
             <h2 id={titleId} data-split-text className="heading-2">
               {title}
@@ -188,11 +190,11 @@ export function PinnedEpisode({
                   data-step-state={step.state}
                   className="pinned-step"
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex min-w-0 items-start gap-4">
                     <span className="text-accent mt-0.5 font-serif text-2xl leading-none italic">
                       {index + 1}
                     </span>
-                    <div>
+                    <div className="min-w-0">
                       <h3 className="text-ink m-0 text-lg font-semibold">
                         {step.title}
                       </h3>
@@ -215,7 +217,7 @@ export function PinnedEpisode({
             </div>
           </div>
 
-          <div className="pinned-stage">
+          <div className="pinned-stage w-full min-w-0">
             {stages?.length ? (
               stages.map((stage, index) => (
                 <div

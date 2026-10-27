@@ -64,8 +64,16 @@ export function InteractiveShowcase() {
   }
 
   return (
-    <div ref={rootRef} className="showcase-stage" data-phase={phase}>
-      <div role="tablist" aria-label="Примеры задач" className="tab-list">
+    <div
+      ref={rootRef}
+      className="showcase-stage w-full max-w-full min-w-0"
+      data-phase={phase}
+    >
+      <div
+        role="tablist"
+        aria-label="Примеры задач"
+        className="tab-list max-w-full overflow-x-auto"
+      >
         {TABS.map((tab) => {
           const selected = tab.id === active;
           return (
@@ -95,7 +103,7 @@ export function InteractiveShowcase() {
         id={`${baseId}-math-panel`}
         aria-labelledby={`${baseId}-math-tab`}
         data-active={active === "math"}
-        className="tab-panel"
+        className="tab-panel w-full max-w-full min-w-0"
       >
         <TaskQuiz
           tag="ЕГЭ · Профиль"
@@ -125,9 +133,9 @@ export function InteractiveShowcase() {
         id={`${baseId}-cs-panel`}
         aria-labelledby={`${baseId}-cs-tab`}
         data-active={active === "cs"}
-        className="tab-panel"
+        className="tab-panel w-full max-w-full min-w-0"
       >
-        <div className="grid gap-4">
+        <div className="grid w-full min-w-0 gap-4">
           <p className="text-ink-soft m-0 text-base leading-relaxed">
             По числу N строится R: дважды дописываем остаток суммы цифр на 2. Найдите
             наименьшее R, большее 83.

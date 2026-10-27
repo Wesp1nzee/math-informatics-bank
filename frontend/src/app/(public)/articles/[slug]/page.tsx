@@ -104,9 +104,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </PageHero>
 
       <Section bordered>
-        <div className="grid grid-cols-12 items-start gap-4 md:gap-6">
+        <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 items-start gap-4 md:gap-6">
           {toc.length > 0 ? (
-            <div className="desk:col-span-3 desk:mb-0 col-span-12 mb-8">
+            <div className="desk:col-span-3 desk:mb-0 col-span-1 mb-8 w-full min-w-0">
               <ArticleToc items={toc} />
             </div>
           ) : null}
@@ -114,8 +114,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div
             className={
               toc.length > 0
-                ? "desk:col-span-8 desk:col-start-5 col-span-12"
-                : "col-span-12"
+                ? "desk:col-span-8 desk:col-start-5 col-span-1 w-full min-w-0"
+                : "col-span-1 w-full min-w-0"
             }
           >
             {article.content ? (

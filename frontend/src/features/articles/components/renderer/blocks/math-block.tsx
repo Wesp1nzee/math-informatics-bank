@@ -12,8 +12,8 @@ export function MathBlock({ block }: { block: Block }) {
   }
 
   return (
-    <figure className="border-accent-soft my-2 flex flex-col gap-2 overflow-x-auto border-l-2 pl-4">
-      <Math display={display ?? true} tex={tex} />
+    <figure className="border-accent-soft my-2 flex max-w-full min-w-0 flex-col gap-2 overflow-x-auto border-l-2 py-1 pl-4">
+      <Math display={display ?? true} tex={tex} className="max-w-full" />
       {typeof caption === "string" && caption ? (
         <figcaption className="text-ink-faint text-sm">{caption}</figcaption>
       ) : null}

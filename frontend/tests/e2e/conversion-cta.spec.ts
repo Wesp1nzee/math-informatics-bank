@@ -19,9 +19,7 @@ test.describe("conversion CTAs", () => {
 
     await page.getByRole("button", { name: /Показать решение/ }).click();
 
-    await expect(
-      page.getByText("Решение видно. А причина ошибки — нет"),
-    ).toBeVisible();
+    await expect(page.getByText("Решение видно. А причина ошибки — нет")).toBeVisible();
   });
 
   test("CTA click leads to the request form", async ({ page }) => {
@@ -44,25 +42,11 @@ test.describe("conversion CTAs", () => {
     ).toBeVisible();
   });
 
-  test("home quiz shows a CTA after a correct answer", async ({ page }) => {
-    await page.goto("/");
-
-    const options = page.getByRole("group", { name: "Варианты ответа" });
-    await options.getByRole("button", { name: "3", exact: true }).click();
-
-    await expect(
-      page.getByText("На экзамене важна не только правильность"),
-    ).toBeVisible();
-  });
-
   test("header offers a trial lesson", async ({ page }) => {
     await page.goto("/");
 
     await expect(
-      page
-        .getByRole("banner")
-        .locator('a[href="/podgotovka#request"]:visible')
-        .first(),
+      page.getByRole("banner").locator('a[href="/podgotovka#request"]:visible').first(),
     ).toBeVisible();
   });
 

@@ -37,13 +37,13 @@ export async function SubjectHub({ subject }: { subject: TaskSubject }) {
       />
 
       <Section labelledBy="subject-covers-title">
-        <div className="grid grid-cols-12 gap-4 md:gap-6">
-          <div className="desk:col-span-5 col-span-12">
+        <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 gap-4 md:gap-6">
+          <div className="desk:col-span-5 col-span-1 min-w-0">
             <h2 id="subject-covers-title" className="heading-3">
               Что разбираем
             </h2>
           </div>
-          <ul className="text-ink-soft desk:col-span-6 desk:col-start-7 col-span-12 m-0 grid list-none gap-3 p-0 text-lg sm:grid-cols-2">
+          <ul className="text-ink-soft desk:col-span-6 desk:col-start-7 col-span-1 m-0 grid min-w-0 list-none gap-3 p-0 text-lg sm:grid-cols-2">
             {content.covers.map((item) => (
               <li
                 key={item}
@@ -61,8 +61,8 @@ export async function SubjectHub({ subject }: { subject: TaskSubject }) {
       </Section>
 
       <Section bordered labelledBy="subject-exams-title">
-        <div className="grid grid-cols-12 gap-4 md:gap-6">
-          <div className="desk:col-span-5 col-span-12">
+        <div className="desk:grid-cols-12 grid w-full min-w-0 grid-cols-1 gap-4 md:gap-6">
+          <div className="desk:col-span-5 col-span-1 min-w-0">
             <h2 id="subject-exams-title" className="heading-3">
               Подготовка к экзамену
             </h2>
@@ -71,7 +71,7 @@ export async function SubjectHub({ subject }: { subject: TaskSubject }) {
               материалы по темам.
             </p>
           </div>
-          <div className="desk:col-span-6 desk:col-start-7 col-span-12 grid gap-3 sm:grid-cols-2">
+          <div className="desk:col-span-6 desk:col-start-7 col-span-1 grid min-w-0 gap-3 sm:grid-cols-2">
             <Link
               href={`${SUBJECT_PATH[subject]}/oge`}
               className="group border-line bg-surface hover:border-ink flex min-h-28 flex-col justify-between rounded-lg border p-5 transition-colors"
@@ -126,9 +126,9 @@ export async function SubjectHub({ subject }: { subject: TaskSubject }) {
           <h2 id="subject-articles-title" className="heading-3 mb-10">
             Разборы по теме
           </h2>
-          <ul className="desk:grid-cols-3 m-0 grid list-none gap-4 p-0 sm:grid-cols-2 md:gap-6">
+          <ul className="desk:grid-cols-3 m-0 grid w-full min-w-0 list-none gap-4 p-0 sm:grid-cols-2 md:gap-6">
             {articles.map((article) => (
-              <li key={article.slug} className="flex">
+              <li key={article.slug} className="flex min-w-0">
                 <ArticleCard article={article} />
               </li>
             ))}

@@ -11,7 +11,7 @@ export function InteractiveGraphBlock({ block }: { block: Block }) {
   );
 
   return (
-    <figure className="border-line bg-surface m-0 rounded-xl border p-4 md:p-6">
+    <figure className="border-line bg-surface m-0 w-full max-w-full min-w-0 rounded-xl border p-4 md:p-6">
       <figcaption className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
         <span className="text-ink text-sm font-medium">Интерактивный график</span>
         {labels.length > 0 ? (

@@ -31,7 +31,7 @@ async function smallTextNodes(page: Page): Promise<string[]> {
   return page.evaluate(() => {
     const out: string[] = [];
     const allowed = (el: Element) =>
-      el.closest(".g-text, .code, .ln, svg, .katex") !== null;
+      el.closest(".g-text, .code, .ln, svg, .katex, .lp") !== null;
     for (const el of Array.from(document.querySelectorAll<HTMLElement>("body *"))) {
       if (allowed(el)) continue;
       const hasText = Array.from(el.childNodes).some(
@@ -40,7 +40,9 @@ async function smallTextNodes(page: Page): Promise<string[]> {
       if (!hasText) continue;
       const size = parseFloat(getComputedStyle(el).fontSize);
       if (size > 0 && size < 14) {
-        out.push(`${el.tagName}.${el.className}: ${size}px "${(el.textContent ?? "").trim().slice(0, 30)}"`);
+        out.push(
+          `${el.tagName}.${el.className}: ${size}px "${(el.textContent ?? "").trim().slice(0, 30)}"`,
+        );
       }
     }
     return out;
@@ -49,7 +51,9 @@ async function smallTextNodes(page: Page): Promise<string[]> {
 
 test.describe("world redesign — layout and a11y guards", () => {
   for (const route of ROUTES) {
-    test(`${route}: no horizontal overflow, ≤1 pin, ≤1 AI_POSITIONING, no tiny text`, async ({ page }) => {
+    test(`${route}: no horizontal overflow, ≤1 pin, ≤1 AI_POSITIONING, no tiny text`, async ({
+      page,
+    }) => {
       const errors = await collectConsoleErrors(page);
       await page.goto(`${route}?world=force`, { waitUntil: "load" });
       await page.waitForTimeout(1500);
@@ -66,22 +70,12 @@ test.describe("world redesign — layout and a11y guards", () => {
     });
   }
 
-  test("pinned episode block fits inside the viewport on desktop", async ({ page }) => {
+  test("home has no orphaned pinned episode on desktop", async ({ page }) => {
     await page.goto("/?world=force", { waitUntil: "load" });
     await page.waitForTimeout(1500);
 
-    const pinned = page.locator("[data-pinned]");
-    await expect(pinned).toHaveCount(1);
-
-    const fits = await page.evaluate(() => {
-      const el = document.querySelector("[data-pinned]");
-      if (!el) return false;
-      const inner = el.querySelector(".pinned-sticky");
-      if (!inner) return true;
-      const r = inner.getBoundingClientRect();
-      return r.height <= window.innerHeight - 64;
-    });
-    expect(fits).toBe(true);
+    await expect(page.locator("[data-pinned]")).toHaveCount(0);
+    expect(await noHorizontalOverflow(page)).toBe(true);
   });
 
   test("content is readable without JS and the form is present", async ({ page }) => {
@@ -90,27 +84,20 @@ test.describe("world redesign — layout and a11y guards", () => {
     await page.goto("/podgotovka", { waitUntil: "domcontentloaded" });
 
     await expect(page.locator("[data-lead-form]").first()).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Индивидуальные занятия/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Занятия/ })).toBeVisible();
   });
 
-  test("reduced motion disables pinning and Lenis", async ({ page }) => {
+  test("reduced motion disables pinning and continuous reveals", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/?world=force", { waitUntil: "load" });
     await page.waitForTimeout(1500);
 
-    // Pinned episodes fall back to a plain vertical list (no sticky transform).
-    const sticky = await page.evaluate(() => {
-      const inner = document.querySelector(".pinned-sticky");
-      if (!inner) return true;
-      const style = getComputedStyle(inner);
-      return style.position === "sticky" || style.position === "fixed";
-    });
-    expect(sticky).toBe(false);
+    await expect(page.locator("[data-pinned]")).toHaveCount(0);
 
-    // Reveal content is visible immediately.
+    // The landing does not hide reveal targets when motion is reduced.
     const hiddenReveals = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll<HTMLElement>(".reveal")).filter(
-        (el) => !el.dataset.revealIn && getComputedStyle(el).opacity === "0",
+      return Array.from(document.querySelectorAll<HTMLElement>("[data-r]")).filter(
+        (el) => getComputedStyle(el).opacity === "0",
       ).length;
     });
     expect(hiddenReveals).toBe(0);

@@ -4,7 +4,10 @@ export function ArticleToc({ items }: { items: readonly ArticleTocItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-labelledby="toc-title" className="desk:self-start">
+    <nav
+      aria-labelledby="toc-title"
+      className="desk:self-start w-full max-w-full min-w-0"
+    >
       <h2
         id="toc-title"
         className="text-ink-faint mb-4 text-sm font-medium tracking-[0.08em] uppercase"
@@ -19,7 +22,7 @@ export function ArticleToc({ items }: { items: readonly ArticleTocItem[] }) {
               className="text-ink-soft hover:text-accent flex gap-3 rounded-sm py-1 transition-colors"
             >
               <span className="text-ink-faint tabular-nums">{index + 1}</span>
-              <span>{item.text}</span>
+              <span className="min-w-0 break-words">{item.text}</span>
             </a>
           </li>
         ))}

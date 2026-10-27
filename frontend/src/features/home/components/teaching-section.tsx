@@ -70,12 +70,12 @@ export function TeachingSection() {
 
       <div
         className={cn(
-          "desk:grid-cols-12 mt-8 grid grid-cols-1 items-start gap-8",
+          "desk:grid-cols-12 mt-8 grid w-full min-w-0 grid-cols-1 items-start gap-8",
           !hasTutorProfile && "desk:grid-cols-1",
         )}
       >
         {hasTutorProfile ? (
-          <div className="desk:col-span-5 reveal" style={step(0)}>
+          <div className="desk:col-span-5 reveal w-full min-w-0" style={step(0)}>
             <div className="glass overflow-hidden rounded-2xl border border-[var(--color-line)]">
               {tutor.photo ? (
                 <img
@@ -101,7 +101,12 @@ export function TeachingSection() {
           </div>
         ) : null}
 
-        <div className={cn(hasTutorProfile && "desk:col-span-6 desk:col-start-7")}>
+        <div
+          className={cn(
+            "w-full min-w-0",
+            hasTutorProfile && "desk:col-span-6 desk:col-start-7",
+          )}
+        >
           <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2">
             {SHORT_FACTS.map((fact, index) => (
               <li key={fact.title} className="reveal" style={step(index + 1)}>

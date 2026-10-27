@@ -6,7 +6,7 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils/cn";
 
 export const buttonVariants = cva(
-  "group/btn inline-flex items-center justify-center gap-2.5 rounded-md border border-transparent font-medium transition-[background-color,border-color,color,transform] duration-150 active:translate-y-px disabled:pointer-events-none disabled:opacity-60",
+  "group/btn inline-flex items-center justify-center gap-2.5 rounded-md border border-transparent font-medium transition-[background-color,border-color,color,transform] duration-150 ease-out motion-safe:active:scale-[0.97] disabled:pointer-events-none disabled:opacity-60",
   {
     variants: {
       variant: {

@@ -8,11 +8,7 @@ import type { ArticleBlockV2, MatchingOption } from "@/features/articles/types";
 type Block = Extract<ArticleBlockV2, { type: "matching" }>;
 
 function toTex(value: string): string {
-  let tex = value
-    .replace(/`/g, "")
-    .replace(/²/g, "^2")
-    .replace(/−/g, "-")
-    .trim();
+  let tex = value.replace(/`/g, "").replace(/²/g, "^2").replace(/−/g, "-").trim();
   tex = tex.replace(/\((\d+)\/(\d+)\)x/g, "\\frac{$1}{$2}x");
   tex = tex.replace(/(-?)(\d+)\/x/g, (_, sign: string, number: string) => {
     return `${sign === "-" ? "-" : ""}\\frac{${number}}{x}`;
@@ -38,7 +34,7 @@ function OptionSide({ options }: { options: readonly MatchingOption[] }) {
     <div className="min-w-0">
       <p className="text-ink text-sm font-semibold">{title}</p>
       {hasImages ? (
-        <div className="mt-3 grid grid-cols-3 gap-3">
+        <div className="mt-3 grid w-full min-w-0 grid-cols-3 gap-2 sm:gap-3">
           {options.map((option) => {
             const src = safeHref(option.image ?? "");
             return (
@@ -101,9 +97,9 @@ export function MatchingBlock({
   const inputId = `article-matching-${block.id}`;
 
   return (
-    <section className="border-line-strong bg-surface text-ink scroll-mt-24 rounded-xl border p-5 shadow-sm md:p-6">
+    <section className="border-line-strong bg-surface text-ink w-full max-w-full min-w-0 scroll-mt-24 rounded-xl border p-4 shadow-sm sm:p-5 md:p-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-ink-faint text-xs font-semibold uppercase tracking-wide">
+        <p className="text-ink-faint text-xs font-semibold tracking-wide uppercase">
           Задание на соответствие
         </p>
         {source || bankId ? (

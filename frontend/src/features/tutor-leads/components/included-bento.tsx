@@ -116,16 +116,16 @@ export function IncludedBento() {
         </p>
       </div>
 
-      <ul className="bento-grid m-0 list-none p-0">
+      <ul className="bento-grid m-0 w-full min-w-0 list-none p-0">
         {SHORT_FACTS.map((fact, index) => {
           const Visual = VISUALS[index] ?? ProgressVisual;
           return (
             <li
               key={fact.title}
-              className={cn("reveal", SPANS[index])}
+              className={cn("reveal w-full min-w-0", SPANS[index])}
               style={step(index)}
             >
-              <div className="bento-cell tech-corners h-full">
+              <div className="bento-cell tech-corners h-full w-full min-w-0">
                 <div className="flex items-start justify-between gap-3">
                   <b className="text-ink block text-lg font-semibold">{fact.title}</b>
                   <span className="text-ink-faint font-mono text-sm">
