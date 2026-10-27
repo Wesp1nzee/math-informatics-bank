@@ -1,4 +1,22 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+/**
+ * Scrolls the page in viewport-sized steps. IntersectionObserver reveals are
+ * driven by actual intersections, so jumping straight to the bottom would
+ * (correctly) leave skipped blocks un-revealed.
+ */
+async function scrollThrough(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    const step = Math.max(200, Math.round(window.innerHeight * 0.55));
+    const max = document.documentElement.scrollHeight;
+    for (let y = 0; y <= max; y += step) {
+      window.scrollTo({ top: y, behavior: "instant" });
+      await new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      );
+    }
+  });
+}
 
 const SECTION_HEADINGS = [
   "Два направления",
@@ -49,13 +67,11 @@ test.describe("home page", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
     await page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
+    await scrollThrough(page);
 
     await expect
-      .poll(async () => {
-        await page.evaluate(() =>
-          window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
-        );
-        return page.evaluate(() => {
+      .poll(() =>
+        page.evaluate(() => {
           const all = Array.from(document.querySelectorAll<HTMLElement>("[data-r]"));
           return (
             all.length > 0 &&
@@ -65,8 +81,8 @@ test.describe("home page", () => {
                 Number.parseFloat(getComputedStyle(el).opacity) >= 0.99,
             )
           );
-        });
-      })
+        }),
+      )
       .toBe(true);
   });
 
@@ -76,13 +92,11 @@ test.describe("home page", () => {
     await expect(page).toHaveURL(/\/$/);
     await page.waitForLoadState("networkidle");
     await page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
+    await scrollThrough(page);
 
     await expect
-      .poll(async () => {
-        await page.evaluate(() =>
-          window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
-        );
-        return page.evaluate(() => {
+      .poll(() =>
+        page.evaluate(() => {
           const all = Array.from(document.querySelectorAll<HTMLElement>("[data-r]"));
           return (
             all.length > 0 &&
@@ -92,8 +106,8 @@ test.describe("home page", () => {
                 Number.parseFloat(getComputedStyle(el).opacity) >= 0.99,
             )
           );
-        });
-      })
+        }),
+      )
       .toBe(true);
   });
 
@@ -104,33 +118,135 @@ test.describe("home page", () => {
     await expect(page.locator("#process .step.on").first()).toBeAttached();
   });
 
-  test("subject cards become a swipeable peek carousel on mobile", async ({
+  test("subject cards stack vertically on phones and keep two columns on desktop", async ({
     page,
     isMobile,
   }) => {
     await page.goto("/");
-    const rail = page.locator(".lp .sub .grid");
-    const metrics = await rail.evaluate((element) => ({
+    await page.locator("#subjects").scrollIntoViewIfNeeded();
+
+    const grid = page.locator("#subjects .grid");
+    const cards = grid.locator(":scope > div");
+    await expect(cards).toHaveCount(2);
+    await expect(page.locator('[aria-label="Направления: прогресс"]')).toHaveCount(0);
+    await expect(grid.locator("[data-peek-item]")).toHaveCount(0);
+
+    const metrics = await grid.evaluate((element) => ({
+      display: getComputedStyle(element).display,
       overflowX: getComputedStyle(element).overflowX,
       scrollWidth: element.scrollWidth,
       clientWidth: element.clientWidth,
     }));
-    const dots = page.locator('[aria-label="Направления: прогресс"]');
+    const first = await cards.nth(0).boundingBox();
+    const second = await cards.nth(1).boundingBox();
+    expect(first).not.toBeNull();
+    expect(second).not.toBeNull();
+
+    expect(metrics.display).toBe("grid");
+    expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth <=
+          document.documentElement.clientWidth + 1,
+      ),
+    ).toBe(true);
 
     if (isMobile) {
-      expect(metrics.overflowX).toBe("auto");
-      expect(metrics.scrollWidth).toBeGreaterThan(metrics.clientWidth);
-      await expect(dots).toBeVisible();
+      // One column: same left edge, the second card below the first.
+      expect(Math.abs(first!.x - second!.x)).toBeLessThan(1);
+      expect(second!.y).toBeGreaterThan(first!.y + first!.height);
+      const gap = second!.y - (first!.y + first!.height);
+      expect(gap).toBeGreaterThanOrEqual(39);
+      expect(gap).toBeLessThanOrEqual(49);
 
-      const first = page.locator(".lp .sub .grid > [data-peek-item]").first();
-      await expect(first).toHaveAttribute("data-active", "");
-      const box = await first.boundingBox();
-      const viewport = page.viewportSize()?.width ?? 375;
-      expect(box).not.toBeNull();
-      expect(Math.abs(box!.x + box!.width / 2 - viewport / 2)).toBeLessThan(2);
+      const svg = await page.locator("#math svg.viz").boundingBox();
+      expect(svg).not.toBeNull();
+      expect(svg!.width).toBeGreaterThan(first!.width * 0.95);
     } else {
-      expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
-      await expect(dots).toBeHidden();
+      // Two columns: side by side, offset card included.
+      expect(second!.x).toBeGreaterThanOrEqual(first!.x + first!.width);
+      expect(Math.abs(first!.y - second!.y)).toBeLessThan(200);
+    }
+  });
+
+  test("both subject illustrations animate when they enter the viewport", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const sample = (selector: string, attribute: string) =>
+      page.evaluate(
+        async ({ selector, attribute }) => {
+          const element = document.querySelector(selector);
+          if (!element) return { found: false, changed: false };
+          const start = performance.now();
+          const firstValue = element.getAttribute(attribute);
+          while (performance.now() - start < 8000) {
+            await new Promise((resolve) => setTimeout(resolve, 120));
+            if (element.getAttribute(attribute) !== firstValue) {
+              return { found: true, changed: true };
+            }
+          }
+          return { found: true, changed: false };
+        },
+        { selector, attribute },
+      );
+
+    await page.locator("#math svg.viz").scrollIntoViewIfNeeded();
+    expect(await sample("#mDot", "transform")).toEqual({
+      found: true,
+      changed: true,
+    });
+
+    await page.locator("#info svg.viz").scrollIntoViewIfNeeded();
+    expect(await sample("#aD", "cx")).toEqual({ found: true, changed: true });
+  });
+
+  test("heavy blur is desktop-only", async ({ page, isMobile }) => {
+    await page.goto("/");
+    if (isMobile) {
+      await expect(page.locator(".world-fallback-glow-a")).toBeAttached();
+    }
+
+    const styles = await page.evaluate(() => {
+      const read = (selector: string) => {
+        const element = document.querySelector(selector);
+        if (!element) return null;
+        const style = getComputedStyle(element);
+        return {
+          filter: style.filter,
+          backdropFilter: style.backdropFilter,
+          willChange: style.willChange,
+          backgroundAttachment: style.backgroundAttachment,
+          transform: style.transform,
+          display: style.display,
+        };
+      };
+      return {
+        body: read("body"),
+        header: read(".site-header"),
+        glow: read(".world-fallback-glow-a"),
+        tilt: read(".tilt-card"),
+        glare: read(".tilt-glare"),
+        viz: read(".lp .viz"),
+      };
+    });
+
+    expect(styles.body).not.toBeNull();
+    expect(styles.header).not.toBeNull();
+
+    if (isMobile) {
+      expect(styles.body!.backgroundAttachment).toBe("scroll");
+      expect(styles.header!.backdropFilter).toBe("none");
+      expect(styles.glow).not.toBeNull();
+      expect(styles.glow!.filter).toBe("none");
+      expect(styles.tilt!.transform).toBe("none");
+      expect(styles.glare!.display).toBe("none");
+      expect(styles.viz!.willChange).toBe("auto");
+    } else {
+      expect(styles.body!.backgroundAttachment).toContain("fixed");
+      expect(styles.header!.backdropFilter).toContain("blur(26px)");
     }
   });
 

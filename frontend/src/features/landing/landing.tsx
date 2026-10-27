@@ -6,7 +6,6 @@ import { LeadForm } from "@/features/landing/lead-form";
 import { useHeroScene } from "@/features/landing/use-hero-scene";
 import { useLandingMotion } from "@/features/landing/use-landing-motion";
 import { useSmoothScroll } from "@/features/landing/use-smooth-scroll";
-import { PeekCarousel, PEEK_ITEM } from "@/components/ui/peek-carousel";
 import { TiltCard } from "@/components/ui/tilt-card";
 import { MobileWorld } from "@/features/world/mobile-world";
 import { useWorldSections } from "@/features/world/use-world-sections";
@@ -124,8 +123,8 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
               <br />
               Одна система.
             </h2>
-            <PeekCarousel count={2} label="Направления" className="grid">
-              <div data-peek-item="" className={`${PEEK_ITEM} min-w-0`}>
+            <div className="grid">
+              <div className="min-w-0">
                 <TiltCard className="h-full">
                   <article className="col" id="math" data-r>
                     <div className="n mono">
@@ -233,7 +232,7 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
                 </TiltCard>
               </div>
 
-              <div data-peek-item="" className={`${PEEK_ITEM} lp-sub-offset min-w-0`}>
+              <div className="lp-sub-offset min-w-0">
                 <TiltCard className="h-full">
                   <article className="col" id="info" data-r>
                     <div className="n mono">
@@ -297,7 +296,7 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
                   </article>
                 </TiltCard>
               </div>
-            </PeekCarousel>
+            </div>
           </div>
         </section>
 
