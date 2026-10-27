@@ -24,6 +24,26 @@ def test_valid_production_settings_are_accepted() -> None:
     assert settings.docs_enabled is False
 
 
+def test_csv_environment_values_are_split(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("ALLOWED_HOSTS", "example.com, api.example.com")
+    monkeypatch.setenv("CORS_ORIGINS", "https://example.com,https://www.example.com")
+
+    settings = Settings()
+
+    assert settings.allowed_hosts == ["example.com", "api.example.com"]
+    assert settings.cors_origins == ["https://example.com", "https://www.example.com"]
+
+
+def test_json_environment_values_are_still_supported(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("ALLOWED_HOSTS", '["example.com", "api.example.com"]')
+    monkeypatch.setenv("CORS_ORIGINS", '["https://example.com"]')
+
+    settings = Settings()
+
+    assert settings.allowed_hosts == ["example.com", "api.example.com"]
+    assert settings.cors_origins == ["https://example.com"]
+
+
 @pytest.mark.parametrize(
     "override",
     [
