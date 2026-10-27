@@ -1,0 +1,1185 @@
+{
+  "slug": "seo-informatika-oge-zadanie-16",
+  "title": "Задание 16 ОГЭ по информатике: программа — полный разбор",
+  "description": "Полная теория программирования для задания 16 ОГЭ: циклы, условия, последовательности, системы счисления, разборы ФИПИ и авторские задачи с проверкой.",
+  "subject": "informatika",
+  "exam": "ОГЭ · Информатика",
+  "reading_minutes": 28,
+  "content": {
+    "version": 2,
+    "blocks": [
+      {
+        "id": "ioge16-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 16 ОГЭ по информатике — написать программу. В отличие от заданий с кратким ответом, здесь нужно не угадать число, а построить работающий алгоритм: прочитать последовательность, проверить условие для каждого элемента и вывести результат. Проверяются циклы, условия, обработка последовательностей и работа с системами счисления."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-spec",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Что проверяет задание 16",
+          "body": [
+            {
+              "type": "text",
+              "text": "Задание 16 относится к высокому уровню и оценивается 2 первичными баллами. Ответ — программа на одном из языков программирования. Время — около 30 минут. Проверяются умение писать программу обработки последовательности, использовать циклы, условия, счётчики, суммы, минимумы и максимумы."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-theory",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Полная теория: программа обработки последовательности"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-theory-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Почти все задачи этого номера устроены одинаково: сначала читается количество чисел N (или последовательность заканчивается нулём), затем в цикле читаются сами числа. Для каждого числа проверяется условие, а результат накапливается в переменной: счётчике, сумме, максимуме или минимуме."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-table-patterns",
+        "type": "table",
+        "data": {
+          "caption": "Пять шаблонов, которые покрывают большинство задач",
+          "headers": [
+            "Что нужно",
+            "Переменная",
+            "Действие"
+          ],
+          "rows": [
+            [
+              "количество",
+              "count",
+              "count += 1"
+            ],
+            [
+              "сумма",
+              "total",
+              "total += value"
+            ],
+            [
+              "среднее",
+              "total, count",
+              "total / count"
+            ],
+            [
+              "максимум",
+              "best",
+              "best = max(best, value)"
+            ],
+            [
+              "минимум",
+              "best",
+              "best = min(best, value)"
+            ],
+            [
+              "флаг «есть ли»",
+              "found",
+              "found = True"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge16-theory-2",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Отдельная группа задач — системы счисления. Последняя цифра в системе с основанием p — это остаток от деления на p. Количество цифр в записи числа можно получить, переводя число в строку: bin(x)[2:], oct(x)[2:], hex(x)[2:]. Это проще, чем писать цикл деления вручную."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-code-template",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "n = int(input())\ncount = 0\nfor _ in range(n):\n    value = int(input())\n    if value % 2 == 0:\n        count += 1\nprint(count)",
+          "caption": "Базовый шаблон: чтение N чисел и счётчик"
+        }
+      },
+      {
+        "id": "ioge16-warning",
+        "type": "callout",
+        "data": {
+          "kind": "warning",
+          "title": "Три ловушки",
+          "body": [
+            {
+              "type": "text",
+              "text": "Первая: перепутать N и сами числа. Вторая: забыть случай «подходящих элементов нет» и вывести 0 вместо NO. Третья: считать среднее целочисленным делением. Проверяйте формат вывода по условию."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-map",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Карта типов задания 16"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-table-map",
+        "type": "table",
+        "data": {
+          "caption": "Шесть типов задания 16",
+          "headers": [
+            "Тип",
+            "Как узнать",
+            "Что делать"
+          ],
+          "rows": [
+            [
+              "Количество",
+              "«определите количество»",
+              "счётчик"
+            ],
+            [
+              "Сумма",
+              "«определите сумму»",
+              "накопитель"
+            ],
+            [
+              "Среднее",
+              "«среднее арифметическое»",
+              "сумма / количество"
+            ],
+            [
+              "Максимум/минимум",
+              "«наибольший/наименьший»",
+              "сравнение"
+            ],
+            [
+              "Системы счисления",
+              "«в системе с основанием p»",
+              "остаток или строка"
+            ],
+            [
+              "Признак конца",
+              "«заканчивается нулём»",
+              "while + break"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge16-fipi",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Разборы заданий ФИПИ"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Ниже — формулировки из открытого банка ФИПИ и авторские решения на Python. Сначала попробуйте написать программу сами, затем сравните с разбором. Обратите внимание на формат ввода: где-то сначала идёт N, а где-то последовательность заканчивается нулём."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 1. Наибольший элемент с нечётной последней цифрой в семеричной записи"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-1-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: 0A474B."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-1-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу, которая в последовательности натуральных десятичных чисел определяет наибольший элемент, запись которого в системе счисления с основанием 7 оканчивается нечётной цифрой. Если среди входных данных таких элементов нет, программа должна вывести «NO». Сначала вводится количество чисел N (3 ≤ N ≤ 10 000), затем N натуральных чисел, не превышающих 30 000, каждое в отдельной строке."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-1-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "n = int(input())\nbest = None\nfor _ in range(n):\n    value = int(input())\n    if (value % 7) % 2 == 1:\n        if best is None or value > best:\n            best = value\nprint(best if best is not None else \"NO\")",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Последняя цифра в семеричной записи — это остаток от деления на 7. Проверяем его нечётность и ищем максимум."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-2",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 2. Среднее арифметическое элементов с нечётной последней цифрой в семеричной записи"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-2-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: 0FCA49."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-2-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу, которая в последовательности натуральных десятичных чисел определяет среднее арифметическое элементов, запись которых в системе счисления с основанием 7 оканчивается нечётной цифрой. Если таких элементов нет, выведите «NO». Сначала вводится N (3 ≤ N ≤ 10 000), затем N натуральных чисел, не превышающих 30 000."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-2-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "n = int(input())\ntotal = 0\ncount = 0\nfor _ in range(n):\n    value = int(input())\n    if (value % 7) % 2 == 1:\n        total += value\n        count += 1\nprint(f\"{total / count:.1f}\" if count else \"NO\")",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Суммируем подходящие элементы и делим на их количество; формат — один знак после запятой."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-3",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 3. Количество трёхзначных шестнадцатеричных чисел, оканчивающихся на D"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-3-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: B9E24F."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-3-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу подсчёта количества элементов последовательности натуральных чисел, запись которых в шестнадцатеричной системе счисления трёхзначна и оканчивается на цифру D. Количество введённых чисел неизвестно, но не превышает 1000; последовательность заканчивается числом 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-3-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "count = 0\nwhile True:\n    value = int(input())\n    if value == 0:\n        break\n    digits = hex(value)[2:].upper()\n    if len(digits) == 3 and digits.endswith(\"D\"):\n        count += 1\nprint(count)",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-3-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Переводим число в шестнадцатеричную запись, проверяем длину 3 и последний символ D."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-4",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 4. Количество элементов, оканчивающихся на 2 в семеричной записи"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-4-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: 11484C."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-4-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу, которая в последовательности натуральных десятичных чисел определяет количество элементов, запись которых в системе счисления с основанием 7 оканчивается цифрой 2. Если таких элементов нет, выведите «NO». Сначала вводится N (3 ≤ N ≤ 10 000), затем N чисел."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-4-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "n = int(input())\ncount = 0\nfor _ in range(n):\n    if int(input()) % 7 == 2:\n        count += 1\nprint(count if count else \"NO\")",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-4-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Последняя цифра в семеричной записи — остаток от деления на 7. Считаем остатки, равные 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-5",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 5. Количество четырёхзначных восьмеричных чисел, оканчивающихся на 5"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-5-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: 20C643."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-5-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу подсчёта количества элементов последовательности натуральных чисел, запись которых в восьмеричной системе счисления четырёхзначна и оканчивается на цифру 5. Последовательность заканчивается числом 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-5-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "count = 0\nwhile True:\n    value = int(input())\n    if value == 0:\n        break\n    digits = oct(value)[2:]\n    if len(digits) == 4 and digits.endswith(\"5\"):\n        count += 1\nprint(count)",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-5-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Переводим в восьмеричную запись, проверяем длину 4 и последнюю цифру 5."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-6",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 6. Количество четырёхзначных восьмеричных чисел, оканчивающихся на 4"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-6-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: 584B41."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-6-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу подсчёта количества элементов последовательности натуральных чисел, запись которых в восьмеричной системе счисления четырёхзначна и оканчивается на цифру 4. Сначала вводится N (1 ≤ N ≤ 1000), затем N элементов."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-6-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "n = int(input())\ncount = 0\nfor _ in range(n):\n    digits = oct(int(input()))[2:]\n    if len(digits) == 4 and digits.endswith(\"4\"):\n        count += 1\nprint(count)",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-6-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Восьмеричная запись: oct(x)[2:]. Длина 4 и последняя цифра 4."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-7",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 7. Наибольший элемент с нечётной последней цифрой в семеричной записи (до нуля)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-7-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: CC7540."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-7-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу, которая в последовательности натуральных чисел определяет наибольший элемент, запись которого в системе счисления с основанием 7 оканчивается нечётной цифрой. Последовательность заканчивается числом 0; если подходящих элементов нет, выведите «NO»."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-7-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "best = None\nwhile True:\n    value = int(input())\n    if value == 0:\n        break\n    if (value % 7) % 2 == 1 and (best is None or value > best):\n        best = value\nprint(best if best is not None else \"NO\")",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-7-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Последняя цифра в семеричной записи — остаток от деления на 7. Ищем максимум среди нечётных остатков."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-8",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 8. Количество четырёхзначных пятеричных чисел, оканчивающихся на 0"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-8-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: B6EBF2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-8-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу подсчёта количества элементов последовательности натуральных чисел, запись которых в системе счисления с основанием 5 четырёхзначна и оканчивается на цифру 0. Последовательность заканчивается числом 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-8-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "count = 0\nwhile True:\n    value = int(input())\n    if value == 0:\n        break\n    digits = \"\"\n    temp = value\n    while temp > 0:\n        digits = str(temp % 5) + digits\n        temp //= 5\n    if len(digits) == 4 and digits.endswith(\"0\"):\n        count += 1\nprint(count)",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-8-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Переводим в пятеричную запись, проверяем длину 4 и последнюю цифру 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-9",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 9. Количество элементов с нечётной последней цифрой в пятеричной записи"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-9-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: AB87F8."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-9-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу, которая в последовательности натуральных чисел определяет количество элементов, запись которых в системе счисления с основанием 5 оканчивается нечётной цифрой. Если таких элементов нет, выведите «NO». Сначала вводится N, затем N чисел."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-9-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "n = int(input())\ncount = 0\nfor _ in range(n):\n    if (int(input()) % 5) % 2 == 1:\n        count += 1\nprint(count if count else \"NO\")",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-9-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Остаток от деления на 5 — последняя цифра в пятеричной записи. Проверяем нечётность."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-10",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 3,
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 10. Количество трёхзначных шестнадцатеричных чисел, оканчивающихся на E"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-10-source",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Источник задания",
+          "body": [
+            {
+              "type": "text",
+              "text": "ФИПИ, открытый банк заданий. Номер задания в банке: 01BE01."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-10-statement",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Напишите программу подсчёта количества элементов последовательности натуральных чисел, запись которых в шестнадцатеричной системе счисления трёхзначна и оканчивается на цифру E. Последовательность заканчивается числом 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-fipi-10-solution",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "count = 0\nwhile True:\n    value = int(input())\n    if value == 0:\n        break\n    digits = hex(value)[2:].upper()\n    if len(digits) == 3 and digits.endswith(\"E\"):\n        count += 1\nprint(count)",
+          "caption": "Решение на Python"
+        }
+      },
+      {
+        "id": "ioge16-fipi-10-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать пояснение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Переводим в шестнадцатеричную запись, проверяем длину 3 и последний символ E."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-errors",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Типичные ошибки"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-table-errors",
+        "type": "table",
+        "data": {
+          "caption": "Что чаще всего ломает программу",
+          "headers": [
+            "Ошибка",
+            "Как распознать",
+            "Как избежать"
+          ],
+          "rows": [
+            [
+              "неверное чтение N",
+              "программа падает или читает лишнее",
+              "сначала прочитать N"
+            ],
+            [
+              "забыли NO",
+              "вывод 0 вместо NO",
+              "проверить условие «нет элементов»"
+            ],
+            [
+              "целое деление",
+              "среднее без дробной части",
+              "использовать / и формат"
+            ],
+            [
+              "неверный остаток",
+              "не та последняя цифра",
+              "проверить основание"
+            ],
+            [
+              "нет счётчика",
+              "ответ не считается",
+              "инициализировать count = 0"
+            ],
+            [
+              "ошибка в цикле",
+              "обрабатывается N+1 число",
+              "range(n), а не range(n+1)"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge16-checklist",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Чек-лист перед сдачей"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-checklist-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "Я правильно читаю N и сами числа."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я инициализирую счётчики и суммы до цикла."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я проверяю условие для каждого элемента."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я обрабатываю случай «подходящих нет»."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я проверяю формат вывода: число, строка, NO."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я прогоняю программу на примере из условия."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "ioge16-plan",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "План подготовки"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-table-plan",
+        "type": "table",
+        "data": {
+          "caption": "Недельный план",
+          "headers": [
+            "День",
+            "Тема",
+            "Что сделать"
+          ],
+          "rows": [
+            [
+              "1",
+              "Ввод и циклы",
+              "5 шаблонов"
+            ],
+            [
+              "2",
+              "Счётчик и сумма",
+              "5 задач"
+            ],
+            [
+              "3",
+              "Максимум и минимум",
+              "5 задач"
+            ],
+            [
+              "4",
+              "Среднее",
+              "5 задач"
+            ],
+            [
+              "5",
+              "Системы счисления",
+              "5 задач"
+            ],
+            [
+              "6",
+              "Последовательность до 0",
+              "5 задач"
+            ],
+            [
+              "7",
+              "Полный вариант",
+              "2 задачи на время"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge16-faq",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Вопросы и ответы"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-table-faq",
+        "type": "table",
+        "data": {
+          "caption": "Частые вопросы",
+          "headers": [
+            "Вопрос",
+            "Ответ"
+          ],
+          "rows": [
+            [
+              "На каком языке писать?",
+              "На любом из допустимых; главное — рабочая программа."
+            ],
+            [
+              "Нужен ли идеальный код?",
+              "Нет, важны правильный ввод, обработка и вывод."
+            ],
+            [
+              "Что делать, если нет подходящих элементов?",
+              "Вывести NO, если это указано в условии."
+            ],
+            [
+              "Можно ли использовать готовые функции?",
+              "Да, если они не нарушают условие."
+            ],
+            [
+              "Сколько времени тратить?",
+              "Ориентир — 25–30 минут."
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge16-links",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Куда дальше"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-links-p",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Смотрите также: "
+            },
+            {
+              "type": "link",
+              "href": "/informatika/oge",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "структура ОГЭ по информатике"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/informatika/oge/zadanie-6",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "задание 6"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/informatika/oge/zadanie-5",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "задание 5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/zadachi?subject=informatika",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "банк задач"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge16-divider",
+        "type": "divider",
+        "data": {
+          "variant": "spaced"
+        }
+      }
+    ]
+  }
+}

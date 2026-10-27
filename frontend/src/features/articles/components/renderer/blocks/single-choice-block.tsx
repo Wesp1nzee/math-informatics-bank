@@ -15,15 +15,17 @@ export function SingleChoiceBlock({
   const prompt = asArray(block.data.prompt);
   const options = asArray<ChoiceOption>(block.data.options);
   const name = `article-choice-${block.id}`;
+  const source = asString(block.data.source);
+  const bankId = asString(block.data.bank_id);
 
   if (options.length === 0) {
     return (
-      <fieldset className="border-line bg-surface m-0 rounded-xl border p-6">
-        <legend className="text-ink px-1 text-lg leading-snug font-medium">
+      <section className="border-line-strong bg-surface rounded-xl border p-6">
+        <p className="text-ink text-lg leading-snug font-medium">
           <InlineNodes nodes={prompt} />
-        </legend>
+        </p>
         <p className="text-ink-faint mt-4 text-sm">Варианты ответа недоступны.</p>
-      </fieldset>
+      </section>
     );
   }
 
@@ -33,9 +35,22 @@ export function SingleChoiceBlock({
       exerciseId={block.id}
       kind="choice"
       name={name}
+      className="border-line-strong bg-surface scroll-mt-24 rounded-xl border p-5 shadow-sm md:p-6"
     >
-      <fieldset className="border-line bg-surface m-0 rounded-xl border p-6">
-        <legend className="text-ink px-1 text-lg leading-snug font-medium">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-ink-faint text-xs font-semibold uppercase tracking-wide">
+          Проверьте себя
+        </p>
+        {source || bankId ? (
+          <p className="text-ink-soft text-xs">
+            {source}
+            {bankId ? ` · № ${bankId}` : ""}
+          </p>
+        ) : null}
+      </div>
+
+      <fieldset className="m-0 mt-3 min-w-0 border-0 p-0">
+        <legend className="text-ink px-0 text-lg leading-snug font-medium break-words [overflow-wrap:anywhere]">
           <InlineNodes nodes={prompt} />
         </legend>
 
@@ -45,15 +60,15 @@ export function SingleChoiceBlock({
             return (
               <label
                 key={optionId}
-                className="border-line-strong hover:border-ink hover:bg-surface-subtle flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-4 transition-colors"
+                className="border-line-strong hover:border-ink hover:bg-surface-subtle flex min-h-12 cursor-pointer items-center gap-3 rounded-md border px-4 py-3 transition-colors"
               >
                 <input
                   type="radio"
                   name={name}
                   value={optionId}
-                  className="accent-accent size-4"
+                  className="accent-accent size-4 shrink-0"
                 />
-                <span className="text-ink">
+                <span className="text-ink min-w-0 break-words [overflow-wrap:anywhere]">
                   <InlineNodes nodes={asArray(option.label)} />
                 </span>
               </label>

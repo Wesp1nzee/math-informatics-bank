@@ -20,14 +20,14 @@ export function StepSolutionBlock({ block }: { block: Block }) {
         {steps.map((step, index) => (
           <li
             key={typeof step.id === "string" ? step.id : index}
-            className="border-line bg-surface-subtle/60 rounded-md border-l-2 px-4 py-2"
+            className="border-line-strong bg-surface rounded-md border-l-2 px-4 py-2"
           >
             <details>
               <summary className="text-ink cursor-pointer text-sm font-medium">
                 Шаг {index + 1}
               </summary>
               <div className="mt-3 min-w-0">
-                <div className="text-ink-soft text-sm">
+                <div className="text-ink text-sm">
                   <InlineNodes nodes={asArray(step.note)} />
                 </div>
                 {step.math && typeof step.math.tex === "string" ? (

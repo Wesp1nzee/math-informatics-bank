@@ -1,15 +1,19 @@
 import { Fragment, type ReactNode } from "react";
 
 import { CalloutBlock } from "@/features/articles/components/renderer/blocks/callout-block";
+import { CodeBlock } from "@/features/articles/components/renderer/blocks/code-block";
 import { DividerBlock } from "@/features/articles/components/renderer/blocks/divider-block";
 import { HintBlock } from "@/features/articles/components/renderer/blocks/hint-block";
 import { ImageBlock } from "@/features/articles/components/renderer/blocks/image-block";
 import { InteractiveGraphBlock } from "@/features/articles/components/renderer/blocks/interactive-graph-block";
 import { MathBlock } from "@/features/articles/components/renderer/blocks/math-block";
+import { MatchingBlock } from "@/features/articles/components/renderer/blocks/matching-block";
+import { TextInputBlock } from "@/features/articles/components/renderer/blocks/text-input-block";
 import { NumericInputBlock } from "@/features/articles/components/renderer/blocks/numeric-input-block";
 import { RichTextBlock } from "@/features/articles/components/renderer/blocks/rich-text-block";
 import { SingleChoiceBlock } from "@/features/articles/components/renderer/blocks/single-choice-block";
 import { StepSolutionBlock } from "@/features/articles/components/renderer/blocks/step-solution-block";
+import { TableBlock } from "@/features/articles/components/renderer/blocks/table-block";
 import { UnknownBlock } from "@/features/articles/components/renderer/unknown-block";
 import { isRecord } from "@/features/articles/runtime";
 import type { ArticleBlockV2, ArticleContent } from "@/features/articles/types";
@@ -35,7 +39,7 @@ export function ArticleRenderer({
   const midIndex = Math.floor((blocks.length - 1) / 2);
 
   return (
-    <div className="flex max-w-[68ch] flex-col gap-5">
+    <div className="text-ink flex min-w-0 max-w-[68ch] flex-col gap-5">
       {blocks.map((block, index) => (
         <Fragment
           key={
@@ -76,6 +80,8 @@ function ArticleBlockView({
       return <SingleChoiceBlock block={typed} articleSlug={articleSlug} />;
     case "numeric_input":
       return <NumericInputBlock block={typed} articleSlug={articleSlug} />;
+    case "text_input":
+      return <TextInputBlock block={typed} articleSlug={articleSlug} />;
     case "step_solution":
       return <StepSolutionBlock block={typed} />;
     case "hint":
@@ -86,6 +92,12 @@ function ArticleBlockView({
       return <ImageBlock block={typed} />;
     case "divider":
       return <DividerBlock block={typed} />;
+    case "table":
+      return <TableBlock block={typed} />;
+    case "code":
+      return <CodeBlock block={typed} />;
+    case "matching":
+      return <MatchingBlock block={typed} articleSlug={articleSlug} />;
     default: {
       const unknownType = (block as { type?: unknown }).type;
       return (

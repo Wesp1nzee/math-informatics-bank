@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getArticleBySlug } from "@/features/articles/api";
+import { ContentHubPage } from "@/features/seo/components/content-hub-page";
 import { TaskTypePageView } from "@/features/seo/components/task-type-page";
+import { getContentHubByPath } from "@/features/seo/content-pages";
 import { loadTaskTypePageData } from "@/features/seo/load-task-type-page";
 import { getTaskTypePage } from "@/features/seo/pages";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -11,6 +13,15 @@ type PageProps = { params: Promise<{ exam: string; taskType: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { exam, taskType } = await params;
+  const contentHub = getContentHubByPath(`/matematika/${exam}/${taskType}`);
+  if (contentHub) {
+    return buildMetadata({
+      title: contentHub.metaTitle,
+      description: contentHub.metaDescription,
+      path: contentHub.path,
+    });
+  }
+
   const page = getTaskTypePage("matematika", exam, taskType);
   if (!page) {
     return buildMetadata({
@@ -43,6 +54,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function MatematikaTaskTypePage({ params }: PageProps) {
   const { exam, taskType } = await params;
+  const contentHub = getContentHubByPath(`/matematika/${exam}/${taskType}`);
+  if (contentHub) return <ContentHubPage hub={contentHub} />;
+
   const page = getTaskTypePage("matematika", exam, taskType);
   if (!page) notFound();
 

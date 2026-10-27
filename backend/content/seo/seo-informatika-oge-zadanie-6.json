@@ -1,0 +1,3041 @@
+{
+  "slug": "seo-informatika-oge-zadanie-6",
+  "title": "Задание 6 ОГЭ по информатике: анализ программы — полный разбор",
+  "description": "Полная теория анализа программы для задания 6 ОГЭ: условия, and/or/not, параметр A, все типы ФИПИ, 22 задания с проверкой и авторские примеры.",
+  "subject": "informatika",
+  "exam": "ОГЭ · Информатика",
+  "reading_minutes": 24,
+  "content": {
+    "version": 2,
+    "blocks": [
+      {
+        "id": "ioge6-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 6 ОГЭ по информатике — анализ готовой программы. Нужно понять, что программа выведет на заданных входных данных, или подобрать параметр так, чтобы результат повторился нужное число раз. Это задание на чтение кода, а не на его написание: главное — аккуратно подставлять числа и не путать «YES» и «NO»."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-spec",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Что проверяет задание 6",
+          "body": [
+            {
+              "type": "text",
+              "text": "По спецификации ОГЭ 2026 года задание 6 относится к базовому уровню и оценивается 1 первичным баллом. Ответ — число. Проверяются ветвления, составные условия, операции сравнения, остаток от деления и умение анализировать программу по входным данным."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-theory",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Полная теория: как читать программу"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-theory-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Программа получает несколько чисел, проверяет условие и выводит YES или NO. В задании почти всегда есть таблица входных пар. Работает один и тот же алгоритм: подставить пару, вычислить условие, записать результат, повторить для всех строк."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-table-operators",
+        "type": "table",
+        "data": {
+          "caption": "Операции, которые встречаются в задании 6",
+          "headers": [
+            "Операция",
+            "Смысл",
+            "Пример"
+          ],
+          "rows": [
+            [
+              "and",
+              "истинно, если истинны оба условия",
+              "s > 5 and t > 0"
+            ],
+            [
+              "or",
+              "истинно, если истинно хотя бы одно",
+              "s > 5 or t > 0"
+            ],
+            [
+              "not",
+              "меняет значение на противоположное",
+              "not (s > 5)"
+            ],
+            [
+              "%",
+              "остаток от деления",
+              "s % 5 == k"
+            ],
+            [
+              "//",
+              "целое деление",
+              "s // 2 > 3"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-theory-2",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Если в условии есть параметр A, то программа выводит YES при одних A и NO при других. Нужно найти границу: например, наименьшее A, при котором YES будет ровно три раза. Надёжнее всего перебрать A на небольшом отрезке и посчитать исходы для каждой пары."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-code-template",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\n\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")\n",
+          "caption": "Шаблон программы из задания 6"
+        }
+      },
+      {
+        "id": "ioge6-map",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Карта типов задания 6"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-table-map",
+        "type": "table",
+        "data": {
+          "caption": "Пять типов задания 6",
+          "headers": [
+            "Тип",
+            "Как узнать",
+            "Что делать"
+          ],
+          "rows": [
+            [
+              "Сколько запусков",
+              "вопрос «сколько было запусков»",
+              "подставить все пары и посчитать"
+            ],
+            [
+              "Наименьшее A",
+              "вопрос «наименьшее значение A»",
+              "перебрать A и найти границу"
+            ],
+            [
+              "Наибольшее A",
+              "вопрос «наибольшее значение A»",
+              "перебрать A и найти границу"
+            ],
+            [
+              "Количество A",
+              "вопрос «количество целых значений A»",
+              "посчитать все подходящие A"
+            ],
+            [
+              "Одно значение A",
+              "вопрос «укажите значение A»",
+              "найти любое подходящее"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type1",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 1. Сколько запусков дадут YES или NO"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type1-text",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Самый простой тип: параметра A нет, нужно просто выполнить программу для каждой пары. Считайте не «в уме», а столбиком: пара, значение условия, результат. Так меньше шансов потерять строку."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type1-worked-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nif not (s > -4) or (t < 3):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type1-worked-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "5",
+              "3"
+            ],
+            [
+              "14",
+              "1"
+            ],
+            [
+              "-12",
+              "5"
+            ],
+            [
+              "5",
+              "7"
+            ],
+            [
+              "10",
+              "3"
+            ],
+            [
+              "8",
+              "2"
+            ],
+            [
+              "3",
+              "0"
+            ],
+            [
+              "-4",
+              "9"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type1-worked-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько запусков программы дадут «YES» на указанных входных данных?"
+            }
+          ],
+          "correct_value": 6.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие not (s > -4) or (t < 3) и считаем строки с «YES». Получаем 6."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "07F3EA"
+        }
+      },
+      {
+        "id": "ioge6-type1-worked-solution",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "ioge6-type1-worked-solution-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Выписываем условие и входные пары."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type1-worked-solution-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Подставляем пары и считаем нужные исходы."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type1-worked-solution-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Получаем 6."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type1-p1-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nk = int(input())\nif s < 6 and k < 6:\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type1-p1-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "k"
+          ],
+          "rows": [
+            [
+              "1",
+              "1"
+            ],
+            [
+              "7",
+              "9"
+            ],
+            [
+              "8",
+              "-12"
+            ],
+            [
+              "6",
+              "6"
+            ],
+            [
+              "3",
+              "11"
+            ],
+            [
+              "-10",
+              "-12"
+            ],
+            [
+              "-10",
+              "11"
+            ],
+            [
+              "7",
+              "1"
+            ],
+            [
+              "12",
+              "7"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type1-p1-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько запусков программы дадут «YES» на указанных входных данных?"
+            }
+          ],
+          "correct_value": 2.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие s < 6 and k < 6 и считаем строки с «YES». Получаем 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "16DCE2"
+        }
+      },
+      {
+        "id": "ioge6-type1-p1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие s < 6 and k < 6 и считаем строки с «YES». Получаем 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type1-p2-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nk = int(input())\nif s % 6 == k:\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type1-p2-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "k"
+          ],
+          "rows": [
+            [
+              "6",
+              "6"
+            ],
+            [
+              "7",
+              "1"
+            ],
+            [
+              "16",
+              "10"
+            ],
+            [
+              "20",
+              "2"
+            ],
+            [
+              "10",
+              "3"
+            ],
+            [
+              "12",
+              "2"
+            ],
+            [
+              "2",
+              "2"
+            ],
+            [
+              "0",
+              "6"
+            ],
+            [
+              "4",
+              "5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type1-p2-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько запусков программы дадут «YES» на указанных входных данных?"
+            }
+          ],
+          "correct_value": 3.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие s % 6 == k и считаем строки с «YES». Получаем 3."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "2F302E"
+        }
+      },
+      {
+        "id": "ioge6-type1-p2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие s % 6 == k и считаем строки с «YES». Получаем 3."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type1-p3-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nk = int(input())\nif s > 6 and k > 6:\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type1-p3-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "k"
+          ],
+          "rows": [
+            [
+              "1",
+              "1"
+            ],
+            [
+              "7",
+              "9"
+            ],
+            [
+              "8",
+              "-12"
+            ],
+            [
+              "6",
+              "6"
+            ],
+            [
+              "8",
+              "11"
+            ],
+            [
+              "-10",
+              "-12"
+            ],
+            [
+              "-10",
+              "11"
+            ],
+            [
+              "7",
+              "1"
+            ],
+            [
+              "12",
+              "7"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type1-p3-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько запусков программы дадут «YES» на указанных входных данных?"
+            }
+          ],
+          "correct_value": 3.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие s > 6 and k > 6 и считаем строки с «YES». Получаем 3."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "3E3052"
+        }
+      },
+      {
+        "id": "ioge6-type1-p3-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие s > 6 and k > 6 и считаем строки с «YES». Получаем 3."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type2",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 2. Наименьшее или наибольшее значение A"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type2-text",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Здесь нужно найти границу параметра. Перебирайте A по порядку и записывайте, сколько раз получается нужный ответ. Как только счётчик совпал с условием — проверьте соседние значения: граница должна быть устойчивой."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type2-worked-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type2-worked-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type2-worked-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «YES» ровно 7 раз."
+            }
+          ],
+          "correct_value": 1.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 1."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "189292"
+        }
+      },
+      {
+        "id": "ioge6-type2-worked-solution",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "ioge6-type2-worked-solution-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Выписываем условие и входные пары."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type2-worked-solution-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Подставляем пары и считаем нужные исходы."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type2-worked-solution-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Получаем 1."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type2-p1-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 11):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type2-p1-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "-9",
+              "11"
+            ],
+            [
+              "2",
+              "7"
+            ],
+            [
+              "5",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "7",
+              "-9"
+            ],
+            [
+              "12",
+              "6"
+            ],
+            [
+              "9",
+              "-1"
+            ],
+            [
+              "7",
+              "11"
+            ],
+            [
+              "11",
+              "-5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type2-p1-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «YES» ровно 3 раз."
+            }
+          ],
+          "correct_value": 10.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 10."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "1B7480"
+        }
+      },
+      {
+        "id": "ioge6-type2-p1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 10."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type2-p2-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 11):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type2-p2-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "-9",
+              "11"
+            ],
+            [
+              "2",
+              "7"
+            ],
+            [
+              "5",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "7",
+              "-9"
+            ],
+            [
+              "12",
+              "6"
+            ],
+            [
+              "9",
+              "-1"
+            ],
+            [
+              "7",
+              "11"
+            ],
+            [
+              "11",
+              "-5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type2-p2-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наименьшее целое значение A, при котором программа напечатает «YES» ровно 3 раз."
+            }
+          ],
+          "correct_value": 9.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 9."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "2643B6"
+        }
+      },
+      {
+        "id": "ioge6-type2-p2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 9."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type2-p3-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type2-p3-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type2-p3-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «YES» ровно 4 раз."
+            }
+          ],
+          "correct_value": 8.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 8."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "2E7C6B"
+        }
+      },
+      {
+        "id": "ioge6-type2-p3-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 8."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type3",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 3. Количество целых значений A"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type3-text",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "В этом типе недостаточно найти одно A: нужно посчитать все целые значения, при которых условие выполняется нужное число раз. Удобно отметить подходящие A на числовой прямой и проверить границы."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type3-worked-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 11):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type3-worked-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "-9",
+              "11"
+            ],
+            [
+              "2",
+              "7"
+            ],
+            [
+              "5",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "7",
+              "-9"
+            ],
+            [
+              "12",
+              "6"
+            ],
+            [
+              "9",
+              "-1"
+            ],
+            [
+              "7",
+              "11"
+            ],
+            [
+              "11",
+              "-5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type3-worked-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько целых значений параметра A дадут «YES» ровно 6 раз?"
+            }
+          ],
+          "correct_value": 5.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «YES». Подходящих значений A: 5."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "0693EB"
+        }
+      },
+      {
+        "id": "ioge6-type3-worked-solution",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "ioge6-type3-worked-solution-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Выписываем условие и входные пары."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type3-worked-solution-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Подставляем пары и считаем нужные исходы."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type3-worked-solution-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Получаем 5."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type3-p1-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 11):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type3-p1-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "-9",
+              "11"
+            ],
+            [
+              "2",
+              "7"
+            ],
+            [
+              "5",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "7",
+              "-9"
+            ],
+            [
+              "12",
+              "6"
+            ],
+            [
+              "9",
+              "-1"
+            ],
+            [
+              "7",
+              "11"
+            ],
+            [
+              "11",
+              "-5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type3-p1-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько целых значений параметра A дадут «NO» ровно 6 раз?"
+            }
+          ],
+          "correct_value": 2.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «NO». Подходящих значений A: 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "249C36"
+        }
+      },
+      {
+        "id": "ioge6-type3-p1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «NO». Подходящих значений A: 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type3-p2-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > 10) or (t > A):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type3-p2-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "1",
+              "2"
+            ],
+            [
+              "11",
+              "2"
+            ],
+            [
+              "1",
+              "12"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-11",
+              "-12"
+            ],
+            [
+              "-11",
+              "12"
+            ],
+            [
+              "-12",
+              "11"
+            ],
+            [
+              "10",
+              "10"
+            ],
+            [
+              "10",
+              "5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type3-p2-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько целых значений параметра A дадут «YES» ровно 7 раз?"
+            }
+          ],
+          "correct_value": 3.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «YES». Подходящих значений A: 3."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "3A01A3"
+        }
+      },
+      {
+        "id": "ioge6-type3-p2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «YES». Подходящих значений A: 3."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type3-p3-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type3-p3-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type3-p3-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько целых значений параметра A дадут «NO» ровно 6 раз?"
+            }
+          ],
+          "correct_value": 2.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «NO». Подходящих значений A: 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4100CF"
+        }
+      },
+      {
+        "id": "ioge6-type3-p3-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «NO». Подходящих значений A: 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type4",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 4. Одно подходящее значение A"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type4-text",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Если просят «укажите значение A», достаточно найти любое подходящее. Не нужно перебирать все: нашли — проверьте на всех парах и записывайте."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type4-worked-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type4-worked-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type4-worked-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наименьшее целое значение A, при котором программа напечатает «YES» ровно 4 раз."
+            }
+          ],
+          "correct_value": 6.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 6."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "3C5AB1"
+        }
+      },
+      {
+        "id": "ioge6-type4-worked-solution",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "ioge6-type4-worked-solution-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Выписываем условие и входные пары."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type4-worked-solution-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Подставляем пары и считаем нужные исходы."
+                }
+              ]
+            },
+            {
+              "id": "ioge6-type4-worked-solution-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Получаем 6."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type4-p1-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type4-p1-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type4-p1-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «NO» ровно 7 раз."
+            }
+          ],
+          "correct_value": 12.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 12."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "3CB92A"
+        }
+      },
+      {
+        "id": "ioge6-type4-p1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 12."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type4-p2-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type4-p2-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type4-p2-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько целых значений параметра A дадут «YES» ровно 5 раз?"
+            }
+          ],
+          "correct_value": 4.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «YES». Подходящих значений A: 4."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "451E97"
+        }
+      },
+      {
+        "id": "ioge6-type4-p2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем целые A и считаем, сколько запусков дают «YES». Подходящих значений A: 4."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-type4-p3-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nif (s < -2) or not (t < 4):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-type4-p3-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "2",
+              "5"
+            ],
+            [
+              "-2",
+              "4"
+            ],
+            [
+              "4",
+              "1"
+            ],
+            [
+              "-11",
+              "-5"
+            ],
+            [
+              "3",
+              "-7"
+            ],
+            [
+              "1",
+              "8"
+            ],
+            [
+              "8",
+              "2"
+            ],
+            [
+              "3",
+              "0"
+            ],
+            [
+              "23",
+              "1"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-type4-p3-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько запусков программы дадут «YES» на указанных входных данных?"
+            }
+          ],
+          "correct_value": 4.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие (s < -2) or not (t < 4) и считаем строки с «YES». Получаем 4."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "46AA57"
+        }
+      },
+      {
+        "id": "ioge6-type4-p3-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Подставляем пары в условие (s < -2) or not (t < 4) и считаем строки с «YES». Получаем 4."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-author",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Авторские примеры: быстрая проверка"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-author-1-label",
+        "type": "callout",
+        "data": {
+          "kind": "tip",
+          "title": "Авторский пример",
+          "body": [
+            {
+              "type": "text",
+              "text": "Тренировочное задание по формату ОГЭ, не из открытого банка ФИПИ."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-author-1-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nif (s > 5) or (t > 10):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа"
+        }
+      },
+      {
+        "id": "ioge6-author-1-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "1",
+              "2"
+            ],
+            [
+              "6",
+              "12"
+            ],
+            [
+              "0",
+              "11"
+            ],
+            [
+              "7",
+              "3"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-author-1-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько запусков дадут «YES»?"
+            }
+          ],
+          "correct_value": 3,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "YES дают (6, 12), (0, 11), (7, 3); (1, 2) даёт NO."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-author-1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "YES дают (6, 12), (0, 11), (7, 3); (1, 2) даёт NO."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-author-2-label",
+        "type": "callout",
+        "data": {
+          "kind": "tip",
+          "title": "Авторский пример",
+          "body": [
+            {
+              "type": "text",
+              "text": "Тренировочное задание по формату ОГЭ, не из открытого банка ФИПИ."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-author-2-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nif s % 2 == 0 and t > 0:\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа"
+        }
+      },
+      {
+        "id": "ioge6-author-2-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "1",
+              "2"
+            ],
+            [
+              "2",
+              "3"
+            ],
+            [
+              "2",
+              "-1"
+            ],
+            [
+              "4",
+              "0"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-author-2-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Сколько запусков дадут «YES»?"
+            }
+          ],
+          "correct_value": 1,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Подходит только (2, 3): s чётно и t > 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-author-2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Подходит только (2, 3): s чётно и t > 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Банк ФИПИ: проверьте себя"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Ниже — ещё проверенные задания из открытого банка ФИПИ. У каждого указан номер банка. Сначала решите, затем откройте объяснение."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank-1-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-bank-1-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-bank-1-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «YES» ровно 3 раз."
+            }
+          ],
+          "correct_value": 10.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 10."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4907E6"
+        }
+      },
+      {
+        "id": "ioge6-bank-1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 10."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank-2-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 11):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-bank-2-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "-9",
+              "11"
+            ],
+            [
+              "2",
+              "7"
+            ],
+            [
+              "5",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "7",
+              "-9"
+            ],
+            [
+              "12",
+              "6"
+            ],
+            [
+              "9",
+              "-1"
+            ],
+            [
+              "7",
+              "11"
+            ],
+            [
+              "11",
+              "-5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-bank-2-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наименьшее целое значение A, при котором программа напечатает «NO» ровно 3 раз."
+            }
+          ],
+          "correct_value": 2.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4AC188"
+        }
+      },
+      {
+        "id": "ioge6-bank-2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank-3-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 11):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-bank-3-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "-9",
+              "11"
+            ],
+            [
+              "2",
+              "7"
+            ],
+            [
+              "5",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "7",
+              "-9"
+            ],
+            [
+              "12",
+              "6"
+            ],
+            [
+              "9",
+              "-1"
+            ],
+            [
+              "7",
+              "11"
+            ],
+            [
+              "11",
+              "-5"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-bank-3-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «YES» ровно 4 раз."
+            }
+          ],
+          "correct_value": 8.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 8."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4AFE17"
+        }
+      },
+      {
+        "id": "ioge6-bank-3-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 11) на всех парах. Подходящее значение: 8."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank-4-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-bank-4-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-bank-4-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «NO» ровно 2 раз."
+            }
+          ],
+          "correct_value": 1.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 1."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4CC3AC"
+        }
+      },
+      {
+        "id": "ioge6-bank-4-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 1."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank-5-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-bank-5-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-bank-5-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наибольшее целое значение A, при котором программа напечатает «NO» ровно 5 раз."
+            }
+          ],
+          "correct_value": 8.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 8."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4EA117"
+        }
+      },
+      {
+        "id": "ioge6-bank-5-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 8."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-bank-6-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "s = int(input())\nt = int(input())\nA = int(input())\nif (s > A) or (t > 12):\n    print(\"YES\")\nelse:\n    print(\"NO\")",
+          "caption": "Программа на Python"
+        }
+      },
+      {
+        "id": "ioge6-bank-6-pairs",
+        "type": "table",
+        "data": {
+          "caption": "Входные пары",
+          "headers": [
+            "s",
+            "t"
+          ],
+          "rows": [
+            [
+              "13",
+              "2"
+            ],
+            [
+              "11",
+              "12"
+            ],
+            [
+              "-12",
+              "12"
+            ],
+            [
+              "2",
+              "-2"
+            ],
+            [
+              "-10",
+              "-10"
+            ],
+            [
+              "6",
+              "-5"
+            ],
+            [
+              "2",
+              "8"
+            ],
+            [
+              "9",
+              "10"
+            ],
+            [
+              "1",
+              "13"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-bank-6-task",
+        "type": "numeric_input",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Укажите наименьшее целое значение A, при котором программа напечатает «YES» ровно 5 раз."
+            }
+          ],
+          "correct_value": 2.0,
+          "tolerance": 1e-09,
+          "unit": "",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4ED09D"
+        }
+      },
+      {
+        "id": "ioge6-bank-6-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "Перебираем A и проверяем условие (s > A) or (t > 12) на всех парах. Подходящее значение: 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-python",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Как проверять себя на Python"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-python-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Если условие большое, выпишите его в Python и прогоните все пары циклом. Это быстрее, чем считать вручную, и сразу видно, на какой строке ошибка."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-python-code",
+        "type": "code",
+        "data": {
+          "language": "python",
+          "code": "pairs = [(1, 2), (11, 2), (1, 12)]\n\ndef f(s, t, A):\n    return (s > A) or (t > 12)\n\nfor A in range(-50, 51):\n    count = sum(1 for s, t in pairs if f(s, t, A))\n    if count == 3:\n        print(A, count)\n",
+          "caption": "Перебор параметра A"
+        }
+      },
+      {
+        "id": "ioge6-errors",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Типичные ошибки"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-table-errors",
+        "type": "table",
+        "data": {
+          "caption": "Что чаще всего ломает ответ",
+          "headers": [
+            "Ошибка",
+            "Как распознать",
+            "Как избежать"
+          ],
+          "rows": [
+            [
+              "путают YES и NO",
+              "ответ отличается на 1–2",
+              "подписать столбец результата"
+            ],
+            [
+              "теряют пару",
+              "счётчик меньше",
+              "нумеровать строки"
+            ],
+            [
+              "неверный приоритет and/or",
+              "условие срабатывает не там",
+              "расставить скобки"
+            ],
+            [
+              "берут только одно A",
+              "в ответе нужно количество",
+              "перебрать весь диапазон"
+            ],
+            [
+              "не проверяют границу",
+              "ответ на 1 меньше",
+              "проверить соседние A"
+            ],
+            [
+              "ошибка с отрицательными",
+              "неверное сравнение",
+              "подставлять аккуратно"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-checklist",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Чек-лист перед экзаменом"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-checklist-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "Я выписываю все входные пары."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я подставляю пары в условие, а не в вывод."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я различаю and и or."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я проверяю отрицательные числа."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я считаю все подходящие A, если просят количество."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я проверяю соседние значения на границе."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "ioge6-plan",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "План подготовки на неделю"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-table-plan",
+        "type": "table",
+        "data": {
+          "caption": "Недельный план",
+          "headers": [
+            "День",
+            "Тема",
+            "Что сделать"
+          ],
+          "rows": [
+            [
+              "1",
+              "and/or/not",
+              "10 условий на истинность"
+            ],
+            [
+              "2",
+              "Сколько запусков",
+              "10 задач"
+            ],
+            [
+              "3",
+              "Наименьшее A",
+              "10 задач"
+            ],
+            [
+              "4",
+              "Наибольшее A",
+              "10 задач"
+            ],
+            [
+              "5",
+              "Количество A",
+              "10 задач"
+            ],
+            [
+              "6",
+              "Отрицательные числа",
+              "10 задач"
+            ],
+            [
+              "7",
+              "Смешанный вариант",
+              "20 задач на время"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-faq",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Вопросы и ответы"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-table-faq",
+        "type": "table",
+        "data": {
+          "caption": "Частые вопросы",
+          "headers": [
+            "Вопрос",
+            "Ответ"
+          ],
+          "rows": [
+            [
+              "Нужно ли писать программу?",
+              "Нет, только ответ — число."
+            ],
+            [
+              "Что делать с параметром A?",
+              "Перебирать целые значения и считать исходы."
+            ],
+            [
+              "Можно ли решать в уме?",
+              "Можно, но лучше выписать таблицу."
+            ],
+            [
+              "Что если подходит несколько A?",
+              "Если просят количество — считать все; если одно — любое."
+            ],
+            [
+              "Как проверить себя?",
+              "Прогнать пары циклом на Python."
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "ioge6-links",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Куда дальше"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-links-p",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Смотрите также: "
+            },
+            {
+              "type": "link",
+              "href": "/informatika/oge",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "структура ОГЭ по информатике"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/informatika/oge/zadanie-5",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "задание 5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/informatika/oge/zadanie-16",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "задание 16"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/zadachi?subject=informatika",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "банк задач"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        }
+      },
+      {
+        "id": "ioge6-divider",
+        "type": "divider",
+        "data": {
+          "variant": "spaced"
+        }
+      }
+    ]
+  }
+}

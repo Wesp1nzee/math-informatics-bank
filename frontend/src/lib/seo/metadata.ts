@@ -15,17 +15,25 @@ export type PageMetadataInput = {
   path: string;
   type?: "website" | "article";
   noIndex?: boolean;
-  ogImage?: string;
+  /**
+   * Path to the social preview image. Omit to use the site-wide default.
+   * Pass `null` when a route provides its own file-based `opengraph-image`.
+   */
+  ogImage?: string | null;
   publishedTime?: string;
   modifiedTime?: string;
 };
 
+const DEFAULT_OG_IMAGE = "/og/default.png";
+
 export function buildMetadata(input: PageMetadataInput): Metadata {
   const url = absoluteUrl(input.path);
-  const images = input.ogImage
+  const imagePath =
+    input.ogImage === null ? undefined : (input.ogImage ?? DEFAULT_OG_IMAGE);
+  const images = imagePath
     ? [
         {
-          url: absoluteUrl(input.ogImage),
+          url: absoluteUrl(imagePath),
           width: 1200,
           height: 630,
           alt: input.title,
@@ -50,7 +58,7 @@ export function buildMetadata(input: PageMetadataInput): Metadata {
       ...(input.modifiedTime ? { modifiedTime: input.modifiedTime } : {}),
     },
     twitter: {
-      card: images ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: input.title,
       description: input.description,
       ...(images ? { images: images.map((image) => image.url) } : {}),

@@ -4,7 +4,12 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { TutoringPage } from "@/features/landing/tutoring-page";
 import { FAQ_ITEMS, TUTORING_INTRO } from "@/features/tutor-leads/content";
 import { hasTutorProfile, siteConfig } from "@/lib/constants/site";
-import { faqPageJsonLd, personJsonLd, serviceJsonLd } from "@/lib/seo/json-ld";
+import {
+  faqPageJsonLd,
+  personJsonLd,
+  serviceJsonLd,
+  breadcrumbJsonLd,
+} from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -19,6 +24,12 @@ export default function TutoringRoute() {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Главная", path: "/" },
+          { name: "Репетиторство", path: "/podgotovka" },
+        ])}
+      />
       <JsonLd data={faqPageJsonLd(FAQ_ITEMS)} />
       {hasTutorProfile ? (
         <JsonLd

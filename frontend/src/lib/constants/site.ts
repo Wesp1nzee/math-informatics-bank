@@ -13,7 +13,8 @@ const tutorVideo = process.env.NEXT_PUBLIC_TUTOR_VIDEO?.trim() ?? "";
 const tutorAbout = process.env.NEXT_PUBLIC_TUTOR_ABOUT?.trim() ?? "";
 
 export const siteConfig = {
-  name: "Математика и информатика",
+  name: "ОСНОВА",
+  tagline: "Математика и информатика",
   url: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL),
   locale: "ru_RU",
   description:

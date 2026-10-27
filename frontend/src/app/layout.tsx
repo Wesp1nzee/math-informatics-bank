@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import {
-  Geist,
-  JetBrains_Mono,
-  Onest,
-  Source_Serif_4,
-} from "next/font/google";
+import { Geist, JetBrains_Mono, Onest, Source_Serif_4 } from "next/font/google";
 import Script from "next/script";
 import type { ReactNode } from "react";
 
 import { siteConfig } from "@/lib/constants/site";
 import { themeInitScript } from "@/lib/theme";
 import { YandexMetrika } from "@/lib/analytics/yandex-metrika";
+import { JsonLd } from "@/components/seo/json-ld";
+import { organizationJsonLd, webSiteJsonLd } from "@/lib/seo/json-ld";
 import "./globals.css";
 
 const geist = Geist({
@@ -57,6 +54,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
+        <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
         <Script
           id="theme-init"
           strategy="beforeInteractive"

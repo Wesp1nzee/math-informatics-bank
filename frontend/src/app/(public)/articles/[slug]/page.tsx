@@ -18,7 +18,7 @@ import {
   getRelatedArticles,
 } from "@/features/articles/api";
 import { getSeoArticlePath } from "@/features/seo/pages";
-import { articleJsonLd } from "@/lib/seo/json-ld";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
@@ -50,6 +50,7 @@ export async function generateMetadata({
     description: article.description,
     path: `/articles/${article.slug}`,
     type: "article",
+    ogImage: null,
     publishedTime: article.published,
     modifiedTime: article.updated ?? article.published,
   });
@@ -70,13 +71,21 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <>
       <JsonLd
-        data={articleJsonLd({
-          title: article.title,
-          description: article.description,
-          path: `/articles/${article.slug}`,
-          published: article.published,
-          modified: article.updated,
-        })}
+        data={[
+          breadcrumbJsonLd([
+            { name: "Главная", path: "/" },
+            { name: "Статьи", path: "/articles" },
+            { name: article.title, path: `/articles/${article.slug}` },
+          ]),
+          articleJsonLd({
+            title: article.title,
+            description: article.description,
+            path: `/articles/${article.slug}`,
+            published: article.published,
+            modified: article.updated,
+            image: "/og/default.png",
+          }),
+        ]}
       />
 
       <PageHero

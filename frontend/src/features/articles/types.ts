@@ -70,12 +70,23 @@ export type SingleChoiceBlockData = {
   prompt: InlineNode[];
   options: ChoiceOption[];
   points?: number;
+  source?: string;
+  bank_id?: string;
 };
 
 export type NumericInputBlockData = {
   prompt: InlineNode[];
   unit?: string;
   points?: number;
+  source?: string;
+  bank_id?: string;
+};
+
+export type TextInputBlockData = {
+  prompt: InlineNode[];
+  points?: number;
+  source?: string;
+  bank_id?: string;
 };
 
 export type StepMath = {
@@ -118,17 +129,49 @@ export type DividerBlockData = {
   variant?: "solid" | "spaced";
 };
 
+export type TableBlockData = {
+  caption?: string;
+  headers?: string[];
+  rows: string[][];
+  first_column_header?: boolean;
+};
+
+export type CodeBlockData = {
+  language?: string;
+  code: string;
+  caption?: string;
+};
+
+export type MatchingOption = {
+  label: string;
+  value: string;
+  image?: string;
+  image_alt?: string;
+};
+
+export type MatchingBlockData = {
+  instruction: string;
+  left: MatchingOption[];
+  right: MatchingOption[];
+  source?: string;
+  bank_id?: string;
+};
+
 export type ArticleBlockV2 =
   | { id: string; type: "rich_text"; data: RichTextBlockData }
   | { id: string; type: "math"; data: MathBlockData }
   | { id: string; type: "interactive_graph"; data: InteractiveGraphBlockData }
   | { id: string; type: "single_choice"; data: SingleChoiceBlockData }
   | { id: string; type: "numeric_input"; data: NumericInputBlockData }
+  | { id: string; type: "text_input"; data: TextInputBlockData }
   | { id: string; type: "step_solution"; data: StepSolutionBlockData }
   | { id: string; type: "hint"; data: HintBlockData }
   | { id: string; type: "callout"; data: CalloutBlockData }
   | { id: string; type: "image"; data: ImageBlockData }
-  | { id: string; type: "divider"; data: DividerBlockData };
+  | { id: string; type: "divider"; data: DividerBlockData }
+  | { id: string; type: "table"; data: TableBlockData }
+  | { id: string; type: "code"; data: CodeBlockData }
+  | { id: string; type: "matching"; data: MatchingBlockData };
 
 export type ArticleContent = {
   version: 2;

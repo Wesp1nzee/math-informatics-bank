@@ -33,7 +33,7 @@ describe("SEO page registry", () => {
   it("rejects unknown task numbers and exams", () => {
     expect(getTaskTypePage("matematika", "oge", "zadanie-99")).toBeNull();
     expect(getTaskTypePage("matematika", "foo", "zadanie-6")).toBeNull();
-    expect(getTaskTypePage("informatika", "oge", "zadanie-2")).toBeNull();
+    expect(getTaskTypePage("informatika", "oge", "zadanie-99")).toBeNull();
   });
 
   it("has an exam hub for every subject and exam", () => {

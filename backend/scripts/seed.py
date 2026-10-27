@@ -16,6 +16,7 @@ from app.domains.subjects.models import Subject
 from app.domains.tasks.models import Task, TaskLevel, task_topics
 from app.domains.topics.models import Topic
 from scripts.seed_content import ARTICLES, TASKS
+from scripts.seo_content import load_seo_articles
 
 
 async def _get_or_create_subject(
@@ -110,7 +111,12 @@ async def seed(*, reset: bool = False) -> None:
 
         published = date.today()
 
-        for article in ARTICLES:
+        seo_articles = load_seo_articles()
+        seo_slugs = {article["slug"] for article in seo_articles}
+        articles = [article for article in ARTICLES if article["slug"] not in seo_slugs]
+        articles.extend(seo_articles)
+
+        for article in articles:
             ArticleContent.model_validate(article["content"])
             await _upsert_article(
                 session,
@@ -148,7 +154,7 @@ async def seed(*, reset: bool = False) -> None:
 
     print(
         "Seeded content: "
-        f"{len(ARTICLES)} interactive articles, {len(TASKS)} tasks."
+        f"{len(articles)} interactive articles, {len(TASKS)} tasks."
         + (" Existing tasks and articles were deleted first." if reset else "")
     )
 

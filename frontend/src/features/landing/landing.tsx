@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { LeadForm } from "@/features/landing/lead-form";
 import { useHeroScene } from "@/features/landing/use-hero-scene";
 import { useLandingMotion } from "@/features/landing/use-landing-motion";
+import { useSmoothScroll } from "@/features/landing/use-smooth-scroll";
 
 type TeacherProfile = {
   name: string;
@@ -27,6 +28,7 @@ export function LandingPage({ teacher }: { teacher?: TeacherProfile }) {
 
   useHeroScene(hostRef, heroRef);
   useLandingMotion(rootRef);
+  useSmoothScroll();
 
   useEffect(() => {
     if (teacher) return;

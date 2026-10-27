@@ -199,6 +199,14 @@ def _numeric_matches(answer: str, correct: float, tolerance: float) -> bool:
     return abs(value - correct) <= tolerance
 
 
+def _text_matches(answer: str, correct: str, case_sensitive: bool) -> bool:
+    def normalize(value: str) -> str:
+        cleaned = " ".join(value.strip().split())
+        return cleaned if case_sensitive else cleaned.lower()
+
+    return normalize(answer) == normalize(correct)
+
+
 async def check_article_exercise(
     session: AsyncSession,
     *,
@@ -216,11 +224,25 @@ async def check_article_exercise(
         raise ConflictError("Содержимое статьи недоступно.") from exc
 
     block = _find_exercise(content, exercise_id)
-    if block is None or block.type not in ("single_choice", "numeric_input"):
+    if block is None or block.type not in (
+        "single_choice",
+        "numeric_input",
+        "text_input",
+        "matching",
+    ):
         raise NotFoundError(f"Упражнение «{exercise_id}» не найдено.")
 
     if block.type == "single_choice":
         is_correct = answer.strip() == block.data.correct_option_id
+        explanation = block.data.explanation if is_correct else None
+    elif block.type == "text_input":
+        is_correct = _text_matches(
+            answer, block.data.correct_answer, block.data.case_sensitive
+        )
+        explanation = block.data.explanation if is_correct else None
+    elif block.type == "matching":
+        normalized = "".join(ch for ch in answer.strip() if ch.isdigit())
+        is_correct = normalized == block.data.correct_answer.strip()
         explanation = block.data.explanation if is_correct else None
     else:
         is_correct = _numeric_matches(answer, block.data.correct_value, block.data.tolerance)

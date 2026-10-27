@@ -34,7 +34,7 @@ export function CalloutBlock({ block }: { block: Block }) {
       className={cn("rounded-xl border px-5 py-4", CALLOUT_STYLES[kind])}
     >
       <p className="text-ink text-sm font-semibold">{title}</p>
-      <div className="text-ink-soft mt-2 text-base leading-relaxed">
+      <div className="text-ink mt-2 text-base leading-relaxed">
         <InlineNodes nodes={body} />
       </div>
     </aside>

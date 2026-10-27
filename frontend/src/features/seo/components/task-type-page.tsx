@@ -62,6 +62,7 @@ export function TaskTypePageView({
           path: page.path,
           published: article.published,
           modified: article.updated,
+          image: "/og/default.png",
         })}
       />
 
@@ -120,8 +121,9 @@ export function TaskTypePageView({
               </ul>
             </div>
             <p className="text-ink-faint mt-4 text-xs leading-relaxed">
-              Это авторский тренировочный разбор в формате экзамена, а не официальное
-              задание ФИПИ. Структура экзамена приведена по спецификации 2026 года.
+              Это авторский тренировочный разбор в формате экзамена. Задания из
+              открытого банка ФИПИ отмечены номером банка; решения и объяснения —
+              авторские. Структура экзамена приведена по спецификации 2026 года.
             </p>
           </aside>
         </div>
