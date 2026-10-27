@@ -24,7 +24,7 @@ export function SiteHeader() {
   return (
     <header
       data-scrolled={scrolled || undefined}
-      className="site-header fixed inset-x-0 top-0 z-50 w-full max-w-full overflow-x-clip border-b backdrop-blur-[26px] backdrop-saturate-[1.7]"
+      className="site-header fixed inset-x-0 top-0 z-50 w-full max-w-full overflow-x-clip border-b"
     >
       <Container>
         <nav

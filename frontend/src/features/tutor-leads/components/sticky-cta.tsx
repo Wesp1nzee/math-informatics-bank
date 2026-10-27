@@ -69,7 +69,7 @@ export function StickyCta() {
         <nav
           aria-label="Быстрая запись на пробное"
           className={cn(
-            "border-line bg-canvas/95 fixed inset-x-0 bottom-0 z-40 border-t px-4 pt-3 backdrop-blur-[14px]",
+            "border-line bg-canvas/95 fixed inset-x-0 bottom-0 z-40 border-t px-4 pt-3",
             "pb-[calc(0.75rem+env(safe-area-inset-bottom))]",
           )}
         >

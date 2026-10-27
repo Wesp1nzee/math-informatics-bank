@@ -2660,6 +2660,14 @@ html:not([data-js]) .reveal {
   pointer-events: none;
 }
 
+/* Blurred glass is a desktop-only luxury: phones repaint it every frame. */
+@media (min-width: 901px) and (pointer: fine) {
+  .site-header {
+    -webkit-backdrop-filter: blur(26px) saturate(1.7);
+    backdrop-filter: blur(26px) saturate(1.7);
+  }
+}
+
 /* Depth: floating showcase cards get 3D tilt from a client leaf. */
 .tilt-card {
   position: relative;
@@ -4398,5 +4406,16 @@ html[data-js] .lp [data-r][data-revealed] {
     height: 100lvh;
     contain: layout paint style;
     transform: translateZ(0);
+  }
+
+  /* Opaque enough to read without a per-frame backdrop blur. */
+  .site-header {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: color-mix(in oklch, var(--color-canvas) 92%, transparent);
+  }
+
+  .site-header[data-scrolled="true"] {
+    background-color: color-mix(in oklch, var(--color-canvas) 95%, transparent);
   }
 }
