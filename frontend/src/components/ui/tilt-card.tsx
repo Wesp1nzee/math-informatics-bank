@@ -11,8 +11,8 @@ const SPRING = "cubic-bezier(0.22, 1, 0.36, 1)";
  * Pointer-driven tilt (≤ 6°) for showcase cards.
  *
  * - Fine pointers: magnetic tilt + specular glare under the cursor.
- * - Coarse pointers: touch tilt while dragging plus a subtle scroll-linked
- *   glare so cards still feel glassy while the page moves.
+ * - Coarse pointers: touch tilt while dragging only. Scroll-linked tilt was
+ *   removed because it forced a style pass for every card on every frame.
  *
  * Only CSS custom properties are written from rAF callbacks, so the compositor
  * handles transform/opacity. Reduced motion opts out entirely.
@@ -39,7 +39,6 @@ export function TiltCard({
     const touchMax = Math.min(max, 4.5);
 
     let frame = 0;
-    let scrollFrame = 0;
     let touching = false;
 
     const setTilt = (rx: number, ry: number) => {
@@ -109,31 +108,16 @@ export function TiltCard({
       reset();
     };
 
-    const onScroll = () => {
-      if (touching || scrollFrame) return;
-      scrollFrame = requestAnimationFrame(() => {
-        scrollFrame = 0;
-        const rect = el.getBoundingClientRect();
-        const viewport = window.innerHeight || 1;
-        const center = rect.top + rect.height / 2;
-        const visibility = Math.min(
-          1,
-          Math.max(0, 1 - Math.abs(center - viewport / 2) / (viewport * 0.9)),
-        );
-        const tilt = (center / viewport - 0.5) * 1.4;
-        setTilt(tilt, 0);
-        setGlare(50, 12 + (center / viewport) * 76, 0.06 + visibility * 0.12);
-      });
-    };
-
+    /*
+     * No scroll-linked tilt on touch devices: each card used to subscribe to
+     * window scroll, read its rect and rewrite five custom properties every
+     * frame. Touch drag still tilts the card while the finger is down.
+     */
     el.addEventListener("pointerdown", onPointerDown, { passive: true });
     el.addEventListener("pointermove", onPointerMove, { passive: true });
     el.addEventListener("pointerup", release, { passive: true });
     el.addEventListener("pointercancel", release, { passive: true });
     el.addEventListener("pointerleave", release, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    onScroll();
 
     return () => {
       el.removeEventListener("pointerdown", onPointerDown);
@@ -141,9 +125,7 @@ export function TiltCard({
       el.removeEventListener("pointerup", release);
       el.removeEventListener("pointercancel", release);
       el.removeEventListener("pointerleave", release);
-      window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(frame);
-      if (scrollFrame) cancelAnimationFrame(scrollFrame);
     };
   }, [max, reduceMotion]);
 
