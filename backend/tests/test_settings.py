@@ -24,6 +24,17 @@ def test_valid_production_settings_are_accepted() -> None:
     assert settings.docs_enabled is False
 
 
+def test_empty_cookie_secure_uses_production_default(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("COOKIE_SECURE", "")
+
+    settings = Settings(**VALID_PROD)
+
+    assert settings.cookie_secure is None
+    assert settings.cookie_secure_effective is True
+
+
 def test_csv_environment_values_are_split(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("ALLOWED_HOSTS", "example.com, api.example.com")
     monkeypatch.setenv("CORS_ORIGINS", "https://example.com,https://www.example.com")

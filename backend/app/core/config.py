@@ -61,6 +61,13 @@ class Settings(BaseSettings):
 
     ip_hash_salt: str = ""
 
+    @field_validator("cookie_secure", mode="before")
+    @classmethod
+    def _empty_bool_as_none(cls, value: object) -> object:
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+
     @field_validator("cors_origins", "allowed_hosts", mode="before")
     @classmethod
     def _split_csv(cls, value: object) -> object:
