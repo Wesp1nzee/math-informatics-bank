@@ -4,16 +4,15 @@ import { useEffect, useMemo, useRef, type CSSProperties } from "react";
 
 import { currentWorldState, subscribeWorldState } from "@/features/world/bus";
 import { heightAt, LANDSCAPE, WORLD_SIZE } from "@/features/world/landscape";
-import { usePrefersReducedMotion } from "@/lib/utils/use-prefers-reduced-motion";
 
 /**
  * Mobile-first 2.5D fallback rendered before (and behind) the WebGL world.
  *
  * Desktop keeps the original static isoline look while the canvas warms up.
- * On phones the layers come alive: ambient aura drifts, contours draw in and
- * each depth plane follows the page scroll through CSS custom properties.
- * Section changes on the shared world bus recolor the aura without re-rendering
- * React trees.
+ * Phones get the same picture as a static layer: contours and orb nodes are
+ * generated at a lower sampling density, and nothing on the layer reacts to
+ * scroll. Section changes on the shared world bus only recolor it through CSS
+ * variables, so React never re-renders while the reader scrolls.
  */
 
 const VIEW_W = 1200;
@@ -22,6 +21,11 @@ const PAD = 40;
 
 const LEVELS = 11;
 
+const DESKTOP_SAMPLES = 44;
+const MOBILE_SAMPLES = 24;
+const DESKTOP_NODES = 96;
+const MOBILE_NODES = 24;
+
 function toSvg(x: number, z: number): [number, number] {
   const span = VIEW_W - PAD * 2;
   const sx = PAD + ((x + WORLD_SIZE / 2) / WORLD_SIZE) * span;
@@ -29,12 +33,13 @@ function toSvg(x: number, z: number): [number, number] {
   return [sx, sy];
 }
 
-function buildContours(): string[] {
-  const N = 44;
+function buildContours(samples: number): string[] {
+  const N = samples;
   const step = WORLD_SIZE / N;
   const minH = -2.4;
   const maxH = 4.2;
   const paths: string[] = [];
+  const params = { ...LANDSCAPE, relief: 1, morph: 1, signal: 0.55 };
 
   for (let li = 0; li < LEVELS; li += 1) {
     const level = minH + ((maxH - minH) * li) / (LEVELS - 1);
@@ -44,7 +49,6 @@ function buildContours(): string[] {
       for (let ix = 0; ix < N; ix += 1) {
         const x0 = -WORLD_SIZE / 2 + ix * step;
         const z0 = -WORLD_SIZE / 2 + iz * step;
-        const params = { ...LANDSCAPE, relief: 1, morph: 1, signal: 0.55 };
         const h00 = heightAt(x0, z0, params);
         const h10 = heightAt(x0 + step, z0, params);
         const h01 = heightAt(x0, z0 + step, params);
@@ -96,9 +100,10 @@ function round(value: number, digits = 3): number {
   return Number(value.toFixed(digits));
 }
 
-function buildOrbNodes(): { x: number; y: number; r: number; o: number }[] {
-  const nodes: { x: number; y: number; r: number; o: number }[] = [];
-  const count = 96;
+type OrbNode = { x: number; y: number; r: number; o: number };
+
+function buildOrbNodes(count: number): OrbNode[] {
+  const nodes: OrbNode[] = [];
   for (let i = 0; i < count; i += 1) {
     const phi = Math.acos(1 - (2 * (i + 0.5)) / count);
     const theta = Math.PI * (1 + Math.sqrt(5)) * i;
@@ -116,12 +121,41 @@ function buildOrbNodes(): { x: number; y: number; r: number; o: number }[] {
   return nodes;
 }
 
-const ORB_NODES = buildOrbNodes();
+const contourCache = new Map<number, string[]>();
+const nodeCache = new Map<number, OrbNode[]>();
 
-export function WorldFallback() {
+function contoursFor(samples: number): string[] {
+  const cached = contourCache.get(samples);
+  if (cached) return cached;
+  const built = buildContours(samples);
+  contourCache.set(samples, built);
+  return built;
+}
+
+function nodesFor(count: number): OrbNode[] {
+  const cached = nodeCache.get(count);
+  if (cached) return cached;
+  const built = buildOrbNodes(count);
+  nodeCache.set(count, built);
+  return built;
+}
+
+export function WorldFallback({
+  density = "full",
+}: {
+  /** `mobile` renders a quarter of the sampling work for phone-sized screens. */
+  density?: "full" | "mobile";
+} = {}) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const reduceMotion = usePrefersReducedMotion();
-  const contours = useMemo(() => buildContours(), []);
+  const compact = density === "mobile";
+  const contours = useMemo(
+    () => contoursFor(compact ? MOBILE_SAMPLES : DESKTOP_SAMPLES),
+    [compact],
+  );
+  const orbNodes = useMemo(
+    () => nodesFor(compact ? MOBILE_NODES : DESKTOP_NODES),
+    [compact],
+  );
   const cx = VIEW_W * 0.72;
   const cy = VIEW_H * 0.36;
 
@@ -134,60 +168,8 @@ export function WorldFallback() {
       root.dataset.worldLive = name || "hero";
     };
     applyState(currentWorldState() ?? "hero");
-    const unsubscribe = subscribeWorldState(applyState);
-
-    if (reduceMotion) {
-      root.style.setProperty("--fallback-scroll-a", "0px");
-      root.style.setProperty("--fallback-scroll-b", "0px");
-      root.style.setProperty("--fallback-scroll-c", "0px");
-      root.style.setProperty("--fallback-scroll-progress", "0");
-      return () => {
-        unsubscribe();
-      };
-    }
-
-    let frame = 0;
-    let maxScroll = 1;
-
-    const measure = () => {
-      maxScroll = Math.max(
-        1,
-        document.documentElement.scrollHeight - window.innerHeight,
-      );
-    };
-
-    const paint = () => {
-      frame = 0;
-      const y = window.scrollY;
-      root.style.setProperty("--fallback-scroll-a", `${(y * 0.025).toFixed(1)}px`);
-      root.style.setProperty("--fallback-scroll-b", `${(y * 0.06).toFixed(1)}px`);
-      root.style.setProperty("--fallback-scroll-c", `${(y * 0.11).toFixed(1)}px`);
-      root.style.setProperty(
-        "--fallback-scroll-progress",
-        Math.min(1, Math.max(0, y / maxScroll)).toFixed(3),
-      );
-    };
-
-    const onScroll = () => {
-      if (frame === 0) frame = window.requestAnimationFrame(paint);
-    };
-    const onResize = () => {
-      measure();
-      onScroll();
-    };
-
-    measure();
-    paint();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
-
-    return () => {
-      unsubscribe();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [reduceMotion]);
+    return subscribeWorldState(applyState);
+  }, []);
 
   return (
     <div
@@ -258,7 +240,7 @@ export function WorldFallback() {
             <circle cx={cx} cy={cy} r={VIEW_W * 0.135} opacity={0.32} />
           </g>
           <g fill="var(--world-accent)" className="world-fallback-nodes">
-            {ORB_NODES.map((node, index) => (
+            {orbNodes.map((node, index) => (
               <circle key={index} cx={node.x} cy={node.y} r={node.r} opacity={node.o} />
             ))}
           </g>

@@ -32,7 +32,7 @@ export function MobileWorld() {
 
   return (
     <div className="lp-mobile-world" aria-hidden="true">
-      <WorldFallback />
+      <WorldFallback density="mobile" />
     </div>
   );
 }

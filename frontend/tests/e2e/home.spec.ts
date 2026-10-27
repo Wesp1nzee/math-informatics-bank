@@ -134,7 +134,7 @@ test.describe("home page", () => {
     }
   });
 
-  test("the 2.5D fallback is live on phones and hidden on desktop", async ({
+  test("the 2.5D fallback is static on phones and hidden on desktop", async ({
     page,
     isMobile,
   }) => {
@@ -147,19 +147,41 @@ test.describe("home page", () => {
     }
 
     await expect(layer).toBeVisible();
+
+    const read = () =>
+      page.evaluate(() => {
+        const fallback = document.querySelector<HTMLElement>(
+          ".lp-mobile-world .world-fallback",
+        );
+        const glow = document.querySelector<HTMLElement>(".world-fallback-glow-a");
+        const orb = document.querySelector<HTMLElement>(".world-fallback-orb");
+        const grain = document.querySelector<HTMLElement>(".world-fallback-grain");
+        if (!fallback || !glow || !orb || !grain) return null;
+        return {
+          scrollVar: fallback.style.getPropertyValue("--fallback-scroll-a"),
+          glowFilter: getComputedStyle(glow).filter,
+          orbFilter: getComputedStyle(orb).filter,
+          glowAnimation: getComputedStyle(glow).animationName,
+          grainDisplay: getComputedStyle(grain).display,
+          runningAnimations: fallback.getAnimations({ subtree: true }).length,
+        };
+      });
+
+    const before = await read();
+    expect(before).not.toBeNull();
+    expect(before).toEqual({
+      scrollVar: "",
+      glowFilter: "none",
+      orbFilter: "none",
+      glowAnimation: "none",
+      grainDisplay: "none",
+      runningAnimations: 0,
+    });
+
     await page.evaluate(() => window.scrollTo(0, 800));
-    await expect
-      .poll(() =>
-        page.evaluate(() => {
-          const fallback = document.querySelector<HTMLElement>(
-            ".lp-mobile-world .world-fallback",
-          );
-          if (!fallback) return "0px";
-          return getComputedStyle(fallback)
-            .getPropertyValue("--fallback-scroll-a")
-            .trim();
-        }),
-      )
-      .not.toBe("0px");
+    await page.waitForTimeout(300);
+
+    // Nothing on the fallback reacts to scroll: same computed values, no vars.
+    expect(await read()).toEqual(before);
   });
 });

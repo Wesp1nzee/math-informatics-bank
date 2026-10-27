@@ -2356,10 +2356,6 @@ html:not([data-js]) .reveal {
   --fallback-accent: var(--world-accent);
   --fallback-signal: var(--world-signal);
   --fallback-intensity: 0.16;
-  --fallback-scroll-a: 0px;
-  --fallback-scroll-b: 0px;
-  --fallback-scroll-c: 0px;
-  --fallback-scroll-progress: 0;
   transition:
     --fallback-accent 900ms var(--ease-soft),
     --fallback-signal 900ms var(--ease-soft),
@@ -2435,77 +2431,90 @@ html:not([data-js]) .reveal {
   pointer-events: none;
 }
 
-@keyframes fallback-aura-a {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-4vw, 3vh, 0) scale(1.08);
-  }
-}
-
-@keyframes fallback-aura-b {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1.04);
-  }
-  50% {
-    transform: translate3d(5vw, -2vh, 0) scale(0.96);
-  }
-}
-
-@keyframes fallback-orb-drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-2.5vw, -2.5vh, 0) scale(1.07);
-  }
-}
-
-@media (max-width: 767px) {
-  .world-fallback-live .world-fallback-aura {
-    transform: translate3d(0, var(--fallback-scroll-a), 0);
-    will-change: transform;
+/*
+ * Phones keep the 2.5D fallback as a static picture: no parallax, no infinite
+ * drift, no blur filters and no colour interpolation while the page scrolls.
+ * Soft radial gradients fade the same shapes without a per-frame raster pass.
+ */
+@media (max-width: 900px), (pointer: coarse) {
+  .world-fallback-live {
+    transition: none;
   }
 
-  .world-fallback-live .world-fallback-depth-mid {
-    transform: translate3d(0, calc(var(--fallback-scroll-b) * -0.7), 0);
-    will-change: transform;
+  .world-fallback-live .world-fallback-glow,
+  .world-fallback-live .world-fallback-orb,
+  .world-fallback-live .world-fallback-ring {
+    transition: none;
+  }
+
+  .world-fallback-live .world-fallback-glow {
+    filter: none;
+    animation: none;
   }
 
   .world-fallback-live .world-fallback-glow-a {
-    animation: fallback-aura-a 26s var(--ease-soft) infinite;
+    background: radial-gradient(
+      circle at 50% 50%,
+      color-mix(in oklch, var(--fallback-accent) 100%, transparent),
+      transparent 70%
+    );
+    opacity: 0.2;
   }
 
   .world-fallback-live .world-fallback-glow-b {
-    animation: fallback-aura-b 34s var(--ease-soft) infinite;
+    background: radial-gradient(
+      circle at 50% 50%,
+      color-mix(in oklch, var(--fallback-signal) 100%, transparent),
+      transparent 70%
+    );
+    opacity: 0.11;
   }
 
   .world-fallback-live .world-fallback-orb {
-    animation: fallback-orb-drift 18s var(--ease-soft) infinite;
+    background:
+      radial-gradient(
+        circle at 36% 30%,
+        color-mix(in oklch, var(--fallback-accent) 26%, transparent),
+        transparent 62%
+      ),
+      radial-gradient(
+        circle at 70% 70%,
+        color-mix(in oklch, var(--fallback-signal) 12%, transparent),
+        transparent 68%
+      );
+    filter: none;
+    opacity: 0.8;
+    animation: none;
   }
 
-  .world-fallback-live .world-fallback-svg {
-    transform: translate3d(0, calc(var(--fallback-scroll-c) * -0.45), 0) scale(1.05);
-    will-change: transform;
+  .world-fallback-ring-a,
+  .world-fallback-ring-b {
+    transform: none;
   }
 
-  .world-fallback-live .world-fallback-contours {
-    transform: translate3d(0, calc(var(--fallback-scroll-c) * -0.28), 0);
-  }
-
+  .world-fallback-live .world-fallback-aura,
+  .world-fallback-live .world-fallback-depth-mid,
+  .world-fallback-live .world-fallback-svg,
+  .world-fallback-live .world-fallback-contours,
   .world-fallback-live .world-fallback-orb-layer {
-    transform: translate3d(0, calc(var(--fallback-scroll-b) * -0.2), 0);
+    transform: none;
+    animation: none;
+    will-change: auto;
+  }
+
+  .world-fallback-grain {
+    display: none;
+  }
+
+  .world-contour,
+  .world-orb-lines {
+    vector-effect: none;
   }
 
   .world-contour {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: contour-draw 2.6s var(--ease-out-expo) forwards;
-    animation-delay: calc(var(--i, 0) * 90ms);
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    animation: none;
   }
 }
 
@@ -4356,4 +4365,38 @@ html[data-js] .lp [data-r][data-revealed] {
 :root[data-theme="dark"] .simple-page .ghost {
   border-bottom-color: rgba(238, 240, 255, 0.16);
   color: #f2f5ff;
+}
+
+/* ------------------------------------------------------------------ */
+/* Phones: static, cheap backgrounds                                   */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Everything below targets phones and touch-first screens. Desktop windows
+ * (≥901px with a fine pointer) keep the layered fixed background, the glass
+ * header and the full world fallback.
+ */
+@media (max-width: 900px), (pointer: coarse) {
+  body {
+    /* One soft wash instead of three gradients plus a 72px grid. */
+    background-image: radial-gradient(
+      ellipse 120% 60% at 50% -10%,
+      color-mix(in oklch, var(--color-accent) 10%, transparent),
+      transparent 65%
+    );
+    background-size: auto;
+    background-attachment: scroll;
+  }
+
+  .lp-mobile-world {
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    height: 100vh;
+    height: 100lvh;
+    contain: layout paint style;
+    transform: translateZ(0);
+  }
 }
