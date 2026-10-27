@@ -43,6 +43,9 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   applicationName: siteConfig.name,
   formatDetection: { telephone: false, address: false, email: false },
+  verification: {
+    yandex: "40077200f219dba3",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
