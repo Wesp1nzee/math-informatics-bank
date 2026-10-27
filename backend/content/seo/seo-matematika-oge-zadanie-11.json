@@ -1,0 +1,3142 @@
+{
+  "slug": "seo-matematika-oge-zadanie-11",
+  "title": "Задание 11 ОГЭ по математике: графики функций — полный разбор",
+  "description": "Полная теория графиков для задания 11 ОГЭ: линейная и квадратичная функции, гипербола, все типы заданий ФИПИ, примеры с решениями и интерактив.",
+  "subject": "matematika",
+  "exam": "ОГЭ · Математика",
+  "reading_minutes": 28,
+  "content": {
+    "version": 2,
+    "blocks": [
+      {
+        "id": "moge11-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 11 ОГЭ по математике проверяет умение читать графики функций и связывать их с формулами. В открытом банке ФИПИ почти все задачи этого номера — на установление соответствия: даны три графика и три набора коэффициентов или три формулы. Нужно не «угадать картинку», а последовательно определить тип функции и знаки её коэффициентов."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-spec",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Что проверяет задание 11",
+          "body": [
+            {
+              "type": "text",
+              "text": "По спецификации ОГЭ 2026 года задание 11 относится к базовому уровню и оценивается 1 первичным баллом. Ответ записывается последовательностью из трёх цифр. Проверяются линейная и квадратичная функции, обратная пропорциональность, чтение коэффициентов и сопоставление формулы с графиком."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-theory",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Полная теория: что вообще происходит на графике"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-theory-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Функция ставит каждому значению x ровно одно значение y. График — это все точки плоскости с координатами (x; y). В задании 11 нас интересуют три семейства функций: прямая, парабола и гипербола. У каждого семейства есть характерная форма и коэффициенты, которые эту форму меняют."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-types",
+        "type": "table",
+        "data": {
+          "caption": "Три семейства функций в задании 11",
+          "headers": [
+            "Функция",
+            "Формула",
+            "Что важно"
+          ],
+          "rows": [
+            [
+              "Линейная",
+              "y = kx + b",
+              "k — наклон, b — сдвиг по оси y"
+            ],
+            [
+              "Квадратичная",
+              "y = ax² + bx + c",
+              "a — направление ветвей, c — пересечение с осью y"
+            ],
+            [
+              "Обратная пропорциональность",
+              "y = k / x",
+              "k — знак и расположение ветвей"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-linear",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 1. Линейная функция"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-formula-linear",
+        "type": "math",
+        "data": {
+          "tex": "y=kx+b",
+          "caption": "Линейная функция"
+        }
+      },
+      {
+        "id": "moge11-linear-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "График линейной функции — прямая. Коэффициент k отвечает за наклон: если k > 0, прямая возрастает (идёт слева направо вверх); если k < 0 — убывает. Коэффициент b показывает, где прямая пересекает ось y: при b > 0 точка пересечения выше нуля, при b < 0 — ниже, при b = 0 прямая проходит через начало координат."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-linear",
+        "type": "table",
+        "data": {
+          "caption": "Как знаки k и b читаются по прямой",
+          "headers": [
+            "Коэффициент",
+            "Знак",
+            "Что видно на графике"
+          ],
+          "rows": [
+            [
+              "k",
+              "k > 0",
+              "прямая возрастает"
+            ],
+            [
+              "k",
+              "k < 0",
+              "прямая убывает"
+            ],
+            [
+              "b",
+              "b > 0",
+              "пересечение с осью y выше нуля"
+            ],
+            [
+              "b",
+              "b < 0",
+              "пересечение с осью y ниже нуля"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-linear-alg",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Алгоритм: сначала посмотрите на наклон прямой и определите знак k. Затем найдите точку пересечения с осью y и определите знак b. После этого останется сопоставить полученную пару знаков с вариантом."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-linear-task",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов k и b и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "k<0, b<0"
+            },
+            {
+              "label": "Б",
+              "value": "k<0, b>0"
+            },
+            {
+              "label": "В",
+              "value": "k>0, b<0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/EBD148-1.png",
+              "image_alt": "График 1 к заданию EBD148"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/EBD148-2.png",
+              "image_alt": "График 2 к заданию EBD148"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/EBD148-3.png",
+              "image_alt": "График 3 к заданию EBD148"
+            }
+          ],
+          "correct_answer": "213",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 213."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "EBD148"
+        }
+      },
+      {
+        "id": "moge11-linear-sol",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "moge11-linear-sol-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Смотрим на наклон каждой прямой: где возрастает — k > 0, где убывает — k < 0."
+                }
+              ]
+            },
+            {
+              "id": "moge11-linear-sol-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Смотрим на пересечение с осью y: выше нуля — b > 0, ниже — b < 0."
+                }
+              ]
+            },
+            {
+              "id": "moge11-linear-sol-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Сопоставляем: А) k<0, b<0 — убывает и пересекает ось ниже; Б) k<0, b>0 — убывает и выше; В) k>0, b<0 — возрастает и ниже."
+                }
+              ]
+            },
+            {
+              "id": "moge11-linear-sol-4",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Получаем последовательность 2, 1, 3."
+                }
+              ],
+              "math": {
+                "tex": "213",
+                "display": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-linear-practice",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов k и b и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "k>0, b<0"
+            },
+            {
+              "label": "Б",
+              "value": "k>0, b>0"
+            },
+            {
+              "label": "В",
+              "value": "k<0, b<0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/8C2242-1.png",
+              "image_alt": "График 1 к заданию 8C2242"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/8C2242-2.png",
+              "image_alt": "График 2 к заданию 8C2242"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/8C2242-3.png",
+              "image_alt": "График 3 к заданию 8C2242"
+            }
+          ],
+          "correct_answer": "231",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 231."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "8C2242"
+        }
+      },
+      {
+        "id": "moge11-quadratic",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 2. Квадратичная функция"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-formula-quadratic",
+        "type": "math",
+        "data": {
+          "tex": "y=ax^2+bx+c",
+          "caption": "Квадратичная функция"
+        }
+      },
+      {
+        "id": "moge11-quadratic-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "График квадратичной функции — парабола. Коэффициент a отвечает за направление ветвей: при a > 0 ветви вверх, при a < 0 — вниз. Коэффициент c показывает, где парабола пересекает ось y: при c > 0 выше нуля, при c < 0 — ниже. Коэффициент b влияет на положение вершины, но в базовых задачах чаще достаточно a и c."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-quadratic",
+        "type": "table",
+        "data": {
+          "caption": "Как знаки a и c читаются по параболе",
+          "headers": [
+            "Коэффициент",
+            "Знак",
+            "Что видно на графике"
+          ],
+          "rows": [
+            [
+              "a",
+              "a > 0",
+              "ветви параболы вверх"
+            ],
+            [
+              "a",
+              "a < 0",
+              "ветви параболы вниз"
+            ],
+            [
+              "c",
+              "c > 0",
+              "пересечение с осью y выше нуля"
+            ],
+            [
+              "c",
+              "c < 0",
+              "пересечение с осью y ниже нуля"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-quadratic-alg",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Алгоритм: сначала смотрим на ветви и определяем знак a. Затем находим точку пересечения с осью y и определяем знак c. Если парабола пересекает ось y в начале координат, то c = 0 — это отдельный случай."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-quadratic-task",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов a и c и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "a>0, c>0"
+            },
+            {
+              "label": "Б",
+              "value": "a<0, c>0"
+            },
+            {
+              "label": "В",
+              "value": "a>0, c<0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/FADB4B-1.png",
+              "image_alt": "График 1 к заданию FADB4B"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/FADB4B-2.png",
+              "image_alt": "График 2 к заданию FADB4B"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/FADB4B-3.png",
+              "image_alt": "График 3 к заданию FADB4B"
+            }
+          ],
+          "correct_answer": "321",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 321."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "FADB4B"
+        }
+      },
+      {
+        "id": "moge11-quadratic-sol",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "moge11-quadratic-sol-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "А) a>0, c>0: ветви вверх, пересечение с осью y выше нуля."
+                }
+              ]
+            },
+            {
+              "id": "moge11-quadratic-sol-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Б) a<0, c>0: ветви вниз, пересечение выше нуля."
+                }
+              ]
+            },
+            {
+              "id": "moge11-quadratic-sol-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "В) a>0, c<0: ветви вверх, пересечение ниже нуля."
+                }
+              ]
+            },
+            {
+              "id": "moge11-quadratic-sol-4",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Сопоставляем с графиками: 3, 2, 1."
+                }
+              ],
+              "math": {
+                "tex": "321",
+                "display": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-quadratic-practice",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между графиками функций и знаками коэффициентов a и c.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/0CB842-1.png",
+              "image_alt": "График А к заданию 0CB842"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/0CB842-2.png",
+              "image_alt": "График Б к заданию 0CB842"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/0CB842-3.png",
+              "image_alt": "График В к заданию 0CB842"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "a<0, c>0"
+            },
+            {
+              "label": "2",
+              "value": "a>0, c<0"
+            },
+            {
+              "label": "3",
+              "value": "a>0, c>0"
+            }
+          ],
+          "correct_answer": "321",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 321."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "0CB842"
+        }
+      },
+      {
+        "id": "moge11-hyperbola",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 3. Обратная пропорциональность"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-formula-hyperbola",
+        "type": "math",
+        "data": {
+          "tex": "y=\\frac{k}{x}",
+          "caption": "Обратная пропорциональность"
+        }
+      },
+      {
+        "id": "moge11-hyperbola-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "График y = k/x — гипербола из двух ветвей. Если k > 0, ветви расположены в первой и третьей координатных четвертях; если k < 0 — во второй и четвёртой. Оси координат являются асимптотами: график приближается к ним, но не пересекает."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-hyperbola",
+        "type": "table",
+        "data": {
+          "caption": "Гипербола: как знак k меняет картинку",
+          "headers": [
+            "Знак k",
+            "Расположение ветвей",
+            "Как выглядит"
+          ],
+          "rows": [
+            [
+              "k > 0",
+              "I и III четверти",
+              "ветви справа сверху и слева снизу"
+            ],
+            [
+              "k < 0",
+              "II и IV четверти",
+              "ветви слева сверху и справа снизу"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-hyperbola-alg",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "В задачах на соответствие гиперболу легко узнать по характерной форме. Если в формуле есть x в знаменателе, это гипербола; остаётся определить знак k по расположению ветвей."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-hyperbola-task",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между функциями и их графиками.",
+          "left": [
+            {
+              "label": "А",
+              "value": "y=1/3 x + 2"
+            },
+            {
+              "label": "Б",
+              "value": "y=− 4x² +20x−22"
+            },
+            {
+              "label": "В",
+              "value": "y=1/x"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/F2AF4A-1.png",
+              "image_alt": "График 1 к заданию F2AF4A"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/F2AF4A-2.png",
+              "image_alt": "График 2 к заданию F2AF4A"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/F2AF4A-3.png",
+              "image_alt": "График 3 к заданию F2AF4A"
+            }
+          ],
+          "correct_answer": "213",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 213."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "F2AF4A"
+        }
+      },
+      {
+        "id": "moge11-hyperbola-sol",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "moge11-hyperbola-sol-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "А) y = (1/3)x + 2 — прямая, возрастает, пересекает ось y выше нуля."
+                }
+              ]
+            },
+            {
+              "id": "moge11-hyperbola-sol-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Б) y = −4x² + 20x − 22 — парабола, ветви вниз."
+                }
+              ]
+            },
+            {
+              "id": "moge11-hyperbola-sol-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "В) y = 1/x — гипербола, ветви в I и III четвертях."
+                }
+              ]
+            },
+            {
+              "id": "moge11-hyperbola-sol-4",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Сопоставляем с графиками: 2, 1, 3."
+                }
+              ],
+              "math": {
+                "tex": "213",
+                "display": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-hyperbola-practice",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между функциями и их графиками.",
+          "left": [
+            {
+              "label": "А",
+              "value": "y=− 2x² +2x+3"
+            },
+            {
+              "label": "Б",
+              "value": "y=− 3/x"
+            },
+            {
+              "label": "В",
+              "value": "y=5/3 x − 1"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/C1EF4B-1.png",
+              "image_alt": "График 1 к заданию C1EF4B"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/C1EF4B-2.png",
+              "image_alt": "График 2 к заданию C1EF4B"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/C1EF4B-3.png",
+              "image_alt": "График 3 к заданию C1EF4B"
+            }
+          ],
+          "correct_answer": "312",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 312."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "C1EF4B"
+        }
+      },
+      {
+        "id": "moge11-match",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 4. Соответствие графиков и формул"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-match-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Здесь порядок обратный: сначала даны графики, потом формулы. Работает тот же алгоритм, но начинать нужно с формы графика: прямая — линейная функция, парабола — квадратичная, гипербола — обратная пропорциональность. Затем уточняем знаки коэффициентов."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-match-task",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между графиками функций и формулами, которые их задают.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/634640-1.png",
+              "image_alt": "График А к заданию 634640"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/634640-2.png",
+              "image_alt": "График Б к заданию 634640"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/634640-3.png",
+              "image_alt": "График В к заданию 634640"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "y=− 2x−1"
+            },
+            {
+              "label": "2",
+              "value": "y=− 2x+1"
+            },
+            {
+              "label": "3",
+              "value": "y=2x+1"
+            }
+          ],
+          "correct_answer": "231",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 231."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "634640"
+        }
+      },
+      {
+        "id": "moge11-match-sol",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "moge11-match-sol-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "А: прямая убывает, пересекает ось y ниже нуля — формула y = −2x − 1."
+                }
+              ]
+            },
+            {
+              "id": "moge11-match-sol-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Б: прямая убывает, пересекает ось y выше нуля — y = −2x + 1."
+                }
+              ]
+            },
+            {
+              "id": "moge11-match-sol-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "В: прямая возрастает, пересекает ось y выше нуля — y = 2x + 1."
+                }
+              ]
+            },
+            {
+              "id": "moge11-match-sol-4",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Получаем 2, 3, 1."
+                }
+              ],
+              "math": {
+                "tex": "231",
+                "display": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-match-practice",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между функциями и их графиками.",
+          "left": [
+            {
+              "label": "А",
+              "value": "y=− x² −x+5"
+            },
+            {
+              "label": "Б",
+              "value": "y=− 3/4 x − 1"
+            },
+            {
+              "label": "В",
+              "value": "y=− 12/x"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/4D9AF5-1.png",
+              "image_alt": "График 1 к заданию 4D9AF5"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/4D9AF5-2.png",
+              "image_alt": "График 2 к заданию 4D9AF5"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/4D9AF5-3.png",
+              "image_alt": "График 3 к заданию 4D9AF5"
+            }
+          ],
+          "correct_answer": "123",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 123."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "4D9AF5"
+        }
+      },
+      {
+        "id": "moge11-deep-theory",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Подробная теория: как читать график"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-deep-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "График — это не просто картинка, а множество точек (x; y), где y = f(x). Когда мы говорим «график возрастает», мы имеем в виду, что при движении слева направо значения y увеличиваются. Когда говорим «пересекает ось y», имеем в виду точку с x = 0. Эти два наблюдения решают большинство задач задания 11."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-deep-2",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Полезно различать три типа точек: пересечение с осью x (y = 0), пересечение с осью y (x = 0) и вершину параболы. В задании 11 чаще всего нужна точка пересечения с осью y, потому что именно она связана со свободным коэффициентом b или c."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-deep-3",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Для параболы полезно помнить: если ветви направлены вверх, то a > 0; если вниз, то a < 0. Если парабола пересекает ось y выше начала координат, то c > 0; ниже — c < 0. Если пересечение в начале координат, то c = 0. Этих трёх фактов достаточно для большинства задач на знаки a и c."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-deep-4",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Для прямой y = kx + b: k — это тангенс угла наклона. Чем больше |k|, тем круче прямая. Если k = 0, прямая горизонтальна. Если b = 0, прямая проходит через начало координат. Если b > 0, точка пересечения с осью y находится выше нуля."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-deep-5",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Для гиперболы y = k/x важно не только расположение ветвей, но и то, что график не пересекает оси координат. Ветви в I и III четвертях означают k > 0; ветви во II и IV — k < 0. Если в формуле стоит минус перед дробью, это уже k < 0."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-deep",
+        "type": "table",
+        "data": {
+          "caption": "Быстрая расшифровка графика",
+          "headers": [
+            "Что видим",
+            "О чём это говорит",
+            "Где пригодится"
+          ],
+          "rows": [
+            [
+              "прямая возрастает",
+              "k > 0",
+              "линейная функция"
+            ],
+            [
+              "прямая убывает",
+              "k < 0",
+              "линейная функция"
+            ],
+            [
+              "прямая пересекает ось y выше 0",
+              "b > 0",
+              "линейная функция"
+            ],
+            [
+              "парабола ветвями вверх",
+              "a > 0",
+              "квадратичная функция"
+            ],
+            [
+              "парабола пересекает ось y выше 0",
+              "c > 0",
+              "квадратичная функция"
+            ],
+            [
+              "ветви гиперболы в I и III четвертях",
+              "k > 0",
+              "обратная пропорциональность"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-universal",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Универсальный алгоритм решения задания 11"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-universal-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "Определите семейство функции по форме графика: прямая, парабола или гипербола."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Для прямой определите знак k по наклону, затем знак b по пересечению с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Для параболы определите знак a по направлению ветвей, затем знак c по пересечению с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Для гиперболы определите знак k по четвертям, в которых находятся ветви."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Сопоставьте полученные признаки с вариантами А, Б, В."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Запишите ответ в порядке А, Б, В, а не в порядке номеров графиков."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Проверьте ответ: подставьте x = 0 в формулу и сравните с точкой пересечения."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge11-walkthrough",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Пошаговый разбор трёх задач ФИПИ"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-walkthrough-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Разберём три задачи так, как это стоит делать на экзамене: без спешки, с фиксацией каждого признака. Даже если ответ совпал случайно, важно уметь объяснить, почему он верный."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-walk-linear-task",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов k и b и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "k<0, b<0"
+            },
+            {
+              "label": "Б",
+              "value": "k<0, b>0"
+            },
+            {
+              "label": "В",
+              "value": "k>0, b<0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/3A0009-1.png",
+              "image_alt": "График 1 к заданию 3A0009"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/3A0009-2.png",
+              "image_alt": "График 2 к заданию 3A0009"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/3A0009-3.png",
+              "image_alt": "График 3 к заданию 3A0009"
+            }
+          ],
+          "correct_answer": "231",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 231."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "3A0009"
+        }
+      },
+      {
+        "id": "moge11-walk-linear-sol",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "moge11-walk-linear-sol-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Определяем семейство функции по форме графика."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-linear-sol-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Для прямых: наклон даёт знак k, пересечение с осью y — знак b."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-linear-sol-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Для парабол: направление ветвей даёт знак a, пересечение с осью y — знак c."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-linear-sol-4",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Сопоставляем признаки с вариантами и записываем ответ в порядке А, Б, В."
+                }
+              ],
+              "math": {
+                "tex": "231",
+                "display": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-walk-quad-task",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между графиками функций и знаками коэффициентов a и c.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/C33B1E-1.png",
+              "image_alt": "График А к заданию C33B1E"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/C33B1E-2.png",
+              "image_alt": "График Б к заданию C33B1E"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/C33B1E-3.png",
+              "image_alt": "График В к заданию C33B1E"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "a<0, c>0"
+            },
+            {
+              "label": "2",
+              "value": "a>0, c>0"
+            },
+            {
+              "label": "3",
+              "value": "a>0, c<0"
+            }
+          ],
+          "correct_answer": "312",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 312."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "C33B1E"
+        }
+      },
+      {
+        "id": "moge11-walk-quad-sol",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "moge11-walk-quad-sol-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Определяем семейство функции по форме графика."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-quad-sol-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Для прямых: наклон даёт знак k, пересечение с осью y — знак b."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-quad-sol-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Для парабол: направление ветвей даёт знак a, пересечение с осью y — знак c."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-quad-sol-4",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Сопоставляем признаки с вариантами и записываем ответ в порядке А, Б, В."
+                }
+              ],
+              "math": {
+                "tex": "312",
+                "display": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-walk-formula-task",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между графиками функций и формулами, которые их задают.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/240003-1.png",
+              "image_alt": "График А к заданию 240003"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/240003-2.png",
+              "image_alt": "График Б к заданию 240003"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/240003-3.png",
+              "image_alt": "График В к заданию 240003"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "y=1/x"
+            },
+            {
+              "label": "2",
+              "value": "y=− x² −2"
+            },
+            {
+              "label": "3",
+              "value": "y=1/2x"
+            }
+          ],
+          "correct_answer": "132",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 132."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "240003"
+        }
+      },
+      {
+        "id": "moge11-walk-formula-sol",
+        "type": "step_solution",
+        "data": {
+          "steps": [
+            {
+              "id": "moge11-walk-formula-sol-1",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Определяем семейство функции по форме графика."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-formula-sol-2",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Для прямых: наклон даёт знак k, пересечение с осью y — знак b."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-formula-sol-3",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Для парабол: направление ветвей даёт знак a, пересечение с осью y — знак c."
+                }
+              ]
+            },
+            {
+              "id": "moge11-walk-formula-sol-4",
+              "note": [
+                {
+                  "type": "text",
+                  "text": "Сопоставляем признаки с вариантами и записываем ответ в порядке А, Б, В."
+                }
+              ],
+              "math": {
+                "tex": "132",
+                "display": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-connections",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Связь с другими заданиями"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-connections-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 11 связано с заданием 6 (вычисления), заданием 15 (геометрия) и заданием 20 (уравнения). Умение читать графики пригодится в задании 22, где нужно построить график функции, и в заданиях на исследование функции в старшей школе."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-connections-2",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Если вы готовитесь к ЕГЭ, эта тема станет основой для заданий на производную и исследование функций. Поэтому важно не просто запомнить картинки, а понимать, как коэффициент меняет график."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-selfcheck",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Как проверять себя"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-selfcheck-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "После решения назовите вслух признак, по которому вы выбрали каждый график."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Подставьте x = 0 в формулу и проверьте точку пересечения с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Проверьте, что ответ записан в порядке А, Б, В."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Если ответ не сходится, найдите первый признак, в котором вы не уверены."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Решите похожую задачу через день — так признак закрепится."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge11-extra-practice",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Дополнительная практика ФИПИ по типам"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-extra-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Ниже — ещё 12 заданий из открытого банка ФИПИ. Они сгруппированы по типам, чтобы можно было отработать каждый признак отдельно. Решайте по алгоритму, а не по памяти."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-extra-linear-1",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между графиками функций и знаками коэффициентов k и b.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/152506-1.png",
+              "image_alt": "График А к заданию 152506"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/152506-2.png",
+              "image_alt": "График Б к заданию 152506"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/152506-3.png",
+              "image_alt": "График В к заданию 152506"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "k<0, b<0"
+            },
+            {
+              "label": "2",
+              "value": "k>0, b>0"
+            },
+            {
+              "label": "3",
+              "value": "k>0, b<0"
+            }
+          ],
+          "correct_answer": "231",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 231."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "152506"
+        }
+      },
+      {
+        "id": "moge11-extra-linear-2",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов k и b и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "k<0, b<0"
+            },
+            {
+              "label": "Б",
+              "value": "k<0, b>0"
+            },
+            {
+              "label": "В",
+              "value": "k>0, b<0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/3A0009-1.png",
+              "image_alt": "График 1 к заданию 3A0009"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/3A0009-2.png",
+              "image_alt": "График 2 к заданию 3A0009"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/3A0009-3.png",
+              "image_alt": "График 3 к заданию 3A0009"
+            }
+          ],
+          "correct_answer": "231",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 231."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "3A0009"
+        }
+      },
+      {
+        "id": "moge11-extra-quad-1",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов a и c и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "a>0, c<0"
+            },
+            {
+              "label": "Б",
+              "value": "a<0, c>0"
+            },
+            {
+              "label": "В",
+              "value": "a>0, c>0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/8414B9-1.png",
+              "image_alt": "График 1 к заданию 8414B9"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/8414B9-2.png",
+              "image_alt": "График 2 к заданию 8414B9"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/8414B9-3.png",
+              "image_alt": "График 3 к заданию 8414B9"
+            }
+          ],
+          "correct_answer": "231",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 231."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "8414B9"
+        }
+      },
+      {
+        "id": "moge11-extra-quad-2",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между графиками функций и знаками коэффициентов a и c.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/1C761E-1.png",
+              "image_alt": "График А к заданию 1C761E"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/1C761E-2.png",
+              "image_alt": "График Б к заданию 1C761E"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/1C761E-3.png",
+              "image_alt": "График В к заданию 1C761E"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "a>0, c<0"
+            },
+            {
+              "label": "2",
+              "value": "a<0, c>0"
+            },
+            {
+              "label": "3",
+              "value": "a>0, c>0"
+            }
+          ],
+          "correct_answer": "123",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 123."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "1C761E"
+        }
+      },
+      {
+        "id": "moge11-extra-quad-3",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между графиками функций и знаками коэффициентов a и c.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/C33B1E-1.png",
+              "image_alt": "График А к заданию C33B1E"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/C33B1E-2.png",
+              "image_alt": "График Б к заданию C33B1E"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/C33B1E-3.png",
+              "image_alt": "График В к заданию C33B1E"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "a<0, c>0"
+            },
+            {
+              "label": "2",
+              "value": "a>0, c>0"
+            },
+            {
+              "label": "3",
+              "value": "a>0, c<0"
+            }
+          ],
+          "correct_answer": "312",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 312."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "C33B1E"
+        }
+      },
+      {
+        "id": "moge11-extra-quad-4",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов a и c и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "a<0, c>0"
+            },
+            {
+              "label": "Б",
+              "value": "a>0, c>0"
+            },
+            {
+              "label": "В",
+              "value": "a>0, c<0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/95FA1B-1.png",
+              "image_alt": "График 1 к заданию 95FA1B"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/95FA1B-2.png",
+              "image_alt": "График 2 к заданию 95FA1B"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/95FA1B-3.png",
+              "image_alt": "График 3 к заданию 95FA1B"
+            }
+          ],
+          "correct_answer": "132",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 132."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "95FA1B"
+        }
+      },
+      {
+        "id": "moge11-extra-formula-1",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между графиками функций и формулами, которые их задают.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/8657FA-1.png",
+              "image_alt": "График А к заданию 8657FA"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/8657FA-2.png",
+              "image_alt": "График Б к заданию 8657FA"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/8657FA-3.png",
+              "image_alt": "График В к заданию 8657FA"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "y=− 6/x"
+            },
+            {
+              "label": "2",
+              "value": "y=− 1/2x²"
+            },
+            {
+              "label": "3",
+              "value": "y=1/2x−2"
+            }
+          ],
+          "correct_answer": "312",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 312."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "8657FA"
+        }
+      },
+      {
+        "id": "moge11-extra-formula-2",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между графиками функций и формулами, которые их задают.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/240003-1.png",
+              "image_alt": "График А к заданию 240003"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/240003-2.png",
+              "image_alt": "График Б к заданию 240003"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/240003-3.png",
+              "image_alt": "График В к заданию 240003"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "y=1/x"
+            },
+            {
+              "label": "2",
+              "value": "y=− x² −2"
+            },
+            {
+              "label": "3",
+              "value": "y=1/2x"
+            }
+          ],
+          "correct_answer": "132",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 132."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "240003"
+        }
+      },
+      {
+        "id": "moge11-extra-formula-3",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между функциями и их графиками.",
+          "left": [
+            {
+              "label": "А",
+              "value": "y=− 3x² +9x−4"
+            },
+            {
+              "label": "Б",
+              "value": "y=− 6/x"
+            },
+            {
+              "label": "В",
+              "value": "y=2/3x−5"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/8F1404-1.png",
+              "image_alt": "График 1 к заданию 8F1404"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/8F1404-2.png",
+              "image_alt": "График 2 к заданию 8F1404"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/8F1404-3.png",
+              "image_alt": "График 3 к заданию 8F1404"
+            }
+          ],
+          "correct_answer": "321",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 321."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "8F1404"
+        }
+      },
+      {
+        "id": "moge11-extra-formula-4",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между графиками функций и формулами, которые их задают.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/AE4000-1.png",
+              "image_alt": "График А к заданию AE4000"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/AE4000-2.png",
+              "image_alt": "График Б к заданию AE4000"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/AE4000-3.png",
+              "image_alt": "График В к заданию AE4000"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "y=x² +2"
+            },
+            {
+              "label": "2",
+              "value": "y=− 2/x"
+            },
+            {
+              "label": "3",
+              "value": "y=2x"
+            }
+          ],
+          "correct_answer": "132",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 132."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "AE4000"
+        }
+      },
+      {
+        "id": "moge11-extra-graph-1",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между графиками функций и формулами, которые их задают.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/D76AF4-1.png",
+              "image_alt": "График А к заданию D76AF4"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/D76AF4-2.png",
+              "image_alt": "График Б к заданию D76AF4"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/D76AF4-3.png",
+              "image_alt": "График В к заданию D76AF4"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "y=2/x"
+            },
+            {
+              "label": "2",
+              "value": "y=− x²"
+            },
+            {
+              "label": "3",
+              "value": "y=2x"
+            }
+          ],
+          "correct_answer": "321",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 321."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "D76AF4"
+        }
+      },
+      {
+        "id": "moge11-extra-graph-2",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между графиками функций и формулами, которые их задают.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/47E77C-1.png",
+              "image_alt": "График А к заданию 47E77C"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/47E77C-2.png",
+              "image_alt": "График Б к заданию 47E77C"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/47E77C-3.png",
+              "image_alt": "График В к заданию 47E77C"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "y=− 3"
+            },
+            {
+              "label": "2",
+              "value": "y=x−3"
+            },
+            {
+              "label": "3",
+              "value": "y=− 3x"
+            }
+          ],
+          "correct_answer": "321",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 321."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "47E77C"
+        }
+      },
+      {
+        "id": "moge11-scenarios",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Что делать, если..."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-scenarios-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "…забыли, как выглядит гипербола: ищите формулу с x в знаменателе; две ветви — признак гиперболы."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "…сомневаетесь в знаке b: подставьте x = 0; значение y в этой точке и есть b."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "…сомневаетесь в знаке c: подставьте x = 0; значение y в этой точке и есть c."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "…прямая кажется почти горизонтальной: проверьте, не равен ли k нулю; в задании 11 такие случаи редки, но возможны."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "…парабола проходит через начало координат: значит, c = 0, и это нужно учитывать."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "…в ответе получились одинаковые цифры: проверьте, не перепутали ли вы порядок А, Б, В."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge11-faq",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Вопросы и ответы"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-faq",
+        "type": "table",
+        "data": {
+          "caption": "Частые вопросы по заданию 11",
+          "headers": [
+            "Вопрос",
+            "Короткий ответ"
+          ],
+          "rows": [
+            [
+              "Почему k отвечает за наклон?",
+              "k — это коэффициент перед x; при росте x на 1 y меняется на k."
+            ],
+            [
+              "Почему b — точка пересечения с осью y?",
+              "при x = 0 формула даёт y = b."
+            ],
+            [
+              "Почему c — точка пересечения с осью y?",
+              "при x = 0 формула даёт y = c."
+            ],
+            [
+              "Как отличить параболу от гиперболы?",
+              "парабола — одна U-образная ветвь (или перевёрнутая), гипербола — две отдельные ветви."
+            ],
+            [
+              "Что делать, если график не подходит ни к одному варианту?",
+              "проверьте знак k/a и точку пересечения с осью y; скорее всего, ошибка в одном признаке."
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-plan",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "План подготовки на неделю"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-plan-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "День 1: выучить три семейства функций и их графики."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "День 2: отработать знаки k и b на 10 прямых."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "День 3: отработать знаки a и c на 10 параболах."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "День 4: разобрать гиперболу и формулы с 1/x."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "День 5: решить 10 задач на соответствие графиков и формул."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "День 6: пройти все 12 дополнительных задач ФИПИ."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "День 7: повторить ошибки и решить 5 новых задач на время."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge11-all-types",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Все типы задания 11"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-all",
+        "type": "table",
+        "data": {
+          "caption": "Карта типов задания 11",
+          "headers": [
+            "Тип",
+            "Как узнать",
+            "Что делать"
+          ],
+          "rows": [
+            [
+              "Линейная функция: знаки k и b",
+              "три прямые, даны знаки k и b",
+              "наклон → знак k, пересечение с осью y → знак b"
+            ],
+            [
+              "Квадратичная функция: знаки a и c",
+              "три параболы, даны знаки a и c",
+              "ветви → знак a, пересечение с осью y → знак c"
+            ],
+            [
+              "Гипербола",
+              "две ветви, формула с x в знаменателе",
+              "четверти → знак k"
+            ],
+            [
+              "Графики и формулы",
+              "даны графики и формулы",
+              "форма → семейство, затем коэффициенты"
+            ],
+            [
+              "Смешанный набор",
+              "прямая, парабола и гипербола вместе",
+              "сначала семейство, потом знак"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-type-details",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Подробно по каждому типу: что важно"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-type-details-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 1 — прямые и знаки k, b. Здесь достаточно двух признаков: наклон и точка пересечения с осью y. Если прямая возрастает, k > 0; если убывает, k < 0. Если точка пересечения выше нуля, b > 0; ниже — b < 0. Не пытайтесь определять b по наклону: это разные характеристики."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-type-details-2",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 2 — параболы и знаки a, c. Ветви вверх дают a > 0, вниз — a < 0. Пересечение с осью y выше нуля даёт c > 0, ниже — c < 0. Если парабола проходит через начало координат, c = 0. Коэффициент b в базовых задачах этого типа обычно не нужен, но он влияет на положение вершины."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-type-details-3",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 3 — гипербола. Формула содержит x в знаменателе. Ветви в I и III четвертях означают k > 0; во II и IV — k < 0. Если перед дробью стоит минус, знак k уже отрицательный. Гипербола не пересекает оси координат."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-type-details-4",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 4 — графики и формулы. Сначала определите семейство по форме, затем уточните коэффициенты. Если формула линейная, смотрите на наклон и сдвиг; если квадратичная — на ветви и пересечение с осью y; если гипербола — на четверти."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-type-details-5",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 5 — смешанный набор. В одном задании могут встретиться прямая, парабола и гипербола. Не сравнивайте их по «красоте»: у каждого семейства свой набор признаков. Сначала подпишите над каждым графиком семейство, и только потом ищите соответствие."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-table-formulas",
+        "type": "table",
+        "data": {
+          "caption": "Формулы и признаки, которые нужно узнавать мгновенно",
+          "headers": [
+            "Формула",
+            "График",
+            "Ключевой признак",
+            "Что проверить"
+          ],
+          "rows": [
+            [
+              "y = kx + b",
+              "прямая",
+              "наклон и точка пересечения с осью y",
+              "знаки k и b"
+            ],
+            [
+              "y = ax² + bx + c",
+              "парабола",
+              "ветви и точка пересечения с осью y",
+              "знаки a и c"
+            ],
+            [
+              "y = k/x",
+              "гипербола",
+              "четверти",
+              "знак k"
+            ],
+            [
+              "y = x²",
+              "парабола",
+              "ветви вверх, вершина в начале координат",
+              "a > 0, b = c = 0"
+            ],
+            [
+              "y = −x²",
+              "парабола",
+              "ветви вниз",
+              "a < 0"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge11-fast",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Как решать за 30 секунд"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-fast-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "Посмотрите на форму: прямая, парабола или гипербола."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Для прямой сразу отметьте наклон и пересечение с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Для параболы сразу отметьте ветви и пересечение с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Для гиперболы сразу отметьте четверти."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Сопоставьте с вариантами и запишите три цифры."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Проверьте x = 0 для каждой формулы, если сомневаетесь."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge11-exam",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "На экзамене не нужно доказывать каждое наблюдение. Достаточно уверенно назвать признак и получить ответ. Но если останется время, проверьте себя подстановкой x = 0: это самый быстрый способ поймать ошибку с b или c."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-interactive",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Интерактив: как коэффициенты меняют график"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-interactive-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Подвигайте ползунки и посмотрите, что происходит с графиком. Это не замена теории, а способ увидеть связь между формулой и картинкой."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-graph-linear",
+        "type": "interactive_graph",
+        "data": {
+          "engine": "svg",
+          "expressions": [
+            {
+              "id": "line",
+              "expr": "k*x+b",
+              "label": "y = kx + b"
+            }
+          ],
+          "parameters": [
+            {
+              "id": "k",
+              "label": "k",
+              "min": -4,
+              "max": 4,
+              "step": 0.5,
+              "default": 1
+            },
+            {
+              "id": "b",
+              "label": "b",
+              "min": -5,
+              "max": 5,
+              "step": 1,
+              "default": 0
+            }
+          ],
+          "viewport": {
+            "x_min": -6,
+            "x_max": 6,
+            "y_min": -6,
+            "y_max": 6
+          },
+          "interactions": [
+            "pan",
+            "zoom",
+            "trace"
+          ]
+        }
+      },
+      {
+        "id": "moge11-graph-quadratic",
+        "type": "interactive_graph",
+        "data": {
+          "engine": "svg",
+          "expressions": [
+            {
+              "id": "parabola",
+              "expr": "a*x^2+b*x+c",
+              "label": "y = ax² + bx + c"
+            }
+          ],
+          "parameters": [
+            {
+              "id": "a",
+              "label": "a",
+              "min": -2,
+              "max": 2,
+              "step": 0.25,
+              "default": 1
+            },
+            {
+              "id": "b",
+              "label": "b",
+              "min": -4,
+              "max": 4,
+              "step": 0.5,
+              "default": 0
+            },
+            {
+              "id": "c",
+              "label": "c",
+              "min": -4,
+              "max": 4,
+              "step": 1,
+              "default": 0
+            }
+          ],
+          "viewport": {
+            "x_min": -6,
+            "x_max": 6,
+            "y_min": -8,
+            "y_max": 8
+          },
+          "interactions": [
+            "pan",
+            "zoom",
+            "trace"
+          ]
+        }
+      },
+      {
+        "id": "moge11-graph-hyperbola",
+        "type": "interactive_graph",
+        "data": {
+          "engine": "svg",
+          "expressions": [
+            {
+              "id": "hyperbola",
+              "expr": "k/x",
+              "label": "y = k/x"
+            }
+          ],
+          "parameters": [
+            {
+              "id": "k",
+              "label": "k",
+              "min": -6,
+              "max": 6,
+              "step": 1,
+              "default": 2
+            }
+          ],
+          "viewport": {
+            "x_min": -8,
+            "x_max": 8,
+            "y_min": -8,
+            "y_max": 8
+          },
+          "interactions": [
+            "pan",
+            "zoom",
+            "trace"
+          ]
+        }
+      },
+      {
+        "id": "moge11-bank",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Банк ФИПИ: проверьте себя"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-bank-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Ниже — задания из открытого банка ФИПИ. Сначала решите самостоятельно, затем проверьте ответ. Если ошиблись, вернитесь к типу, к которому относится задание."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-bank-task-1",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. Установите соответствие между функциями и их графиками.",
+          "left": [
+            {
+              "label": "А",
+              "value": "y=− 2x+4"
+            },
+            {
+              "label": "Б",
+              "value": "y=2x−4"
+            },
+            {
+              "label": "В",
+              "value": "y=2x+4"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/B7EAFA-1.png",
+              "image_alt": "График 1 к заданию B7EAFA"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/B7EAFA-2.png",
+              "image_alt": "График 2 к заданию B7EAFA"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/B7EAFA-3.png",
+              "image_alt": "График 3 к заданию B7EAFA"
+            }
+          ],
+          "correct_answer": "321",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 321."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "B7EAFA"
+        }
+      },
+      {
+        "id": "moge11-bank-task-2",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между знаками коэффициентов k и b и графиками функций.",
+          "left": [
+            {
+              "label": "А",
+              "value": "k>0, b>0"
+            },
+            {
+              "label": "Б",
+              "value": "k<0, b>0"
+            },
+            {
+              "label": "В",
+              "value": "k<0, b<0"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "1",
+              "image": "/media/fipi/matematika/oge11/F7E600-1.png",
+              "image_alt": "График 1 к заданию F7E600"
+            },
+            {
+              "label": "2",
+              "value": "2",
+              "image": "/media/fipi/matematika/oge11/F7E600-2.png",
+              "image_alt": "График 2 к заданию F7E600"
+            },
+            {
+              "label": "3",
+              "value": "3",
+              "image": "/media/fipi/matematika/oge11/F7E600-3.png",
+              "image_alt": "График 3 к заданию F7E600"
+            }
+          ],
+          "correct_answer": "312",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 312."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "F7E600"
+        }
+      },
+      {
+        "id": "moge11-bank-task-3",
+        "type": "matching",
+        "data": {
+          "instruction": "Установите соответствие и впишите ответ. На рисунках изображены графики функций. Установите соответствие между графиками функций и знаками коэффициентов a и c.",
+          "left": [
+            {
+              "label": "А",
+              "value": "А",
+              "image": "/media/fipi/matematika/oge11/3C2809-1.png",
+              "image_alt": "График А к заданию 3C2809"
+            },
+            {
+              "label": "Б",
+              "value": "Б",
+              "image": "/media/fipi/matematika/oge11/3C2809-2.png",
+              "image_alt": "График Б к заданию 3C2809"
+            },
+            {
+              "label": "В",
+              "value": "В",
+              "image": "/media/fipi/matematika/oge11/3C2809-3.png",
+              "image_alt": "График В к заданию 3C2809"
+            }
+          ],
+          "right": [
+            {
+              "label": "1",
+              "value": "a>0, c>0"
+            },
+            {
+              "label": "2",
+              "value": "a>0, c<0"
+            },
+            {
+              "label": "3",
+              "value": "a<0, c>0"
+            }
+          ],
+          "correct_answer": "132",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "Ответ ФИПИ: 1 3 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "3C2809"
+        }
+      },
+      {
+        "id": "moge11-errors",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Типичные ошибки"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-errors-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "Путают знак k и знак b: наклон и пересечение с осью y — разные признаки."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Смотрят на ветви параболы, но забывают про c — точку пересечения с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Считают, что гипербола всегда в I и III четвертях, и не проверяют знак k."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Сопоставляют графики и формулы, не определив сначала семейство функции."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Записывают ответ в порядке графиков, а не в порядке букв А, Б, В."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge11-checklist",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Чек-лист перед экзаменом"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge11-checklist-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "Я различаю прямую, параболу и гиперболу по форме."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я знаю, как знак k влияет на наклон прямой."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я знаю, как знак b влияет на пересечение прямой с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я знаю, как знак a влияет на ветви параболы."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я знаю, как знак c влияет на пересечение параболы с осью y."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я умею определять знак k у гиперболы по четвертям."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я записываю ответ в порядке А, Б, В, а не в порядке номеров графиков."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge11-divider",
+        "type": "divider",
+        "data": {
+          "variant": "spaced"
+        }
+      },
+      {
+        "id": "moge11-links",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Дальше: "
+            },
+            {
+              "type": "link",
+              "href": "/matematika/oge",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "структура ОГЭ по математике"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/matematika/oge/zadanie-6",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "задание 6"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/articles/bally-oge-matematika-perevod-v-ocenku",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "баллы ОГЭ по математике"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/zadachi?subject=matematika",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "банк задач"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

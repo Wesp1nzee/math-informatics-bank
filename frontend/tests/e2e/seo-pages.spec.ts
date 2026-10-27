@@ -18,6 +18,53 @@ const SEO_PAGES = [
   { path: "/informatika/ege/zadanie-4", title: /Задание 4 ЕГЭ/ },
   { path: "/informatika/ege/zadanie-5", title: /Задание 5 ЕГЭ/ },
   { path: "/informatika/ege/zadanie-8", title: /Задание 8 ЕГЭ/ },
+  { path: "/matematika/oge/zadanie-10", title: /Задание 10 ОГЭ/ },
+  { path: "/matematika/oge/zadanie-16", title: /Задание 16 ОГЭ/ },
+  { path: "/matematika/oge/zadanie-18", title: /Задание 18 ОГЭ/ },
+  { path: "/matematika/oge/zadanie-20", title: /Задание 20 ОГЭ/ },
+  { path: "/informatika/oge/zadanie-2", title: /Задание 2 ОГЭ/ },
+  { path: "/informatika/oge/zadanie-6", title: /Задание 6 ОГЭ/ },
+  { path: "/informatika/oge/zadanie-7", title: /Задание 7 ОГЭ/ },
+  { path: "/informatika/oge/zadanie-8", title: /Задание 8 ОГЭ/ },
+  { path: "/informatika/oge/zadanie-16", title: /Задание 16 ОГЭ/ },
+  { path: "/informatika/ege/zadanie-3", title: /Задание 3 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-6", title: /Задание 6 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-7", title: /Задание 7 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-10", title: /Задание 10 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-11", title: /Задание 11 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-12", title: /Задание 12 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-13", title: /Задание 13 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-14", title: /Задание 14 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-18", title: /Задание 18 ЕГЭ/ },
+  { path: "/informatika/ege/zadanie-22", title: /Задание 22 ЕГЭ/ },
+  { path: "/matematika/ege/teoriya", title: /Теория ЕГЭ по математике/ },
+  { path: "/informatika/ege/teoriya", title: /Теория ЕГЭ по информатике/ },
+  { path: "/matematika/oge/razbory", title: /Разборы ОГЭ по математике/ },
+  { path: "/matematika/razbory", title: /Разборы задач по математике/ },
+  { path: "/informatika/ege/razbory", title: /Разборы ЕГЭ по информатике/ },
+  { path: "/informatika/oge/razbory", title: /Разборы ОГЭ по информатике/ },
+  { path: "/informatika/10-klass", title: /Информатика 10 класс/ },
+  { path: "/repetitor/matematika", title: /Репетитор по математике/ },
+  { path: "/repetitor/informatika", title: /Репетитор по информатике/ },
+  { path: "/articles/bally-ege-matematika", title: /Баллы ЕГЭ по математике/ },
+  { path: "/articles/bally-ege-informatika", title: /Баллы ЕГЭ по информатике/ },
+  { path: "/articles/bally-oge-informatika", title: /Баллы ОГЭ по информатике/ },
+  {
+    path: "/articles/izmeneniya-ege-informatika-2027",
+    title: /Изменения ЕГЭ по информатике 2027/,
+  },
+  {
+    path: "/articles/izmeneniya-ege-matematika-2027",
+    title: /Изменения ЕГЭ по математике 2027/,
+  },
+  {
+    path: "/articles/izmeneniya-oge-matematika-2027",
+    title: /Изменения ОГЭ по математике 2027/,
+  },
+  {
+    path: "/articles/izmeneniya-oge-informatika-2027",
+    title: /Изменения ОГЭ по информатике 2027/,
+  },
   { path: "/articles/formuly-sokrashchennogo-umenozheniya", title: /Формулы/ },
   { path: "/articles/stepeni-i-korni-svojstva", title: /Степени и корни/ },
   {
@@ -92,12 +139,57 @@ test.describe("SEO pages", () => {
     const html = await response.text();
     expect(html).not.toContain("correct_option_id");
     expect(html).not.toContain("correct_value");
+    expect(html).not.toContain("correct_answer");
     expect(html).not.toContain('"correct"');
 
     await page.goto("/matematika/oge/zadanie-6");
-    await page.locator('input[type="radio"][value="b"]').check();
-    await page.getByRole("button", { name: "Проверить" }).first().click();
+    const numeric = page.locator("#article-numeric-moge6-type1-p1-task");
+    await numeric.fill("6,8");
+    await page
+      .locator("form")
+      .filter({ has: numeric })
+      .getByRole("button", { name: "Проверить" })
+      .click();
     await expect(page.getByText("Верно.").first()).toBeVisible();
-    await expect(page.getByText("3/7 ≈ 0,4286")).toBeVisible();
+    await expect(page.getByText("9,2−2,4 = 6,8").first()).toBeVisible();
+  });
+
+  test("matching exercise checks the column order", async ({ page }) => {
+    await page.goto("/informatika/ege/zadanie-2");
+    const input = page.locator("#article-matching-iege2-type1-p1-matching");
+    await input.fill("1324");
+    await page
+      .locator("form")
+      .filter({ has: input })
+      .getByRole("button", { name: "Проверить" })
+      .click();
+    await expect(page.getByText("Верно.").first()).toBeVisible();
+    await expect(page.getByText("Столбцы идут в порядке").first()).toBeVisible();
+  });
+
+  test("text exercise checks a command sequence", async ({ page }) => {
+    await page.goto("/informatika/oge/zadanie-5");
+    const input = page.locator("#article-text-ioge5-type2-worked-task");
+    await input.fill("12211");
+    await page
+      .locator("form")
+      .filter({ has: input })
+      .getByRole("button", { name: "Проверить" })
+      .click();
+    await expect(page.getByText("Верно.").first()).toBeVisible();
+    await expect(page.getByText(/Подходит последовательность 12211/).first()).toBeVisible();
+  });
+
+  test("numeric exercise checks a search query", async ({ page }) => {
+    await page.goto("/informatika/oge/zadanie-8");
+    const input = page.locator("#article-numeric-ioge8-type1-p1-task");
+    await input.fill("4540");
+    await page
+      .locator("form")
+      .filter({ has: input })
+      .getByRole("button", { name: "Проверить" })
+      .click();
+    await expect(page.getByText("Верно.").first()).toBeVisible();
+    await expect(page.getByText(/Подставляем: .*4540/).first()).toBeVisible();
   });
 });

@@ -16,7 +16,9 @@ export {
   TUTORING_INTRO,
 } from "@/features/tutor-leads/content";
 export { Faq } from "@/features/tutor-leads/components/faq";
+export { LeadCommandCenter } from "@/features/tutor-leads/components/lead-command-center";
 export { TutorLeadForm } from "@/features/tutor-leads/components/lead-form";
+export type { LeadProgressState } from "@/features/tutor-leads/components/lead-form";
 export { TutoringHero } from "@/features/tutor-leads/components/tutoring-hero";
 export { Pricing } from "@/features/tutor-leads/components/pricing";
 export { Reviews } from "@/features/tutor-leads/components/reviews";

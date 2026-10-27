@@ -316,6 +316,8 @@ class SingleChoiceBlockData(BaseModel):
     correct_option_id: str
     explanation: list[InlineNode] | None = None
     points: float = Field(default=1, ge=0)
+    source: str | None = Field(default=None, max_length=64)
+    bank_id: str | None = Field(default=None, max_length=32)
 
     @model_validator(mode="after")
     def _validate_choice(self) -> SingleChoiceBlockData:
@@ -339,11 +341,28 @@ class NumericInputBlockData(BaseModel):
     unit: str = Field(default="", max_length=64)
     explanation: list[InlineNode] | None = None
     points: float = Field(default=1, ge=0)
+    source: str | None = Field(default=None, max_length=64)
+    bank_id: str | None = Field(default=None, max_length=32)
 
 
 class NumericInputBlock(BlockBase):
     type: Literal["numeric_input"]
     data: NumericInputBlockData
+
+
+class TextInputBlockData(BaseModel):
+    prompt: list[InlineNode] = Field(min_length=1)
+    correct_answer: str = Field(min_length=1, max_length=512)
+    case_sensitive: bool = False
+    explanation: list[InlineNode] | None = None
+    points: float = Field(default=1, ge=0)
+    source: str | None = Field(default=None, max_length=64)
+    bank_id: str | None = Field(default=None, max_length=32)
+
+
+class TextInputBlock(BlockBase):
+    type: Literal["text_input"]
+    data: TextInputBlockData
 
 
 class StepMath(BaseModel):
@@ -426,17 +445,98 @@ class DividerBlock(BlockBase):
     data: DividerBlockData
 
 
+class TableBlockData(BaseModel):
+    caption: str | None = Field(default=None, max_length=512)
+    headers: list[str] = Field(default_factory=list, max_length=20)
+    rows: list[list[str]] = Field(min_length=1, max_length=200)
+    first_column_header: bool = False
+
+    @model_validator(mode="after")
+    def _validate_table(self) -> TableBlockData:
+        max_columns = max(len(row) for row in self.rows)
+        if max_columns == 0:
+            raise ValueError("table rows must not be empty")
+        if self.headers and len(self.headers) != max_columns:
+            raise ValueError("table headers must match the number of columns")
+        for row in self.rows:
+            if len(row) != max_columns:
+                raise ValueError("all table rows must have the same number of columns")
+            for cell in row:
+                if len(cell) > 2_000:
+                    raise ValueError("table cell is too long")
+        return self
+
+
+class TableBlock(BlockBase):
+    type: Literal["table"]
+    data: TableBlockData
+
+
+class CodeBlockData(BaseModel):
+    language: str = Field(default="python", max_length=32)
+    code: str = Field(min_length=1, max_length=20_000)
+    caption: str | None = Field(default=None, max_length=512)
+
+
+class CodeBlock(BlockBase):
+    type: Literal["code"]
+    data: CodeBlockData
+
+
+class MatchingOption(BaseModel):
+    label: str = Field(min_length=1, max_length=8)
+    value: str = Field(min_length=1, max_length=256)
+    image: str | None = None
+    image_alt: str | None = Field(default=None, max_length=512)
+
+    @field_validator("image")
+    @classmethod
+    def _image(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        return _validate_link(value)
+
+
+class MatchingBlockData(BaseModel):
+    instruction: str = Field(min_length=1, max_length=512)
+    left: list[MatchingOption] = Field(min_length=2, max_length=5)
+    right: list[MatchingOption] = Field(min_length=2, max_length=5)
+    correct_answer: str = Field(min_length=1, max_length=16)
+    explanation: list[InlineNode] | None = None
+    source: str | None = Field(default=None, max_length=64)
+    bank_id: str | None = Field(default=None, max_length=32)
+
+    @model_validator(mode="after")
+    def _validate_matching(self) -> MatchingBlockData:
+        left_labels = [item.label for item in self.left]
+        right_labels = [item.label for item in self.right]
+        if len(left_labels) != len(set(left_labels)):
+            raise ValueError("matching left labels must be unique")
+        if len(right_labels) != len(set(right_labels)):
+            raise ValueError("matching right labels must be unique")
+        return self
+
+
+class MatchingBlock(BlockBase):
+    type: Literal["matching"]
+    data: MatchingBlockData
+
+
 ArticleBlockV2 = Annotated[
     RichTextBlock
     | MathBlock
     | InteractiveGraphBlock
     | SingleChoiceBlock
     | NumericInputBlock
+    | TextInputBlock
     | StepSolutionBlock
     | HintBlock
     | CalloutBlock
     | ImageBlock
-    | DividerBlock,
+    | DividerBlock
+    | TableBlock
+    | CodeBlock
+    | MatchingBlock,
     Field(discriminator="type"),
 ]
 
@@ -462,6 +562,8 @@ class PublicSingleChoiceBlockData(BaseModel):
     prompt: list[InlineNode] = Field(min_length=1)
     options: list[ChoiceOption] = Field(min_length=2)
     points: float = 1
+    source: str | None = None
+    bank_id: str | None = None
 
 
 class PublicSingleChoiceBlock(BlockBase):
@@ -473,11 +575,45 @@ class PublicNumericInputBlockData(BaseModel):
     prompt: list[InlineNode] = Field(min_length=1)
     unit: str = ""
     points: float = 1
+    source: str | None = None
+    bank_id: str | None = None
 
 
 class PublicNumericInputBlock(BlockBase):
     type: Literal["numeric_input"]
     data: PublicNumericInputBlockData
+
+
+class PublicTextInputBlockData(BaseModel):
+    prompt: list[InlineNode] = Field(min_length=1)
+    points: float = 1
+    source: str | None = None
+    bank_id: str | None = None
+
+
+class PublicTextInputBlock(BlockBase):
+    type: Literal["text_input"]
+    data: PublicTextInputBlockData
+
+
+class PublicMatchingOption(BaseModel):
+    label: str
+    value: str
+    image: str | None = None
+    image_alt: str | None = None
+
+
+class PublicMatchingBlockData(BaseModel):
+    instruction: str
+    left: list[PublicMatchingOption]
+    right: list[PublicMatchingOption]
+    source: str | None = None
+    bank_id: str | None = None
+
+
+class PublicMatchingBlock(BlockBase):
+    type: Literal["matching"]
+    data: PublicMatchingBlockData
 
 
 PublicArticleBlock = Annotated[
@@ -486,11 +622,15 @@ PublicArticleBlock = Annotated[
     | InteractiveGraphBlock
     | PublicSingleChoiceBlock
     | PublicNumericInputBlock
+    | PublicTextInputBlock
     | StepSolutionBlock
     | HintBlock
     | CalloutBlock
     | ImageBlock
-    | DividerBlock,
+    | DividerBlock
+    | TableBlock
+    | CodeBlock
+    | PublicMatchingBlock,
     Field(discriminator="type"),
 ]
 
@@ -506,11 +646,15 @@ _BLOCK_MODELS: dict[str, type[BaseModel]] = {
     "interactive_graph": InteractiveGraphBlock,
     "single_choice": SingleChoiceBlock,
     "numeric_input": NumericInputBlock,
+    "text_input": TextInputBlock,
     "step_solution": StepSolutionBlock,
     "hint": HintBlock,
     "callout": CalloutBlock,
     "image": ImageBlock,
     "divider": DividerBlock,
+    "table": TableBlock,
+    "code": CodeBlock,
+    "matching": MatchingBlock,
 }
 
 
@@ -543,6 +687,8 @@ def public_content_from_raw(raw: Any) -> PublicArticleContent | None:
                         prompt=block.data.prompt,
                         options=block.data.options,
                         points=block.data.points,
+                        source=block.data.source,
+                        bank_id=block.data.bank_id,
                     ),
                 )
             )
@@ -555,6 +701,51 @@ def public_content_from_raw(raw: Any) -> PublicArticleContent | None:
                         prompt=block.data.prompt,
                         unit=block.data.unit,
                         points=block.data.points,
+                        source=block.data.source,
+                        bank_id=block.data.bank_id,
+                    ),
+                )
+            )
+        elif isinstance(block, TextInputBlock):
+            public_blocks.append(
+                PublicTextInputBlock(
+                    id=block.id,
+                    type="text_input",
+                    data=PublicTextInputBlockData(
+                        prompt=block.data.prompt,
+                        points=block.data.points,
+                        source=block.data.source,
+                        bank_id=block.data.bank_id,
+                    ),
+                )
+            )
+        elif isinstance(block, MatchingBlock):
+            public_blocks.append(
+                PublicMatchingBlock(
+                    id=block.id,
+                    type="matching",
+                    data=PublicMatchingBlockData(
+                        instruction=block.data.instruction,
+                        left=[
+                            PublicMatchingOption(
+                                label=item.label,
+                                value=item.value,
+                                image=item.image,
+                                image_alt=item.image_alt,
+                            )
+                            for item in block.data.left
+                        ],
+                        right=[
+                            PublicMatchingOption(
+                                label=item.label,
+                                value=item.value,
+                                image=item.image,
+                                image_alt=item.image_alt,
+                            )
+                            for item in block.data.right
+                        ],
+                        source=block.data.source,
+                        bank_id=block.data.bank_id,
                     ),
                 )
             )

@@ -164,3 +164,40 @@ See `deploy/README.md` for cron setup.
 - [ ] Sitemap/robots resolve on the production domain; Search Console and
       Metrika are configured by the owner.
 - [ ] Off-server backup copy and log rotation are configured.
+
+## 9. SEO launch checklist
+
+The frontend already provides canonical URLs, `robots.txt`, a dynamic
+`sitemap.xml`, Open Graph/Twitter images and JSON-LD (`WebSite`,
+`EducationalOrganization`, `BreadcrumbList`, `Article`, `LearningResource`,
+`FAQPage`). These checks confirm the production domain is wired correctly:
+
+```bash
+# Canonicals, robots and sitemap must use the public HTTPS domain.
+curl -fsS https://<SITE_DOMAIN>/robots.txt
+curl -fsS https://<SITE_DOMAIN>/sitemap.xml | head
+curl -fsS https://<SITE_DOMAIN>/ | grep -o 'rel="canonical" href="[^"]*"'
+curl -fsS https://<SITE_DOMAIN>/ | grep -o 'og:image" content="[^"]*"'
+
+# Every sitemap URL should return 200 and must not contain noindex.
+curl -fsS https://<SITE_DOMAIN>/sitemap.xml \
+  | grep -o '<loc>[^<]*' | sed 's/<loc>//' \
+  | while read -r url; do
+      code=$(curl -s -o /dev/null -w '%{http_code}' "$url")
+      [ "$code" = 200 ] || echo "$code $url"
+    done
+```
+
+Then, after DNS points to the VPS and the stack is healthy:
+
+1. Add the site to Yandex Webmaster and Google Search Console (DNS
+   verification is enough; no code changes are required).
+2. Submit `https://<SITE_DOMAIN>/sitemap.xml` in both panels and request
+   indexing for the home page and the main hubs.
+3. Check the Yandex Webmaster "Diagnostics" and Search Console "Page indexing"
+   reports after 3–7 days.
+4. Add a `www` CNAME if `www.<SITE_DOMAIN>` should work, and redirect it to the
+   canonical host (by default the app uses the exact `SITE_DOMAIN` only).
+5. Do not promise top positions from technical SEO alone. Ranking also depends
+   on content quality, competition, backlinks and time.
+

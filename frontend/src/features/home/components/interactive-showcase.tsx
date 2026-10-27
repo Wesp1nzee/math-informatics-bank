@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState, type KeyboardEvent } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 
 import { CodeDemo } from "@/features/home/components/code-demo";
 import { TaskQuiz, type QuizStep } from "@/features/home/components/task-quiz";
@@ -36,7 +36,21 @@ const TABS = [
 
 export function InteractiveShowcase() {
   const [active, setActive] = useState<(typeof TABS)[number]["id"]>("math");
+  const [phase, setPhase] = useState(0);
   const baseId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current?.closest<HTMLElement>("[data-pinned]");
+    if (!root) return;
+    const onStep = (event: Event) => {
+      const index = Number((event as CustomEvent<number>).detail ?? 0);
+      setPhase(index);
+      setActive(index === 1 ? "cs" : "math");
+    };
+    root.addEventListener("pinned-step", onStep);
+    return () => root.removeEventListener("pinned-step", onStep);
+  }, []);
 
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
@@ -50,7 +64,7 @@ export function InteractiveShowcase() {
   }
 
   return (
-    <div>
+    <div ref={rootRef} className="showcase-stage" data-phase={phase}>
       <div role="tablist" aria-label="Примеры задач" className="tab-list">
         {TABS.map((tab) => {
           const selected = tab.id === active;
@@ -115,8 +129,8 @@ export function InteractiveShowcase() {
       >
         <div className="grid gap-4">
           <p className="text-ink-soft m-0 text-base leading-relaxed">
-            По числу N строится R: дважды дописываем остаток суммы цифр на 2.
-            Найдите наименьшее R, большее 83.
+            По числу N строится R: дважды дописываем остаток суммы цифр на 2. Найдите
+            наименьшее R, большее 83.
           </p>
           <CodeDemo />
         </div>

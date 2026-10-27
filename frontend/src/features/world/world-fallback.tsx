@@ -82,22 +82,86 @@ function buildContours(): string[] {
   return paths;
 }
 
+function buildOrbNodes(): { x: number; y: number; r: number; o: number }[] {
+  const nodes: { x: number; y: number; r: number; o: number }[] = [];
+  const count = 96;
+  for (let i = 0; i < count; i += 1) {
+    const phi = Math.acos(1 - (2 * (i + 0.5)) / count);
+    const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+    const x = 0.72 + Math.sin(phi) * Math.cos(theta) * 0.22;
+    const y = 0.36 + Math.cos(phi) * 0.22;
+    nodes.push({
+      x: x * VIEW_W,
+      y: y * VIEW_H,
+      r: 1.2 + ((i * 7) % 5) * 0.5,
+      o: 0.35 + ((i * 11) % 6) * 0.09,
+    });
+  }
+  return nodes;
+}
+
+const ORB_NODES = buildOrbNodes();
+
 export function WorldFallback() {
   const contours = buildContours();
+  const cx = VIEW_W * 0.72;
+  const cy = VIEW_H * 0.36;
 
   return (
     <div className="world-fallback" aria-hidden="true">
       <div className="world-fallback-glow world-fallback-glow-a" />
       <div className="world-fallback-glow world-fallback-glow-b" />
+      <div className="world-fallback-orb" />
+      <div className="world-fallback-ring world-fallback-ring-a" />
+      <div className="world-fallback-ring world-fallback-ring-b" />
       <svg
         className="world-fallback-svg"
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         preserveAspectRatio="xMidYMid slice"
         focusable="false"
       >
+        <defs>
+          <radialGradient id="world-orb-fill" cx="38%" cy="32%" r="72%">
+            <stop offset="0%" stopColor="var(--world-accent)" stopOpacity="0.5" />
+            <stop offset="52%" stopColor="var(--world-accent)" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="var(--world-bg)" stopOpacity="0" />
+          </radialGradient>
+          <linearGradient id="world-orb-stroke" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--world-accent)" stopOpacity="0.65" />
+            <stop offset="100%" stopColor="var(--world-peak)" stopOpacity="0.16" />
+          </linearGradient>
+        </defs>
+
         {contours.map((d, index) => (
           <path key={index} d={d} className="world-contour" />
         ))}
+
+        <circle cx={cx} cy={cy} r={VIEW_W * 0.27} fill="url(#world-orb-fill)" />
+        <g className="world-orb-lines" stroke="url(#world-orb-stroke)" fill="none">
+          <ellipse cx={cx} cy={cy} rx={VIEW_W * 0.27} ry={VIEW_W * 0.095} />
+          <ellipse
+            cx={cx}
+            cy={cy}
+            rx={VIEW_W * 0.27}
+            ry={VIEW_W * 0.095}
+            transform={`rotate(58 ${cx} ${cy})`}
+          />
+          <ellipse
+            cx={cx}
+            cy={cy}
+            rx={VIEW_W * 0.27}
+            ry={VIEW_W * 0.095}
+            transform={`rotate(-58 ${cx} ${cy})`}
+          />
+          <circle cx={cx} cy={cy} r={VIEW_W * 0.27} />
+          <circle cx={cx} cy={cy} r={VIEW_W * 0.205} opacity={0.55} />
+          <circle cx={cx} cy={cy} r={VIEW_W * 0.135} opacity={0.32} />
+        </g>
+        <g fill="var(--world-accent)">
+          {ORB_NODES.map((node, index) => (
+            <circle key={index} cx={node.x} cy={node.y} r={node.r} opacity={node.o} />
+          ))}
+        </g>
       </svg>
       <div className="world-fallback-grain" />
     </div>

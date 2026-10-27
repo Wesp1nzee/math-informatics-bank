@@ -15,3 +15,8 @@ backups/
 
 # world screenshot artifacts
 frontend/screenshots/
+
+# autonomous Remotion video workspace
+video-studio/node_modules/
+video-studio/out/
+video-studio

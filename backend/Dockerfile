@@ -27,6 +27,7 @@ COPY --from=builder /app/.venv /app/.venv
 COPY alembic.ini ./
 COPY migrations ./migrations
 COPY scripts ./scripts
+COPY content ./content
 COPY app ./app
 
 USER appuser

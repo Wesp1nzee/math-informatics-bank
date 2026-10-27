@@ -27,7 +27,11 @@ type ScrollTools = {
 async function loadTools(): Promise<ScrollTools | null> {
   try {
     const [{ default: gsap }, { ScrollTrigger }, { default: Lenis }] =
-      await Promise.all([import("gsap"), import("gsap/ScrollTrigger"), import("lenis")]);
+      await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+        import("lenis"),
+      ]);
     gsap.registerPlugin(ScrollTrigger);
     return { gsap, ScrollTrigger, Lenis };
   } catch {
@@ -40,7 +44,10 @@ function isFinePointer(): boolean {
 }
 
 function prefersReducedMotion(): boolean {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }
 
 export function ScrollEngine() {
@@ -84,7 +91,9 @@ export function ScrollEngine() {
       cleanups.push(() => document.removeEventListener("click", onAnchorClick));
 
       // --- Section → world state -----------------------------------------
-      const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-world-state]"));
+      const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-world-state]"),
+      );
       for (const section of sections) {
         const name = section.dataset.worldState;
         if (!name) continue;
@@ -107,7 +116,9 @@ export function ScrollEngine() {
       // --- H2 reveal ------------------------------------------------------
       // Whole-element reveal (transform/opacity only) — no DOM splitting,
       // which keeps React's reconciliation intact across client navigations.
-      const headings = Array.from(document.querySelectorAll<HTMLElement>("[data-split-text]"));
+      const headings = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-split-text]"),
+      );
       for (const heading of headings) {
         gsap.from(heading, {
           y: 26,
@@ -141,6 +152,57 @@ export function ScrollEngine() {
       window.addEventListener("scroll", onDepthScroll, { passive: true });
       cleanups.push(() => window.removeEventListener("scroll", onDepthScroll));
 
+      // --- Scroll-linked CSS variables and cached parallax ---------------
+      const parallaxItems = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-parallax]"),
+      ).map((element) => ({
+        element,
+        rate: Number.parseFloat(element.dataset.parallax ?? "0") || 0,
+        top: 0,
+        height: 1,
+      }));
+
+      const measureParallax = () => {
+        for (const item of parallaxItems) {
+          const rect = item.element.getBoundingClientRect();
+          item.top = rect.top + window.scrollY;
+          item.height = Math.max(1, rect.height);
+        }
+      };
+
+      let scrollFrame = 0;
+      const paintScroll = () => {
+        scrollFrame = 0;
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        doc.style.setProperty("--scroll-progress", progress.toFixed(4));
+        const vh = window.innerHeight;
+        for (const item of parallaxItems) {
+          const raw = (window.scrollY - item.top + vh) / (vh + item.height);
+          const clamp = Math.min(1, Math.max(0, raw));
+          const offset = (clamp - 0.5) * 2 * item.rate * 72;
+          item.element.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
+        }
+      };
+      const scheduleScroll = () => {
+        if (scrollFrame === 0) scrollFrame = window.requestAnimationFrame(paintScroll);
+      };
+      const onResizeParallax = () => {
+        measureParallax();
+        scheduleScroll();
+      };
+
+      measureParallax();
+      paintScroll();
+      window.addEventListener("scroll", scheduleScroll, { passive: true });
+      window.addEventListener("resize", onResizeParallax, { passive: true });
+      cleanups.push(() => {
+        window.removeEventListener("scroll", scheduleScroll);
+        window.removeEventListener("resize", onResizeParallax);
+        if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
+      });
+
       ScrollTrigger.refresh();
     };
 
@@ -152,7 +214,8 @@ export function ScrollEngine() {
       void bootstrap();
     };
     if (document.readyState === "complete") {
-      const idle = (window as { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback;
+      const idle = (window as { requestIdleCallback?: (cb: () => void) => void })
+        .requestIdleCallback;
       if (typeof idle === "function") idle(start);
       else window.setTimeout(start, 250);
     } else {

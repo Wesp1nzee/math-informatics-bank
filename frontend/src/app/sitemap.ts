@@ -3,6 +3,10 @@ import type { MetadataRoute } from "next";
 import { getPublishedArticles } from "@/features/articles/api";
 import { getTaskIds } from "@/features/tasks/api";
 import {
+  getContentHubsForSitemap,
+  getTutorLandingsForSitemap,
+} from "@/features/seo/content-pages";
+import {
   SEO_EXAM_HUBS,
   SEO_TASK_TYPE_PAGES,
   isSeoArticleSlug,
@@ -54,6 +58,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
+  const contentHubRoutes: MetadataRoute.Sitemap = getContentHubsForSitemap().map(
+    (hub) => ({
+      url: `${siteConfig.url}${hub.path}`,
+      changeFrequency: "monthly",
+      priority: hub.kind === "solutions" ? 0.7 : 0.8,
+    }),
+  );
+
+  const tutorLandingRoutes: MetadataRoute.Sitemap = getTutorLandingsForSitemap().map(
+    (landing) => ({
+      url: `${siteConfig.url}${landing.path}`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    }),
+  );
+
   const taskRoutes: MetadataRoute.Sitemap = taskIds.map((id) => ({
     url: `${siteConfig.url}/zadachi/${id}`,
     changeFrequency: "monthly",
@@ -72,6 +92,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...examRoutes,
+    ...contentHubRoutes,
+    ...tutorLandingRoutes,
     ...taskTypeRoutes,
     ...taskRoutes,
     ...articleRoutes,

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import json
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, field_validator, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -22,8 +23,8 @@ class Settings(BaseSettings):
     debug: bool = False
     log_level: str = "INFO"
     log_json: bool = False
-    allowed_hosts: list[str] = Field(default_factory=lambda: ["*"])
-    cors_origins: list[str] = Field(
+    allowed_hosts: Annotated[list[str], NoDecode] = Field(default_factory=lambda: ["*"])
+    cors_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: [
             "http://localhost:3000",
             "http://127.0.0.1:3000",
@@ -60,12 +61,30 @@ class Settings(BaseSettings):
 
     ip_hash_salt: str = ""
 
+    @field_validator("cookie_secure", mode="before")
+    @classmethod
+    def _empty_bool_as_none(cls, value: object) -> object:
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+
     @field_validator("cors_origins", "allowed_hosts", mode="before")
     @classmethod
     def _split_csv(cls, value: object) -> object:
-        if isinstance(value, str):
-            return [item.strip() for item in value.split(",") if item.strip()]
-        return value
+        if not isinstance(value, str):
+            return value
+
+        text = value.strip()
+        if text.startswith("["):
+            try:
+                parsed = json.loads(text)
+            except json.JSONDecodeError:
+                pass
+            else:
+                if isinstance(parsed, list):
+                    return [str(item).strip() for item in parsed if str(item).strip()]
+
+        return [item.strip() for item in text.split(",") if item.strip()]
 
     @model_validator(mode="after")
     def _validate_production(self) -> Settings:

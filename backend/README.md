@@ -17,7 +17,7 @@ the Next.js frontend expects in `frontend/src/features/*/api.ts`.
 uv sync
 cp .env.example .env        # adjust DATABASE_URL and other settings as needed
 uv run alembic upgrade head # create the schema
-uv run python -m scripts.seed   # editorial content: 17 articles + 12 tasks
+uv run python -m scripts.seed   # editorial content: 43 articles + 12 tasks
 uv run python main.py       # uvicorn --reload on http://localhost:8000
 ```
 
@@ -158,5 +158,11 @@ app/
                     # leads, users, progress (models/schemas/service/router)
 migrations/         # Alembic environment and versions
 scripts/            # seed helper
+content/seo/        # long-form SEO articles as JSON (loaded by scripts.seed)
 tests/              # pytest suite (SQLite)
 ```
+
+Long-form SEO articles live in `content/seo/*.json`. The seed script loads them
+after `scripts/seed_content.py` and replaces any short article with the same
+slug. Each file contains metadata plus the version-2 content blocks (rich text,
+formulas, tables, code, images, exercises and interactive graphs).

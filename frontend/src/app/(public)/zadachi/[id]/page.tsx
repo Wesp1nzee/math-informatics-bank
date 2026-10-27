@@ -15,7 +15,7 @@ import { SolutionSteps } from "@/features/tasks/components/solution-steps";
 import { TaskStatement } from "@/features/tasks/components/task-statement";
 import { getRelatedTasks, getTaskById } from "@/features/tasks/api";
 import { SUBJECT_LABEL, SUBJECT_PATH } from "@/features/tasks/labels";
-import { learningResourceJsonLd } from "@/lib/seo/json-ld";
+import { breadcrumbJsonLd, learningResourceJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { formatMinutes } from "@/lib/utils/format";
 
@@ -43,6 +43,7 @@ export async function generateMetadata({ params }: TaskPageProps): Promise<Metad
     description: `${task.summary} ${SUBJECT_LABEL[task.subject]}, ${task.examLabel}. Ответ и решение по шагам.`,
     path: `/zadachi/${task.id}`,
     type: "article",
+    ogImage: null,
   });
 }
 
@@ -56,12 +57,19 @@ export default async function TaskPage({ params }: TaskPageProps) {
   return (
     <>
       <JsonLd
-        data={learningResourceJsonLd({
-          name: `${task.title} — задача #${task.id}`,
-          description: task.summary,
-          path: `/zadachi/${task.id}`,
-          educationalLevel: task.examLabel,
-        })}
+        data={[
+          breadcrumbJsonLd([
+            { name: "Главная", path: "/" },
+            { name: "Задачи", path: "/zadachi" },
+            { name: `#${task.id}`, path: `/zadachi/${task.id}` },
+          ]),
+          learningResourceJsonLd({
+            name: `${task.title} — задача #${task.id}`,
+            description: task.summary,
+            path: `/zadachi/${task.id}`,
+            educationalLevel: task.examLabel,
+          }),
+        ]}
       />
 
       <PageHero

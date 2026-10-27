@@ -23,6 +23,7 @@ const S = {
     drawA: 0.9,
     drawB: 0.55,
     marker: START,
+    shape: 0,
   },
   quiz: {
     name: "quiz",
@@ -37,6 +38,7 @@ const S = {
     drawA: 0.9,
     drawB: 0.55,
     marker: START,
+    shape: 1,
   },
   /** Pinned episode: "Нейросеть решает. Я нахожу причину ошибки". */
   pinned: {
@@ -52,6 +54,7 @@ const S = {
     drawA: 0,
     drawB: 0,
     marker: START,
+    shape: 1,
   },
   "pinned-draw-b": {
     name: "pinned-draw-b",
@@ -66,6 +69,7 @@ const S = {
     drawA: 1,
     drawB: 1,
     marker: START,
+    shape: 2,
   },
   "pinned-healed": {
     name: "pinned-healed",
@@ -80,6 +84,7 @@ const S = {
     drawA: 1,
     drawB: 1,
     marker: PEAK,
+    shape: 3,
   },
   teaching: {
     name: "teaching",
@@ -94,6 +99,7 @@ const S = {
     drawA: 1,
     drawB: 0.7,
     marker: START,
+    shape: 3,
   },
   materials: {
     name: "materials",
@@ -108,6 +114,7 @@ const S = {
     drawA: 1,
     drawB: 0.7,
     marker: START,
+    shape: 2,
   },
   faq: {
     name: "faq",
@@ -122,6 +129,7 @@ const S = {
     drawA: 1,
     drawB: 0.7,
     marker: START,
+    shape: 1,
   },
   /** "Вид с вершины" — the summit view used by both finales. */
   summit: {
@@ -137,6 +145,7 @@ const S = {
     drawA: 1,
     drawB: 1,
     marker: PEAK,
+    shape: 4,
   },
   /** /podgotovka hero: relief rises, then a single scan passes over it. */
   "tutoring-hero": {
@@ -152,6 +161,7 @@ const S = {
     drawA: 0.9,
     drawB: 0.55,
     marker: START,
+    shape: 0,
   },
   /** Pinned episode on /podgotovka: "Как проходит пробное". */
   "trial-1": {
@@ -167,6 +177,7 @@ const S = {
     drawA: 0.35,
     drawB: 0.2,
     marker: START,
+    shape: 0,
   },
   "trial-2": {
     name: "trial-2",
@@ -181,6 +192,7 @@ const S = {
     drawA: 0.65,
     drawB: 0.4,
     marker: [-4.5, 1.5] as const,
+    shape: 1,
   },
   "trial-3": {
     name: "trial-3",
@@ -195,8 +207,9 @@ const S = {
     drawA: 1,
     drawB: 0.7,
     marker: PEAK,
+    shape: 3,
   },
-  "tutor": {
+  tutor: {
     name: "tutor",
     cam: [4, 9, 12] as const,
     look: [-1, 0.4, 0] as const,
@@ -209,6 +222,7 @@ const S = {
     drawA: 1,
     drawB: 0.7,
     marker: START,
+    shape: 3,
   },
   "error-quiz": {
     name: "error-quiz",
@@ -223,6 +237,7 @@ const S = {
     drawA: 1,
     drawB: 0.7,
     marker: START,
+    shape: 1,
   },
   bento: {
     name: "bento",
@@ -237,6 +252,7 @@ const S = {
     drawA: 1,
     drawB: 0.7,
     marker: START,
+    shape: 3,
   },
 } satisfies Record<string, WorldState>;
 

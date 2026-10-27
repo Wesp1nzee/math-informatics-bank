@@ -36,6 +36,15 @@ def _content() -> dict:
                 },
             },
             {
+                "id": "ex-text",
+                "type": "text_input",
+                "data": {
+                    "prompt": [{"type": "text", "text": "Устройство вывода изображения"}],
+                    "correct_answer": "Монитор",
+                    "explanation": [{"type": "text", "text": "Это монитор."}],
+                },
+            },
+            {
                 "id": "not-an-exercise",
                 "type": "rich_text",
                 "data": {
@@ -227,3 +236,22 @@ async def test_answer_validation(client) -> None:
 
     too_long = await _check(client, "interactive", "ex-choice", "x" * 513)
     assert too_long.status_code == 422
+
+
+async def test_text_input_check_is_case_insensitive(client) -> None:
+    await _create_published(client)
+    await _logout(client)
+
+    public = await client.get("/api/v1/articles/interactive")
+    assert public.status_code == 200
+    public_text = json.dumps(public.json(), ensure_ascii=False)
+    assert "correct_answer" not in public_text
+
+    correct = await _check(client, "interactive", "ex-text", "  монитор ")
+    assert correct.status_code == 200, correct.text
+    assert correct.json()["isCorrect"] is True
+    assert correct.json()["explanation"][0]["text"] == "Это монитор."
+
+    wrong = await _check(client, "interactive", "ex-text", "клавиатура")
+    assert wrong.status_code == 200
+    assert wrong.json()["isCorrect"] is False

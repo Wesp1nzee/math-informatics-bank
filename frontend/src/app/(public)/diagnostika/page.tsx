@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 
 import { PageHero } from "@/components/layout/page-hero";
 import { Section } from "@/components/layout/section";
+import { JsonLd } from "@/components/seo/json-ld";
 import { DemoNotice } from "@/components/ui/demo-notice";
 import {
   DEMO_DIAGNOSTIC_ITEMS,
   DiagnosticsRunner,
   selectDiagnosticItems,
 } from "@/features/diagnostics";
+import { breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -23,11 +25,14 @@ export default function DiagnosticsPage() {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Главная", path: "/" },
+          { name: "Диагностика", path: "/diagnostika" },
+        ])}
+      />
       <PageHero
-        breadcrumbs={[
-          { name: "Главная", href: "/" },
-          { name: "Диагностика" },
-        ]}
+        breadcrumbs={[{ name: "Главная", href: "/" }, { name: "Диагностика" }]}
         eyebrow="Бесплатно, без регистрации"
         title="Где вы теряете баллы?"
         description="Решите 10 задач разных тем. В конце увидите отчёт по темам — и сможете разобрать результат на пробном занятии."

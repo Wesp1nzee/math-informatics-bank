@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/layout/page-hero";
 import { Section } from "@/components/layout/section";
 import { Button, ButtonArrow } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ArticleCard } from "@/features/articles/components/article-card";
 import { getArticlesBySubject } from "@/features/articles/api";
 import { getTasks } from "@/features/tasks/api";
@@ -10,6 +11,7 @@ import { TaskList } from "@/features/tasks/components/task-list";
 import { SUBJECT_LABEL, SUBJECT_PATH } from "@/features/tasks/labels";
 import type { TaskSubject } from "@/features/tasks/types";
 import { SUBJECT_CONTENT } from "@/features/topics/content";
+import { breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { buildQueryHref } from "@/lib/utils/url";
 
 export async function SubjectHub({ subject }: { subject: TaskSubject }) {
@@ -21,6 +23,12 @@ export async function SubjectHub({ subject }: { subject: TaskSubject }) {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Главная", path: "/" },
+          { name: content.label, path: SUBJECT_PATH[subject] },
+        ])}
+      />
       <PageHero
         breadcrumbs={[{ name: "Главная", href: "/" }, { name: content.label }]}
         eyebrow={content.eyebrow}

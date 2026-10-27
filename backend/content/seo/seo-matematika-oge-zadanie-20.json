@@ -1,0 +1,2226 @@
+{
+  "slug": "seo-matematika-oge-zadanie-20",
+  "title": "Задание 20 ОГЭ по математике: уравнения и неравенства — полный разбор",
+  "description": "Полная теория уравнений для задания 20 ОГЭ: линейные и квадратные уравнения, Виет, неравенства, системы, дробные уравнения и 20 заданий ФИПИ с рисунками.",
+  "subject": "matematika",
+  "exam": "ОГЭ · Математика",
+  "reading_minutes": 24,
+  "content": {
+    "version": 2,
+    "blocks": [
+      {
+        "id": "moge20-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Задание 20 ОГЭ по математике — уравнения, неравенства и их системы. Это задание с развёрнутым ответом: нужно не только получить число, но и показать ход решения. Главное — правильно определить тип уравнения и выбрать метод: перенос слагаемых, разложение на множители, дискриминант или метод интервалов."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-spec",
+        "type": "callout",
+        "data": {
+          "kind": "info",
+          "title": "Что проверяет задание 20",
+          "body": [
+            {
+              "type": "text",
+              "text": "Задание 20 относится к повышенному уровню и оценивается 2 первичными баллами. Ответ — развёрнутое решение. Проверяются линейные и квадратные уравнения, дробно-рациональные уравнения, неравенства и системы."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-theory",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Полная теория: уравнения и неравенства"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-theory-1",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Линейное уравнение ax + b = 0 решается переносом слагаемых: x = −b/a. Квадратное уравнение ax² + bx + c = 0 решается через дискриминант или по теореме Виета. Неравенство решается так же, как уравнение, но при умножении на отрицательное число знак неравенства меняется."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-formula",
+        "type": "math",
+        "data": {
+          "tex": "x=\\frac{-b}{a},\\qquad D=b^2-4ac,\\qquad x_{1,2}=\\frac{-b\\pm\\sqrt{D}}{2a},\\qquad x_1x_2=\\frac{c}{a}",
+          "caption": "Линейное и квадратное уравнения"
+        }
+      },
+      {
+        "id": "moge20-table",
+        "type": "table",
+        "data": {
+          "caption": "Что применять",
+          "headers": [
+            "Тип",
+            "Как узнать",
+            "Метод"
+          ],
+          "rows": [
+            [
+              "Линейное",
+              "x в первой степени",
+              "перенос слагаемых"
+            ],
+            [
+              "Квадратное",
+              "x²",
+              "дискриминант или Виет"
+            ],
+            [
+              "Дробно-рациональное",
+              "x в знаменателе",
+              "ОДЗ + умножение"
+            ],
+            [
+              "Неравенство",
+              "знак <, >, ≤, ≥",
+              "интервалы"
+            ],
+            [
+              "Система",
+              "два уравнения",
+              "подстановка или сложение"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge20-map",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Карта типов задания 20"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-table-map",
+        "type": "table",
+        "data": {
+          "caption": "Шесть типов задания 20",
+          "headers": [
+            "Тип",
+            "Как узнать",
+            "Что делать"
+          ],
+          "rows": [
+            [
+              "Линейное уравнение",
+              "x без степени",
+              "выразить x"
+            ],
+            [
+              "Квадратное уравнение",
+              "x²",
+              "D или Виет"
+            ],
+            [
+              "Дробное уравнение",
+              "x в знаменателе",
+              "ОДЗ"
+            ],
+            [
+              "Линейное неравенство",
+              "x и знак",
+              "перенести, разделить"
+            ],
+            [
+              "Квадратное неравенство",
+              "x² и знак",
+              "интервалы"
+            ],
+            [
+              "Система",
+              "два уравнения",
+              "подстановка"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge20-type1",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 1. Линейные уравнения"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-type2",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 2. Квадратные уравнения"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-type3",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 3. Неравенства"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-type4",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 4. Системы"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-type5",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Тип 5. Дробно-рациональные уравнения"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-note",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Об авторских заданиях"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Банк ФИПИ: 20 неравенств"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-intro",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Ниже — задания из открытого банка ФИПИ. У каждого указан номер банка; условие дано рисунком. Выберите промежуток, который является решением."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-1-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/F5A849.gif",
+          "alt": "Неравенство F5A849",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-1-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5) ∪ {4}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5]"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -4] ∪ {4}"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5] ∪ {4}"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "d",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(4−x)(x²+x−20) = −(x−4)²(x+5) ≥ 0, поэтому (x−4)²(x+5) ≤ 0. Отсюда x ≤ −5 или x = 4."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "F5A849"
+        }
+      },
+      {
+        "id": "moge20-fipi-1-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(4−x)(x²+x−20) = −(x−4)²(x+5) ≥ 0, поэтому (x−4)²(x+5) ≤ 0. Отсюда x ≤ −5 или x = 4."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-2-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/166F42.gif",
+          "alt": "Неравенство 166F42",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-2-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-6; -4]"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-5; -4] ∪ [3; 5]"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-6; -4] ∪ [3; 5]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-6; -4) ∪ (3; 5)"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(x²+x−30)(x²+x−12) = (x+6)(x−5)(x+4)(x−3) ≤ 0. Метод интервалов даёт [-6; -4] ∪ [3; 5]."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "166F42"
+        }
+      },
+      {
+        "id": "moge20-fipi-2-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(x²+x−30)(x²+x−12) = (x+6)(x−5)(x+4)(x−3) ≤ 0. Метод интервалов даёт [-6; -4] ∪ [3; 5]."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-3-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/2A0B4A.gif",
+          "alt": "Неравенство 2A0B4A",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-3-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-4; 1] ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-5; 1] ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-5; 1) ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-5; 1]"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(x²+2x−15)(x²−4x+3) = (x+5)(x−1)(x−3)² ≤ 0. Квадрат неотрицателен, поэтому [-5; 1] и отдельно x = 3."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "2A0B4A"
+        }
+      },
+      {
+        "id": "moge20-fipi-3-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(x²+2x−15)(x²−4x+3) = (x+5)(x−1)(x−3)² ≤ 0. Квадрат неотрицателен, поэтому [-5; 1] и отдельно x = 3."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-4-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/7585FE.gif",
+          "alt": "Неравенство 7585FE",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-4-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-6; 2] ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-6; 2) ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-6; 2]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-5; 2] ∪ {3}"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(x²+3x−18)(x²−5x+6) = (x+6)(x−2)(x−3)² ≤ 0. Отсюда [-6; 2] и x = 3."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "7585FE"
+        }
+      },
+      {
+        "id": "moge20-fipi-4-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(x²+3x−18)(x²−5x+6) = (x+6)(x−2)(x−3)² ≤ 0. Отсюда [-6; 2] и x = 3."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-5-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/D842F6.gif",
+          "alt": "Неравенство D842F6",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-5-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(0; 4)"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 4]"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[1; 4)"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 4)"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "d",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "x²/(x−4) ≤ x ⇔ (x²−x(x−4))/(x−4) ≤ 0 ⇔ 4x/(x−4) ≤ 0. Метод интервалов: [0; 4)."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "D842F6"
+        }
+      },
+      {
+        "id": "moge20-fipi-5-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "x²/(x−4) ≤ x ⇔ (x²−x(x−4))/(x−4) ≤ 0 ⇔ 4x/(x−4) ≤ 0. Метод интервалов: [0; 4)."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-6-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/A2F1F4.gif",
+          "alt": "Неравенство A2F1F4",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-6-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-5; -4]"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-4; -4] ∪ [3; 4]"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-5; -4] ∪ [3; 4]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-5; -4) ∪ (3; 4)"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(x²+x−12)(x²+x−20) = (x+4)(x−3)(x+5)(x−4) ≤ 0. Интервалы: [-5; -4] ∪ [3; 4]."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "A2F1F4"
+        }
+      },
+      {
+        "id": "moge20-fipi-6-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(x²+x−12)(x²+x−20) = (x+4)(x−3)(x+5)(x−4) ≤ 0. Интервалы: [-5; -4] ∪ [3; 4]."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-7-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/A5ABF3.gif",
+          "alt": "Неравенство A5ABF3",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-7-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "нет решений"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(0; 5)"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 5]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(1; 5)"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "1/x ≥ 1/(x−5) ⇔ −5/(x(x−5)) ≥ 0 ⇔ 1/(x(x−5)) ≤ 0. Подходит (0; 5)."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "A5ABF3"
+        }
+      },
+      {
+        "id": "moge20-fipi-7-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "1/x ≥ 1/(x−5) ⇔ −5/(x(x−5)) ≥ 0 ⇔ 1/(x(x−5)) ≤ 0. Подходит (0; 5)."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-8-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/CDC8F5.gif",
+          "alt": "Неравенство CDC8F5",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-8-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -7) ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -7)"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -6) ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "нет решений"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "3x²−18x+27 = 3(x−3)². Неравенство 3(x−3)²/(x+7) ≤ 0 даёт x < −7 или x = 3."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "CDC8F5"
+        }
+      },
+      {
+        "id": "moge20-fipi-8-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "3x²−18x+27 = 3(x−3)². Неравенство 3(x−3)²/(x+7) ≤ 0 даёт x < −7 или x = 3."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-9-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/6FF9F5.gif",
+          "alt": "Неравенство 6FF9F5",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-9-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -8) ∪ (0; 8)"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -8]"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -7] ∪ (0; 8]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -8] ∪ (0; 8]"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "d",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "x ≤ 64/x ⇔ (x²−64)/x ≤ 0 ⇔ (x−8)(x+8)/x ≤ 0. Интервалы: (-∞; -8] ∪ (0; 8]."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "6FF9F5"
+        }
+      },
+      {
+        "id": "moge20-fipi-9-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "x ≤ 64/x ⇔ (x²−64)/x ≤ 0 ⇔ (x−8)(x+8)/x ≤ 0. Интервалы: (-∞; -8] ∪ (0; 8]."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-10-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/04A113.gif",
+          "alt": "Неравенство 04A113",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-10-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5]"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -4] ∪ {5}"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5] ∪ {5}"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5) ∪ {5}"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(5−x)(x²−25) = −(x−5)²(x+5) ≥ 0, поэтому x ≤ −5 или x = 5."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "04A113"
+        }
+      },
+      {
+        "id": "moge20-fipi-10-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(5−x)(x²−25) = −(x−5)²(x+5) ≥ 0, поэтому x ≤ −5 или x = 5."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-11-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/0B532B.gif",
+          "alt": "Неравенство 0B532B",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-11-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[1; 5)"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 5)"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(0; 5)"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 5]"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "x²/(x−5) ≤ x ⇔ 5x/(x−5) ≤ 0. Метод интервалов: [0; 5)."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "0B532B"
+        }
+      },
+      {
+        "id": "moge20-fipi-11-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "x²/(x−5) ≤ x ⇔ 5x/(x−5) ≤ 0. Метод интервалов: [0; 5)."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-12-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/678BFE.gif",
+          "alt": "Неравенство 678BFE",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-12-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -6] ∪ {1}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -6) ∪ {1}"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -6]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5] ∪ {1}"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(1−x)(x²+5x−6) = −(x−1)²(x+6) ≥ 0, поэтому x ≤ −6 или x = 1."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "678BFE"
+        }
+      },
+      {
+        "id": "moge20-fipi-12-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(1−x)(x²+5x−6) = −(x−1)²(x+6) ≥ 0, поэтому x ≤ −6 или x = 1."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-13-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/6CE616.gif",
+          "alt": "Неравенство 6CE616",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-13-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 6]"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(1; 6)"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "нет решений"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(0; 6)"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "d",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "1/x ≥ 1/(x−6) ⇔ −6/(x(x−6)) ≥ 0 ⇔ 1/(x(x−6)) ≤ 0. Подходит (0; 6)."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "6CE616"
+        }
+      },
+      {
+        "id": "moge20-fipi-13-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "1/x ≥ 1/(x−6) ⇔ −6/(x(x−6)) ≥ 0 ⇔ 1/(x(x−6)) ≤ 0. Подходит (0; 6)."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-14-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/7DD37C.gif",
+          "alt": "Неравенство 7DD37C",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-14-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -3) ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "нет решений"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -4) ∪ {3}"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -4)"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "2x²−12x+18 = 2(x−3)². Неравенство 2(x−3)²/(x+4) ≤ 0 даёт x < −4 или x = 3."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "7DD37C"
+        }
+      },
+      {
+        "id": "moge20-fipi-14-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "2x²−12x+18 = 2(x−3)². Неравенство 2(x−3)²/(x+4) ≤ 0 даёт x < −4 или x = 3."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-15-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/8CC574.gif",
+          "alt": "Неравенство 8CC574",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-15-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[1; 6)"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 6)"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(0; 6)"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[0; 6]"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "x²/(x−6) ≤ x ⇔ 6x/(x−6) ≤ 0. Метод интервалов: [0; 6)."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "8CC574"
+        }
+      },
+      {
+        "id": "moge20-fipi-15-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "x²/(x−6) ≤ x ⇔ 6x/(x−6) ≤ 0. Метод интервалов: [0; 6)."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-16-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/C7CC09.gif",
+          "alt": "Неравенство C7CC09",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-16-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -3) ∪ {2}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -3)"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -2) ∪ {2}"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "нет решений"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "3x²−12x+12 = 3(x−2)². Неравенство 3(x−2)²/(x+3) ≤ 0 даёт x < −3 или x = 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "C7CC09"
+        }
+      },
+      {
+        "id": "moge20-fipi-16-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "3x²−12x+12 = 3(x−2)². Неравенство 3(x−2)²/(x+3) ≤ 0 даёт x < −3 или x = 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-17-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/E31F7D.gif",
+          "alt": "Неравенство E31F7D",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-17-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-4; -3) ∪ (2; 3)"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-4; -3]"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-3; -3] ∪ [2; 3]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-4; -3] ∪ [2; 3]"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "d",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(x²+x−6)(x²+x−12) = (x+3)(x−2)(x+4)(x−3) ≤ 0. Интервалы: [-4; -3] ∪ [2; 3]."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "E31F7D"
+        }
+      },
+      {
+        "id": "moge20-fipi-17-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(x²+x−6)(x²+x−12) = (x+3)(x−2)(x+4)(x−3) ≤ 0. Интервалы: [-4; -3] ∪ [2; 3]."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-18-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/F05EB9.gif",
+          "alt": "Неравенство F05EB9",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-18-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -7]"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -6] ∪ {7}"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -7] ∪ {7}"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -7) ∪ {7}"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(7−x)(x²−49) = −(x−7)²(x+7) ≥ 0, поэтому x ≤ −7 или x = 7."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "F05EB9"
+        }
+      },
+      {
+        "id": "moge20-fipi-18-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(7−x)(x²−49) = −(x−7)²(x+7) ≥ 0, поэтому x ≤ −7 или x = 7."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-19-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/0B612B.gif",
+          "alt": "Неравенство 0B612B",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-19-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "нет решений"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5) ∪ {2}"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -5)"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-∞; -4) ∪ {2}"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "2x²−8x+8 = 2(x−2)². Неравенство 2(x−2)²/(x+5) ≤ 0 даёт x < −5 или x = 2."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "0B612B"
+        }
+      },
+      {
+        "id": "moge20-fipi-19-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "2x²−8x+8 = 2(x−2)². Неравенство 2(x−2)²/(x+5) ≤ 0 даёт x < −5 или x = 2."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-fipi-20-img",
+        "type": "image",
+        "data": {
+          "src": "/media/fipi/matematika/oge20/6F56B0.gif",
+          "alt": "Неравенство 6F56B0",
+          "caption": null
+        }
+      },
+      {
+        "id": "moge20-fipi-20-task",
+        "type": "single_choice",
+        "data": {
+          "prompt": [
+            {
+              "type": "text",
+              "text": "Решите неравенство."
+            }
+          ],
+          "options": [
+            {
+              "id": "a",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-3; 2] ∪ {7}"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "(-3; 2) ∪ {7}"
+                }
+              ]
+            },
+            {
+              "id": "c",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-3; 2]"
+                }
+              ]
+            },
+            {
+              "id": "d",
+              "label": [
+                {
+                  "type": "text",
+                  "text": "[-2; 2] ∪ {7}"
+                }
+              ]
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": [
+            {
+              "type": "text",
+              "text": "(x²−4x−21)(x²−9x+14) = (x−7)²(x+3)(x−2) ≤ 0. Отсюда [-3; 2] и x = 7."
+            }
+          ],
+          "source": "ФИПИ",
+          "bank_id": "6F56B0"
+        }
+      },
+      {
+        "id": "moge20-fipi-20-hint",
+        "type": "hint",
+        "data": {
+          "title": "Показать решение",
+          "body": [
+            {
+              "type": "text",
+              "text": "(x²−4x−21)(x²−9x+14) = (x−7)²(x+3)(x−2) ≤ 0. Отсюда [-3; 2] и x = 7."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-errors",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Типичные ошибки"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-table-errors",
+        "type": "table",
+        "data": {
+          "caption": "Что чаще всего ломает решение",
+          "headers": [
+            "Ошибка",
+            "Как распознать",
+            "Как избежать"
+          ],
+          "rows": [
+            [
+              "потеря знака",
+              "корень отличается знаком",
+              "проверить перенос"
+            ],
+            [
+              "забыли ОДЗ",
+              "корень обращает знаменатель в 0",
+              "выписать ограничения"
+            ],
+            [
+              "неверный дискриминант",
+              "корни не сходятся",
+              "пересчитать D"
+            ],
+            [
+              "знак неравенства",
+              "интервал не тот",
+              "помнить про умножение на −1"
+            ],
+            [
+              "не все корни",
+              "потерян корень",
+              "проверить оба"
+            ],
+            [
+              "не проверили корни",
+              "посторонний корень",
+              "подставить в уравнение"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge20-checklist",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Чек-лист перед экзаменом"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-checklist-list",
+        "type": "rich_text",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "text": "Я определяю тип уравнения."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я выписываю ОДЗ для дробных уравнений."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я проверяю корни подстановкой."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я помню формулы дискриминанта и Виета."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я слежу за знаком неравенства."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "text": "Я записываю ответ в требуемом виде."
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "id": "moge20-plan",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "План подготовки"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-table-plan",
+        "type": "table",
+        "data": {
+          "caption": "Недельный план",
+          "headers": [
+            "День",
+            "Тема",
+            "Что сделать"
+          ],
+          "rows": [
+            [
+              "1",
+              "Линейные уравнения",
+              "10 задач"
+            ],
+            [
+              "2",
+              "Квадратные уравнения",
+              "10 задач"
+            ],
+            [
+              "3",
+              "Виет",
+              "10 задач"
+            ],
+            [
+              "4",
+              "Неравенства",
+              "10 задач"
+            ],
+            [
+              "5",
+              "Системы",
+              "10 задач"
+            ],
+            [
+              "6",
+              "Дробные уравнения",
+              "10 задач"
+            ],
+            [
+              "7",
+              "Полный вариант",
+              "5 задач с решением"
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge20-faq",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Вопросы и ответы"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-table-faq",
+        "type": "table",
+        "data": {
+          "caption": "Частые вопросы",
+          "headers": [
+            "Вопрос",
+            "Ответ"
+          ],
+          "rows": [
+            [
+              "Нужно ли писать решение?",
+              "Да, задание 20 проверяется по развёрнутому ответу."
+            ],
+            [
+              "Что делать с дробными уравнениями?",
+              "Выписать ОДЗ и проверить корни."
+            ],
+            [
+              "Когда использовать Виета?",
+              "Когда корни легко подобрать."
+            ],
+            [
+              "Как решать квадратное неравенство?",
+              "Методом интервалов."
+            ],
+            [
+              "Можно ли проверить корни?",
+              "Да, подстановкой в исходное уравнение."
+            ]
+          ],
+          "first_column_header": true
+        }
+      },
+      {
+        "id": "moge20-links",
+        "type": "rich_text",
+        "data": {
+          "kind": "heading",
+          "level": 2,
+          "children": [
+            {
+              "type": "text",
+              "text": "Куда дальше"
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-links-p",
+        "type": "rich_text",
+        "data": {
+          "kind": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "text": "Смотрите также: "
+            },
+            {
+              "type": "link",
+              "href": "/matematika/oge",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "структура ОГЭ по математике"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/matematika/oge/zadanie-6",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "задание 6"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/matematika/oge/zadanie-19",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "задание 19"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", "
+            },
+            {
+              "type": "link",
+              "href": "/zadachi?subject=matematika",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "банк задач"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        }
+      },
+      {
+        "id": "moge20-divider",
+        "type": "divider",
+        "data": {
+          "variant": "spaced"
+        }
+      }
+    ]
+  }
+}

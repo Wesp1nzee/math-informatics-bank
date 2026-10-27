@@ -15,10 +15,11 @@ type Status = "idle" | "checking" | "correct" | "wrong";
 export type ExerciseFormProps = {
   articleSlug?: string;
   exerciseId: string;
-  kind: "choice" | "numeric";
+  kind: "choice" | "numeric" | "text";
   name: string;
   inputId?: string;
   unit?: string;
+  className?: string;
 
   children: ReactNode;
 };
@@ -30,6 +31,7 @@ export function ExerciseForm({
   name,
   inputId,
   unit,
+  className,
   children,
 }: ExerciseFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -39,6 +41,7 @@ export function ExerciseForm({
   const [error, setError] = useState<string | null>(null);
   const [attempts, setAttempts] = useState<number | null>(null);
   const [numericValue, setNumericValue] = useState("");
+  const [textValue, setTextValue] = useState("");
   const [solved, setSolved] = useState<boolean | null>(null);
 
   const configured = Boolean(articleSlug?.trim());
@@ -52,6 +55,8 @@ export function ExerciseForm({
     if (kind === "choice") {
       const data = formRef.current ? new FormData(formRef.current) : null;
       answer = String(data?.get(name) ?? "").trim();
+    } else if (kind === "text") {
+      answer = textValue.trim();
     } else {
       answer = numericValue.trim();
     }
@@ -88,6 +93,7 @@ export function ExerciseForm({
     setError(null);
     setSolved(null);
     setNumericValue("");
+    setTextValue("");
     formRef.current?.reset();
   }
 
@@ -101,29 +107,35 @@ export function ExerciseForm({
           : "";
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} noValidate>
+    <form ref={formRef} onSubmit={handleSubmit} noValidate className={cn("min-w-0", className)}>
       {children}
 
-      {kind === "numeric" ? (
+      {kind === "numeric" || kind === "text" ? (
         <div className="mt-4">
           <label htmlFor={inputId} className="text-ink-soft block text-sm font-medium">
-            Ваш ответ{unit ? `, ${unit}` : ""}
+            Ваш ответ{kind === "numeric" && unit ? `, ${unit}` : ""}
           </label>
           <div className="mt-2 flex items-center gap-3">
             <Input
               id={inputId}
               name={name}
               type="text"
-              inputMode="decimal"
+              inputMode={kind === "numeric" ? "decimal" : "text"}
               autoComplete="off"
-              value={numericValue}
-              onChange={(event) => setNumericValue(event.target.value)}
+              value={kind === "numeric" ? numericValue : textValue}
+              onChange={(event) =>
+                kind === "numeric"
+                  ? setNumericValue(event.target.value)
+                  : setTextValue(event.target.value)
+              }
               disabled={disabled}
               aria-invalid={status === "wrong"}
               aria-describedby={statusId}
-              className="max-w-48"
+              className={kind === "numeric" ? "max-w-48" : "max-w-md"}
             />
-            {unit ? <span className="text-ink-soft text-sm">{unit}</span> : null}
+            {kind === "numeric" && unit ? (
+              <span className="text-ink-soft text-sm">{unit}</span>
+            ) : null}
           </div>
         </div>
       ) : null}

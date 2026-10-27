@@ -78,7 +78,7 @@ export function StickyCta() {
             onClick={() =>
               track(ANALYTICS_EVENTS.ctaClick, { placement: "sticky-mobile" })
             }
-            className="bg-accent hover:bg-accent-strong flex min-h-12 items-center justify-center gap-2 rounded-md text-base font-medium text-white transition-colors"
+            className="bg-accent-surface hover:bg-accent-surface-hover flex min-h-12 items-center justify-center gap-2 rounded-md text-base font-medium text-white transition-colors"
           >
             Записаться на пробное
             <ArrowRight aria-hidden className="size-4" />

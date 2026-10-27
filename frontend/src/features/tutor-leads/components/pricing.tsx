@@ -7,7 +7,13 @@ export function Pricing({ className }: { className?: string }) {
   const details = [PRICING.format, PRICING.duration].filter(Boolean);
 
   return (
-    <div className={cn("border-line bg-surface rounded-xl border p-6", className)}>
+    <div
+      className={cn(
+        "gradient-border glass relative overflow-hidden rounded-xl border border-[var(--glass-border)] p-6",
+        className,
+      )}
+    >
+      <span className="mono-label mb-3">PRICING / PLAN</span>
       <p className="text-ink text-2xl font-semibold tracking-[-0.02em]">
         {PRICING.from}
       </p>

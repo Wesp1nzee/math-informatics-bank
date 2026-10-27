@@ -30,6 +30,8 @@ export type WorldState = {
   drawB: number;
   /** Position of the "you are here" marker on the xz-plane. */
   marker: Vec2;
+  /** Morph target for the 3D abstraction: 0 torus, 1 wave, 2 lattice, 3 sphere, 4 ring. */
+  shape: number;
 };
 
 export type PulseKind = "ok" | "err";

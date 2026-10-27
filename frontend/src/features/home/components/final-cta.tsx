@@ -6,9 +6,16 @@ export function FinalCta() {
   const copy = CTA_CONTENT["home-final"];
 
   return (
-    <WorldSection worldState="summit" labelledBy="final-title" className="py-20 md:py-32">
-      <div className="grid grid-cols-1 items-center gap-10 desk:grid-cols-12">
-        <div className="desk:col-span-6 reveal ">
+    <WorldSection
+      worldState="summit"
+      labelledBy="final-title"
+      className="relative isolate overflow-clip py-20 md:py-32"
+    >
+      <div className="final-halo" aria-hidden="true" />
+
+      <div className="desk:grid-cols-12 relative grid grid-cols-1 items-center gap-10">
+        <div className="reveal desk:col-span-6">
+          <span className="mono-label mb-5">CONVERSION / PORTAL</span>
           <h2
             id="final-title"
             data-split-text
@@ -19,10 +26,24 @@ export function FinalCta() {
           <p className="text-ink-soft heading-scrim mt-5 max-w-[32em] text-lg leading-relaxed">
             {copy.text}
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <span className="metric-chip">
+              <b>01</b>
+              <span className="text-ink-soft">диагностика</span>
+            </span>
+            <span className="metric-chip">
+              <b>02</b>
+              <span className="text-ink-soft">план</span>
+            </span>
+            <span className="metric-chip">
+              <b>03</b>
+              <span className="text-ink-soft">результат</span>
+            </span>
+          </div>
         </div>
 
-        <div className="desk:col-span-5 desk:col-start-8 reveal ">
-          <div className="glass border-line rounded-2xl border p-5 md:p-6">
+        <div className="reveal desk:col-span-5 desk:col-start-8">
+          <div className="glass-strong rounded-2xl border border-[var(--glass-border)] p-5 md:p-6">
             <h3 className="heading-3 mb-4">Записаться на пробное</h3>
             <TutorLeadPanel />
           </div>

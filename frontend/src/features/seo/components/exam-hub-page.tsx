@@ -5,11 +5,26 @@ import { Section } from "@/components/layout/section";
 import { Button, ButtonArrow } from "@/components/ui/button";
 import { JsonLd } from "@/components/seo/json-ld";
 import { TaskTypeTable } from "@/features/seo/components/task-type-table";
+import { SEO_CONTENT_HUBS, getTutorLanding } from "@/features/seo/content-pages";
 import { getArticleLabel, type ExamHub, type SeoSubject } from "@/features/seo/pages";
 import { SUBJECT_LABEL, SUBJECT_PATH } from "@/features/tasks/labels";
 import { breadcrumbJsonLd } from "@/lib/seo/json-ld";
 
 const EXAM_LABEL = { oge: "ОГЭ", ege: "ЕГЭ" } as const;
+
+function extraHubLabel(hub: (typeof SEO_CONTENT_HUBS)[number]): string {
+  if (hub.kind === "theory" && hub.exam) return `Теория ${EXAM_LABEL[hub.exam]}`;
+  if (hub.kind === "solutions" && hub.exam) return `Разборы ${EXAM_LABEL[hub.exam]}`;
+  if (hub.kind === "solutions") return "Разборы задач по математике";
+  if (hub.kind === "grade") return "Информатика 10 класс";
+  return hub.h1;
+}
+
+function extraHubNote(hub: (typeof SEO_CONTENT_HUBS)[number]): string {
+  if (hub.kind === "theory") return "Формулы, темы и порядок подготовки.";
+  if (hub.kind === "grade") return "Темы, задачи и подготовка к ЕГЭ.";
+  return "Пошаговые решения и типичные ошибки.";
+}
 
 export function ExamHubPage({ hub }: { hub: ExamHub }) {
   const subject = hub.subject as SeoSubject;
@@ -21,6 +36,10 @@ export function ExamHubPage({ hub }: { hub: ExamHub }) {
     { name: examLabel },
   ];
   const taskHubPath = `${hub.path}/zadaniya`;
+  const extraHubs = SEO_CONTENT_HUBS.filter(
+    (item) => item.subject === subject && (!item.exam || item.exam === hub.exam),
+  );
+  const tutorLanding = getTutorLanding(subject);
 
   return (
     <>
@@ -121,6 +140,52 @@ export function ExamHubPage({ hub }: { hub: ExamHub }) {
         </div>
         <TaskTypeTable items={hub.taskTypes} className="md:grid-cols-2" />
       </Section>
+
+      {extraHubs.length > 0 || tutorLanding ? (
+        <Section bordered labelledBy="exam-extra-title">
+          <h2 id="exam-extra-title" className="heading-3 mb-8">
+            Теория и разборы
+          </h2>
+          <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2">
+            {extraHubs.map((item) => (
+              <li key={item.path}>
+                <Link
+                  href={item.path}
+                  className="group border-line bg-surface hover:border-ink flex h-full flex-col justify-between gap-3 rounded-lg border p-5 transition-colors"
+                >
+                  <span>
+                    <span className="text-ink block font-medium">
+                      {extraHubLabel(item)}
+                    </span>
+                    <span className="text-ink-soft mt-1 block text-sm">
+                      {extraHubNote(item)}
+                    </span>
+                  </span>
+                  <ButtonArrow />
+                </Link>
+              </li>
+            ))}
+            {tutorLanding ? (
+              <li>
+                <Link
+                  href={tutorLanding.path}
+                  className="group border-line bg-surface hover:border-ink flex h-full flex-col justify-between gap-3 rounded-lg border p-5 transition-colors"
+                >
+                  <span>
+                    <span className="text-ink block font-medium">
+                      Репетитор по предмету
+                    </span>
+                    <span className="text-ink-soft mt-1 block text-sm">
+                      Индивидуальная подготовка к ОГЭ и ЕГЭ.
+                    </span>
+                  </span>
+                  <ButtonArrow />
+                </Link>
+              </li>
+            ) : null}
+          </ul>
+        </Section>
+      ) : null}
 
       {hub.relatedArticleSlugs.length > 0 ? (
         <Section bordered labelledBy="exam-articles-title">

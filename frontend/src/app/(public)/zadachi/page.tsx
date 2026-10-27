@@ -3,6 +3,7 @@ import { Suspense } from "react";
 
 import { PageHero } from "@/components/layout/page-hero";
 import { Section } from "@/components/layout/section";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
 import { DemoNotice } from "@/components/ui/demo-notice";
 import { StateMessage } from "@/components/ui/state-message";
@@ -17,6 +18,7 @@ import {
   type RawSearchParams,
 } from "@/features/tasks/search-params";
 import { describeApiError } from "@/lib/api/errors";
+import { breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { formatTaskCount } from "@/lib/utils/format";
 import { buildQueryHref } from "@/lib/utils/url";
@@ -122,6 +124,12 @@ export default function TasksPage({
 }) {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Главная", path: "/" },
+          { name: "Задачи", path: "/zadachi" },
+        ])}
+      />
       <PageHero
         breadcrumbs={[{ name: "Главная", href: "/" }, { name: "Задачи" }]}
         eyebrow="Банк задач"

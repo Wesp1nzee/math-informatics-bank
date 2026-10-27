@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { REQUEST_PATH } from "@/features/tutor-leads/content";
 import { mainNav } from "@/lib/constants/navigation";
-import { cn } from "@/lib/utils/cn";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -24,10 +23,8 @@ export function SiteHeader() {
 
   return (
     <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-[14px] transition-colors duration-300",
-        scrolled ? "border-line bg-canvas/88" : "bg-canvas/60 border-transparent",
-      )}
+      data-scrolled={scrolled || undefined}
+      className="site-header fixed inset-x-0 top-0 z-50 border-b backdrop-blur-[26px] backdrop-saturate-[1.7]"
     >
       <Container>
         <nav

@@ -29,8 +29,9 @@ export function TutoringHero({
       <Container className="relative z-[1]">
         <Breadcrumbs className="mb-6 text-sm" items={breadcrumbs} />
 
-        <div className="flex flex-col gap-8 desk:grid desk:grid-cols-12 desk:gap-8">
-          <div className="desk:col-span-6 desk:row-start-1">
+        <div className="desk:grid desk:grid-cols-12 desk:gap-8 flex flex-col gap-8">
+          <div className="desk:col-span-5 desk:row-start-1">
+            <span className="mono-label mb-4">X-RAY / KNOWLEDGE MAP</span>
             <h1
               id="tutoring-hero-title"
               className="heading-2 max-w-[16ch] text-balance"
@@ -47,14 +48,34 @@ export function TutoringHero({
                 </li>
               ))}
             </ul>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <span className="metric-chip">
+                <b>4</b>
+                <span className="text-ink-soft">оси диагностики</span>
+              </span>
+              <span className="metric-chip">
+                <b>1</b>
+                <span className="text-ink-soft">пробное занятие</span>
+              </span>
+            </div>
           </div>
 
           <div
             id="request"
-            className="desk:col-span-5 desk:col-start-8 desk:row-span-2 desk:row-start-1 order-2 scroll-mt-24"
+            className="desk:col-span-7 desk:col-start-6 desk:row-start-1 order-2 scroll-mt-24"
           >
-            <div className="glass border-line rounded-2xl border p-5 md:p-6">
-              <h2 className="heading-3 mb-4">Записаться на пробное</h2>
+            <div className="glass-strong tech-corners rounded-2xl border border-[var(--glass-border)] p-4 md:p-5">
+              <div className="mb-4 flex flex-wrap items-end justify-between gap-3 px-1">
+                <div>
+                  <span className="mono-label mb-2">REQUEST / CONFIGURATOR</span>
+                  <h2 className="heading-3">Записаться на пробное</h2>
+                </div>
+                <span className="metric-chip">
+                  <b>2 мин</b>
+                  <span className="text-ink-soft">на заявку</span>
+                </span>
+              </div>
               <TutorLeadPanel />
             </div>
           </div>

@@ -3,14 +3,34 @@ import { absoluteUrl } from "@/lib/seo/metadata";
 
 export type JsonLdObject = Record<string, unknown>;
 
+export const ORGANIZATION_ID = `${siteConfig.url}/#organization`;
+export const WEBSITE_ID = `${siteConfig.url}/#website`;
+
+export function organizationJsonLd(): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "@id": ORGANIZATION_ID,
+    name: "ОСНОВА",
+    alternateName: siteConfig.tagline,
+    url: siteConfig.url,
+    logo: absoluteUrl("/images/logo.png"),
+    description: siteConfig.description,
+    areaServed: "RU",
+  };
+}
+
 export function webSiteJsonLd(): JsonLdObject {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: siteConfig.name,
+    "@id": WEBSITE_ID,
+    name: "ОСНОВА",
+    alternateName: siteConfig.tagline,
     url: siteConfig.url,
     inLanguage: "ru-RU",
     description: siteConfig.description,
+    publisher: { "@id": ORGANIZATION_ID },
   };
 }
 
@@ -35,7 +55,10 @@ export function articleJsonLd(input: {
   path: string;
   published: string;
   modified?: string;
+  image?: string;
 }): JsonLdObject {
+  const authorName = siteConfig.tutor.name.trim();
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -45,6 +68,19 @@ export function articleJsonLd(input: {
     inLanguage: "ru-RU",
     datePublished: input.published,
     ...(input.modified ? { dateModified: input.modified } : {}),
+    ...(input.image ? { image: absoluteUrl(input.image) } : {}),
+    author: authorName
+      ? { "@type": "Person", name: authorName }
+      : { "@type": "Organization", "@id": ORGANIZATION_ID, name: "ОСНОВА" },
+    publisher: {
+      "@type": "Organization",
+      "@id": ORGANIZATION_ID,
+      name: "ОСНОВА",
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/images/logo.png"),
+      },
+    },
   };
 }
 
@@ -78,9 +114,7 @@ export function personJsonLd(input: {
     name: input.name,
     ...(input.description ? { description: input.description } : {}),
     ...(input.image ? { image: absoluteUrl(input.image) } : {}),
-    ...(input.sameAs && input.sameAs.length > 0
-      ? { sameAs: [...input.sameAs] }
-      : {}),
+    ...(input.sameAs && input.sameAs.length > 0 ? { sameAs: [...input.sameAs] } : {}),
   };
 }
 
@@ -102,7 +136,9 @@ export function serviceJsonLd(input: {
   };
 }
 
-export function faqPageJsonLd(items: readonly { question: string; answer: string }[]): JsonLdObject {
+export function faqPageJsonLd(
+  items: readonly { question: string; answer: string }[],
+): JsonLdObject {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",

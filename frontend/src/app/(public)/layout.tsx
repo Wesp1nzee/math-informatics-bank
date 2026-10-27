@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { StickyCta } from "@/features/tutor-leads/components/sticky-cta";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
@@ -21,7 +20,6 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <div className="relative z-[1]">
         <SiteFooter />
       </div>
-      <StickyCta />
       <ScrollReveal />
     </>
   );

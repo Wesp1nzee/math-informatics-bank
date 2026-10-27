@@ -6,6 +6,7 @@ vi.mock("@/features/articles/exercises-api", () => ({
 }));
 
 import { NumericInputBlock } from "@/features/articles/components/renderer/blocks/numeric-input-block";
+import { TextInputBlock } from "@/features/articles/components/renderer/blocks/text-input-block";
 import { SingleChoiceBlock } from "@/features/articles/components/renderer/blocks/single-choice-block";
 import {
   checkArticleExercise,
@@ -37,6 +38,16 @@ function numericBlock(): Extract<ArticleBlockV2, { type: "numeric_input" }> {
     data: {
       prompt: [{ type: "text", text: "3.5" }],
       unit: "см",
+    },
+  };
+}
+
+function textBlock(): Extract<ArticleBlockV2, { type: "text_input" }> {
+  return {
+    id: "ex-text",
+    type: "text_input",
+    data: {
+      prompt: [{ type: "text", text: "Устройство вывода" }],
     },
   };
 }
@@ -109,6 +120,22 @@ describe("exercise blocks", () => {
     await screen.findByText("Верно.");
     expect(mockedCheck).toHaveBeenCalledWith("demo", "ex-number", "3,5");
     expect(screen.getByText("Ответ 3.5")).toBeInTheDocument();
+  });
+
+  it("checks a text answer and shows the explanation", async () => {
+    mockedCheck.mockResolvedValue(
+      result({ explanation: [{ type: "text", text: "Это монитор." }] }),
+    );
+
+    render(<TextInputBlock block={textBlock()} articleSlug="demo" />);
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "монитор" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+
+    await screen.findByText("Верно.");
+    expect(mockedCheck).toHaveBeenCalledWith("demo", "ex-text", "монитор");
+    expect(screen.getByText("Это монитор.")).toBeInTheDocument();
   });
 
   it("shows an accessible error when the check fails", async () => {

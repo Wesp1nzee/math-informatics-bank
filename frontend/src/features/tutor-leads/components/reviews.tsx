@@ -11,7 +11,7 @@ export function Reviews({ className }: { className?: string }) {
       {reviews.map((review) => (
         <li
           key={`${review.name}-${review.exam}`}
-          className="border-line bg-surface flex flex-col gap-4 rounded-xl border p-6"
+          className="glass flex flex-col gap-4 rounded-xl border border-[var(--glass-border)] p-6"
         >
           <blockquote className="text-ink text-lg leading-relaxed">
             {review.text}

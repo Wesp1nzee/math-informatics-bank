@@ -1,5 +1,5 @@
 import { StateMessage } from "@/components/ui/state-message";
-import { TutorLeadForm } from "@/features/tutor-leads/components/lead-form";
+import { LeadCommandCenter } from "@/features/tutor-leads/components/lead-command-center";
 import { isPublicApiConfigured } from "@/lib/api/config";
 import { mailHref, siteConfig, telegramHref } from "@/lib/constants/site";
 
@@ -20,7 +20,7 @@ export function TutorLeadPanel() {
   }
 
   return (
-    <TutorLeadForm
+    <LeadCommandCenter
       channels={{ telegramHref: telegram, emailHref: email, apiConfigured }}
     />
   );

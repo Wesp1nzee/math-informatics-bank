@@ -24,8 +24,8 @@ export function RichTextBlock({ block }: { block: Block }) {
     const listItems = asArray<InlineNode[]>(items);
     const Tag = ordered ? "ol" : "ul";
     const className = ordered
-      ? "text-ink-soft m-0 list-decimal space-y-2 pl-6 text-lg"
-      : "text-ink-soft m-0 list-disc space-y-2 pl-6 text-lg";
+      ? "text-ink m-0 list-decimal space-y-2 pl-6 text-lg"
+      : "text-ink m-0 list-disc space-y-2 pl-6 text-lg";
 
     return (
       <Tag className={className}>
@@ -39,7 +39,7 @@ export function RichTextBlock({ block }: { block: Block }) {
   }
 
   return (
-    <p className="text-ink-soft text-lg leading-relaxed">
+    <p className="text-ink text-lg leading-relaxed">
       <InlineNodes nodes={children} />
     </p>
   );
