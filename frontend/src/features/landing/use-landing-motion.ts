@@ -39,6 +39,10 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
     let reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let viewportHeight = window.innerHeight;
 
+    /* Compact = phones and touch-first screens (same query as the CSS). */
+    const compactQuery = window.matchMedia("(max-width: 900px), (pointer: coarse)");
+    let compact = compactQuery.matches;
+
     /* ---------- reveal, parallax, process route ---------- */
 
     const revealItems = Array.from(root.querySelectorAll<HTMLElement>("[data-r]"));
@@ -95,12 +99,58 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
       for (const element of revealItems) revealObserver.observe(element);
     }
 
+    /*
+     * Parallax only runs for illustrations that are actually near the viewport.
+     * The observer maintains a set, so each scroll frame reads rects for a
+     * couple of nodes at most instead of every `.viz` on the page.
+     */
+    const visibleVisuals = new Set<HTMLElement>();
+    const visualObserver =
+      typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                const element = entry.target as HTMLElement;
+                if (entry.isIntersecting) visibleVisuals.add(element);
+                else visibleVisuals.delete(element);
+              }
+            },
+            { rootMargin: "15% 0px 15% 0px", threshold: 0 },
+          )
+        : null;
+    for (const element of visualItems) visualObserver?.observe(element);
+
+    const clearParallax = (): void => {
+      for (const element of [...visualItems, ...parallaxItems]) {
+        element.style.removeProperty("translate");
+      }
+    };
+
     const trackPath = query<SVGPathElement>("#pl");
     const trackBase = query<SVGPathElement>("#pb");
     const progressDot = query<HTMLElement>("#pdot");
     const track = query<HTMLElement>("#track");
     const nodes = track ? Array.from(track.querySelectorAll<HTMLElement>(".node")) : [];
     const steps = Array.from(root.querySelectorAll<HTMLElement>(".step"));
+
+    /*
+     * The progress route only needs work while its section is on screen. The
+     * observer parks it completely once the reader scrolls past.
+     */
+    let trackNear = true;
+    const trackObserver =
+      track && typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => {
+              trackNear = entries[0]?.isIntersecting ?? false;
+            },
+            { rootMargin: "35% 0px 35% 0px", threshold: 0 },
+          )
+        : null;
+    if (track && trackObserver) {
+      trackNear = false;
+      trackObserver.observe(track);
+    }
 
     const curveHeight = (x: number): number =>
       60 + 26 * Math.sin((x / 1000) * Math.PI * 3);
@@ -127,23 +177,20 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
         scrollQueued = false;
         const y = window.scrollY;
 
-        if (!reduce) {
-          if (revealObserver && pendingReveals.size > 0) {
-            const limit = viewportHeight * 0.94;
-            for (const element of Array.from(pendingReveals)) {
-              if (element.getBoundingClientRect().top < limit) {
-                revealElement(element);
-              }
-            }
-          }
-
-          visualItems.forEach((element) => {
+        // Reveals are driven by IntersectionObserver alone; no rect sweeps here.
+        if (!reduce && !compact) {
+          // Read first, write second: one layout pass per frame.
+          const pending: Array<[HTMLElement, string]> = [];
+          for (const element of visibleVisuals) {
             const bounds = element.getBoundingClientRect();
-            element.style.setProperty(
-              "translate",
+            pending.push([
+              element,
               `0 ${((bounds.top + bounds.height / 2 - viewportHeight / 2) * 0.05).toFixed(1)}px`,
-            );
-          });
+            ]);
+          }
+          for (const [element, value] of pending) {
+            element.style.setProperty("translate", value);
+          }
 
           parallaxItems.forEach((element) => {
             element.style.setProperty(
@@ -153,7 +200,7 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
           });
         }
 
-        if (track && trackPath && progressDot) {
+        if (track && trackNear && trackPath && progressDot) {
           const bounds = track.getBoundingClientRect();
           const progress = reduce
             ? 1
@@ -180,8 +227,17 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
       onScroll();
     };
 
+    const onCompactChange = (event: MediaQueryListEvent): void => {
+      compact = event.matches;
+      if (compact) clearParallax();
+      onScroll();
+    };
+
+    if (compact || reduce) clearParallax();
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
+    compactQuery.addEventListener("change", onCompactChange);
     onScroll();
 
     /* ---------- illustrations: one shared timeline loop ---------- */
@@ -436,9 +492,7 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
         element.style.willChange = "";
       });
       revealObserver?.disconnect();
-      [...parallaxItems, ...visualItems].forEach((element) => {
-        element.style.removeProperty("translate");
-      });
+      clearParallax();
       onScroll();
     };
     motionQuery.addEventListener("change", onMotionChange);
@@ -447,7 +501,10 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement | null>): voi
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       motionQuery.removeEventListener("change", onMotionChange);
+      compactQuery.removeEventListener("change", onCompactChange);
       revealObserver?.disconnect();
+      visualObserver?.disconnect();
+      trackObserver?.disconnect();
       visualObservers.forEach((observer) => observer.disconnect());
       cancelAnimationFrame(loopRaf);
     };
