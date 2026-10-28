@@ -201,3 +201,35 @@ Then, after DNS points to the VPS and the stack is healthy:
 5. Do not promise top positions from technical SEO alone. Ranking also depends
    on content quality, competition, backlinks and time.
 
+## 10. Logs
+
+Caddy writes an access log for every request with the real client IP, timestamp,
+method, path, status and duration:
+
+```bash
+docker compose --env-file deploy/.env.production -f compose.prod.yaml \
+  logs -f --tail=100 caddy
+```
+
+Next.js writes a request line for page requests (real IP from
+`X-Forwarded-For`, ISO timestamp, method and path):
+
+```bash
+docker compose --env-file deploy/.env.production -f compose.prod.yaml \
+  logs -f --tail=100 web
+```
+
+API access logs use the same timestamped formatter as the rest of the backend.
+With `LOG_JSON=true` they are JSON lines with a `time` field:
+
+```bash
+docker compose --env-file deploy/.env.production -f compose.prod.yaml \
+  logs -f --tail=100 api
+```
+
+Note that server-side page rendering calls the API from the `web` container, so
+those internal calls show the container IP in API logs. The original visitor IP
+is in the Caddy access log (and in the Next.js request line). Direct browser
+calls to `/api/*` are proxied by Caddy and show the visitor IP in the API log.
+
+

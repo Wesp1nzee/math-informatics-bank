@@ -3,10 +3,18 @@
 }
 
 www.{$SITE_DOMAIN} {
+	log {
+		output stdout
+		format console
+	}
 	redir https://{$SITE_DOMAIN}{uri} permanent
 }
 
 {$SITE_DOMAIN} {
+	log {
+		output stdout
+		format console
+	}
 	encode zstd gzip
 
 	@backend path /api/* /health

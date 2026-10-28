@@ -44,8 +44,17 @@ def setup_logging(settings: Settings) -> None:
     # httpx logs the full request URL at INFO, including the Telegram bot token.
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpcore").setLevel(logging.WARNING)
-    # uvicorn installs its own access handler; disabling propagation avoids duplicates.
-    logging.getLogger("uvicorn.access").propagate = False
+
+    # Uvicorn installs its own access/error handlers before importing the app.
+    # Replace them with the same formatter so every request line gets a real
+    # timestamp (and JSON fields when LOG_JSON=true). Without this, access logs
+    # look like "INFO: 172.18.0.4:... - \"GET /...\"" with no time.
+    for name in ("uvicorn", "uvicorn.error", "uvicorn.access"):
+        uvicorn_logger = logging.getLogger(name)
+        uvicorn_logger.handlers.clear()
+        uvicorn_logger.addHandler(handler)
+        uvicorn_logger.propagate = False
+    logging.getLogger("uvicorn.access").setLevel(logging.INFO)
 
 
 def bind_logger(name: str, **fields: Any) -> logging.LoggerAdapter[logging.Logger]:
